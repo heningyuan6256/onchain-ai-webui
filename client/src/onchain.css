@@ -3,7 +3,7 @@
 }
 
 .bg-nav-bar {
-  background: #f4f4f5;
+  background: linear-gradient(180deg, #f4f4f500, #f4f4f5 47%, #f4f4f57a) !important;
 }
 
 .top_logo {
@@ -67,4 +67,16 @@
   border: 1px solid #E0E0E0;
   padding: 0px 10px;
   line-height: 40px;
+}
+
+
+.side_item_start {
+  box-shadow: 2px 2px 4px -1px rgba(68, 69, 69, 0.05);
+}
+
+.side_item_start a {
+  color: #212121;
+  font-style: normal;
+  text-decoration: none;
+  font-weight: normal;
 }

@@ -141,7 +141,8 @@ const Conversations: FC<ConversationsProps> = ({
       }
       let rendering: JSX.Element;
       if (item.type === 'header') {
-        rendering = <DateLabel groupName={item.groupName} />;
+        // rendering = <DateLabel groupName={item.groupName} />;
+         rendering = <></>;
       } else if (item.type === 'convo') {
         rendering = (
           <MemoizedConvo conversation={item.convo} retainView={moveToTop} toggleNav={toggleNav} />

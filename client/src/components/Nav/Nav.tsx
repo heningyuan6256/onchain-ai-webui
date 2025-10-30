@@ -18,18 +18,12 @@ import NewChat from './NewChat';
 import { cn } from '~/utils';
 import store from '~/store';
 import Restract from '../Icons/restract';
-import { NavProjects } from '../nav-projects';
-import ADDSVG from "@/assets/image/front-add.svg";
-import CHATSVG from "@/assets/image/front-chat.svg";
-import appsSvg from "@/assets/image/front-apps.svg";
-import LIBRARYSVG from "@/assets/image/front-library.svg";
-import Icon from '../icon';
-
+import { SidebarMenuHorizentol, SidebarMenuTitle } from '../ui/sidebar';
 const BookmarkNav = lazy(() => import('./Bookmarks/BookmarkNav'));
 const AccountSettings = lazy(() => import('./AccountSettings'));
 const AgentMarketplaceButton = lazy(() => import('./AgentMarketplaceButton'));
 
-const NAV_WIDTH_DESKTOP = '260px';
+const NAV_WIDTH_DESKTOP = '254px';
 const NAV_WIDTH_MOBILE = '320px';
 
 const NavMask = memo(
@@ -202,14 +196,14 @@ const Nav = memo(
           data-testid="nav"
           className={cn(
             'nav active max-w-[320px] flex-shrink-0 transform overflow-x-hidden bg-nav-bar border-r-[#E0E0E0] border-r transition-all duration-200 ease-in-out',
-            'md:max-w-[260px]',
+            'md:max-w-[254px]',
           )}
           style={{
             width: navVisible ? navWidth : '0px',
             transform: navVisible ? 'translateX(0)' : 'translateX(-100%)',
           }}
         >
-          <div className="h-full w-[320px] md:w-[260px]">
+          <div className="h-full w-[320px] md:w-[254px]">
             <div className="flex h-full flex-col">
               <div
                 className={`flex h-full flex-col transition-opacity duration-200 ease-in-out ${navVisible ? 'opacity-100' : 'opacity-0'}`}
@@ -218,7 +212,7 @@ const Nav = memo(
                   <nav
                     id="chat-history-nav"
                     aria-label={localize('com_ui_chat_history')}
-                    className="flex h-full flex-col px-2 pb-3.5 md:px-3"
+                    className="flex h-full flex-col px-2 pb-3.5 md:px-3 pt-1"
                   >
                     <div className="flex flex-1 flex-col" ref={outerContainerRef}>
                       <div className="py-4 px-1 flex justify-between items-center">
@@ -232,7 +226,7 @@ const Nav = memo(
                                 variant="outline"
                                 data-testid="close-sidebar-button"
                                 aria-label={localize('com_nav_close_sidebar')}
-                                className="rounded-full border-none bg-transparent hover:bg-surface-hover md:rounded-xl h-[24px] w-[30px]"
+                                className="rotate-[180deg] rounded-full border-none bg-transparent hover:bg-surface-hover md:rounded-xl h-[24px] w-[24px]"
                                 onClick={toggleNavVisible}
                               >
                                 <Restract className="max-md:hidden" />
@@ -242,13 +236,27 @@ const Nav = memo(
                           />
                         </div>
                       </div>
-                     
+
                       <MemoNewChat
-                        subHeaders={subHeaders}
+                        // subHeaders={subHeaders}
                         toggleNav={toggleNavVisible}
                         headerButtons={headerButtons}
                         isSmallScreen={isSmallScreen}
                       />
+                      <div className="px-1 mb-2 mt-2">
+                        <SidebarMenuHorizentol></SidebarMenuHorizentol>
+                      </div>
+                      <SidebarMenuTitle
+                        title="收藏对话"
+                        data={[]}
+                      ></SidebarMenuTitle>
+                      <div className="px-1 mb-2 mt-2">
+                        <SidebarMenuHorizentol></SidebarMenuHorizentol>
+                      </div>
+                      <SidebarMenuTitle
+                        title="近期对话"
+                        data={[]}
+                      ></SidebarMenuTitle>
                       <Conversations
                         conversations={conversations}
                         moveToTop={moveToTop}

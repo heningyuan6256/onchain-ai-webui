@@ -75,7 +75,7 @@ export default function Header() {
             <ExportAndShareMenu
               isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
             />
-            <TemporaryChat />
+            {/* <TemporaryChat /> */}
           </div>
         )}
       </div>
