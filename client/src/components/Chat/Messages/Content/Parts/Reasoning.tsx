@@ -3,12 +3,14 @@ import { ContentTypes } from 'librechat-data-provider';
 import { ThinkingContent } from '~/components/Artifacts/Thinking';
 import { useMessageContext } from '~/Providers';
 import { cn } from '~/utils';
+import { OnChainThoughtChain } from '~/components/ChatView/ThoughtChain';
 
 type ReasoningProps = {
   reasoning: string;
+  isSubmitting?: boolean
 };
 
-const Reasoning = memo(({ reasoning }: ReasoningProps) => {
+const Reasoning = memo(({ reasoning, isSubmitting }: ReasoningProps) => {
   const { isExpanded, nextType } = useMessageContext();
   const reasoningText = useMemo(() => {
     return reasoning
@@ -21,6 +23,16 @@ const Reasoning = memo(({ reasoning }: ReasoningProps) => {
     return null;
   }
 
+  const result = reasoningText
+    .split(/\n+/) // 按段落或换行分割
+    .filter(line => line.trim() !== '') // 去掉空行
+    .map((line, index) => ({
+      title: `过程节点 ${index + 1}`,
+      key: `p${index + 1}`,
+      data: line.trim(),
+      icon: 'success'
+    })) as any;
+
   return (
     <div
       className={cn(
@@ -31,8 +43,9 @@ const Reasoning = memo(({ reasoning }: ReasoningProps) => {
         gridTemplateRows: isExpanded ? '1fr' : '0fr',
       }}
     >
-      <div className="overflow-hidden">
-        <ThinkingContent isPart={true}>{reasoningText}</ThinkingContent>
+      <div className="overflow-hidden thought_table">
+        <OnChainThoughtChain items={result} isEnd={!isSubmitting}></OnChainThoughtChain>
+        {/* <ThinkingContent isPart={true}>{reasoningText}</ThinkingContent> */}
       </div>
     </div>
   );

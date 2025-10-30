@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="dotCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('dotCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 400;
+        canvas.height = 100;
+
+        const dots = Array.from({ length: 25 }).map(() => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 4 + 2,
+            speed: Math.random() * 0.8 + 0.2,
+            offset: Math.random() * Math.PI * 2
+        }));
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            dots.forEach(dot => {
+                dot.y += Math.sin(Date.now() / 400 + dot.offset) * dot.speed;
+                ctx.beginPath();
+                ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(30,30,30,0.8)';
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <style>
+        body {
+            background: linear-gradient(141deg, #FFFFFF 0%, #F4F4F5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        canvas {
+            border-radius: 8px;
+            background: transparent;
+        }
+    </style>
+</body>
+
+</html>

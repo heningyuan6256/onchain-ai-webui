@@ -110,9 +110,9 @@ export default function Message(props: TMessageProps) {
                 isCreatedByUser ? 'user-turn' : 'agent-turn',
               )}
             >
-              <h2 className={cn('select-none font-semibold text-text-primary', fontSize)}>
+              {/* <h2 className={cn('select-none font-semibold text-text-primary', fontSize)}>
                 {name}
-              </h2>
+              </h2> */}
               <div className="flex flex-col gap-1">
                 <div className="flex max-w-full flex-grow flex-col gap-0">
                   <ContentParts

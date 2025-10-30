@@ -7,6 +7,7 @@ import AISVG from "@/assets/image/front-ai.svg";
 import ExpandSvg from "@/assets/image/front-expandGrey.svg";
 import { generateSnowId } from "@/utils";
 import RenderMardown from "../Markdown";
+import DotLoading from "../DotLoading";
 // import ArrowSvg from "@/assets/image/front-arrow.svg";
 
 function getStatusIcon(status: ThoughtChainItem["status"]) {
@@ -138,6 +139,7 @@ export const OnChainThoughtChain: FC<OnChainThoughtChainProps> = (props) => {
       >
         <div className="flex items-center">
           <Icon src={AISVG} className="w-[18px]"></Icon>
+          <DotLoading></DotLoading>
         </div>
         <div
           className="flex items-center cursor-pointer"
@@ -152,8 +154,8 @@ export const OnChainThoughtChain: FC<OnChainThoughtChainProps> = (props) => {
         </div>
       </div>
       <div className={`bg-[#fff] flex ${hidden ? "h-[0px]" : "h-[auto]"}`}>
-        <div className="w-[160px] thought_bg border-r border-[#E0E0E0] pl-5 pb-4">
-          <div className="mt-5 text-xs font-medium text-[#333333]">{`思考中...(${time}s)`}</div>
+        <div className="w-[160px] border-r border-[#E0E0E0] pl-5 pb-4 bg_thought_left">
+          <div className="mt-5 text-xs font-medium text-[#333333]">{props.isEnd ? "思考完成" : `思考中...(${time}s)`}</div>
           <ThoughtChain className="mt-5" size="small" items={Items} />
         </div>
         <div className="flex-1 p-5">

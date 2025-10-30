@@ -120,7 +120,6 @@ const ContentParts = memo(
         </>
       );
     }
-
     return (
       <>
         <SearchContext.Provider value={{ searchResults }}>
@@ -128,7 +127,7 @@ const ContentParts = memo(
           <Sources messageId={messageId} conversationId={conversationId || undefined} />
           {hasReasoningParts && (
             <div className="mb-5">
-              <ThinkingButton
+              {/* <ThinkingButton
                 isExpanded={isExpanded}
                 onClick={() =>
                   setIsExpanded((prev) => {
@@ -142,7 +141,7 @@ const ContentParts = memo(
                     ? localize('com_ui_thinking')
                     : localize('com_ui_thoughts')
                 }
-              />
+              /> */}
             </div>
           )}
           {content
