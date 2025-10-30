@@ -1,17 +1,17 @@
 #root {
-    background: url("assets/背景花纹.png") top center / 100% auto no-repeat;
+  background: url("assets/背景花纹.png") top center / 100% auto no-repeat;
 }
 
 .bg-nav-bar {
-    background: #f4f4f5;
+  background: #f4f4f5;
 }
 
 .top_logo {
-    width: 150px;
-    height: 24px;
+  width: 150px;
+  height: 24px;
 }
 
-.thought_table .ant-thought-chain.ant-thought-chain-small > .ant-thought-chain-item .ant-thought-chain-item-header::before {
+.thought_table .ant-thought-chain.ant-thought-chain-small>.ant-thought-chain-item .ant-thought-chain-item-header::before {
   width: 1px;
 }
 
@@ -19,7 +19,7 @@
   background: none !important;
 }
 
-.thought_table .ant-thought-chain.ant-thought-chain-small > .ant-thought-chain-item .ant-thought-chain-item-header::before {
+.thought_table .ant-thought-chain.ant-thought-chain-small>.ant-thought-chain-item .ant-thought-chain-item-header::before {
   top: 22px;
   bottom: -22px;
 }
@@ -28,14 +28,11 @@
   margin-bottom: 18px;
 }
 
-.thought_table .ant-thought-chain.ant-thought-chain-small > .ant-thought-chain-item .ant-thought-chain-item-header::before {
+.thought_table .ant-thought-chain.ant-thought-chain-small>.ant-thought-chain-item .ant-thought-chain-item-header::before {
   inset-inline-start: 7px;
 }
 
-.thought_table .ant-thought-chain.ant-thought-chain-small
-  .ant-thought-chain-item
-  .ant-thought-chain-item-header
-  .ant-thought-chain-item-icon {
+.thought_table .ant-thought-chain.ant-thought-chain-small .ant-thought-chain-item .ant-thought-chain-item-header .ant-thought-chain-item-icon {
   height: 16px;
   width: 16px;
 }
@@ -48,11 +45,7 @@
   gap: 5px;
 }
 
-.thought_table .ant-thought-chain.ant-thought-chain-small
-  .ant-thought-chain-item
-  .ant-thought-chain-item-header
-  .ant-thought-chain-item-header-box
-  .ant-thought-chain-item-title {
+.thought_table .ant-thought-chain.ant-thought-chain-small .ant-thought-chain-item .ant-thought-chain-item-header .ant-thought-chain-item-header-box .ant-thought-chain-item-title {
   font-weight: 500;
   font-size: 12px;
   color: #898989;
@@ -60,9 +53,18 @@
 }
 
 .thought_table .ant-thought-chain-item-success-success>*::before {
-    background-color: #E0E0E0 !important;
+  background-color: #E0E0E0 !important;
 }
 
-.bg_thought_left{
-    background: linear-gradient(141deg, #FFFFFF 0%, #F4F4F5 100%) !important;
+.bg_thought_left {
+  background: linear-gradient(141deg, #FFFFFF 0%, #F4F4F5 100%) !important;
+}
+
+.user_message_box {
+  height: 40px;
+  background: #FFFFFF;
+  border-radius: 15px 15px 0px 15px;
+  border: 1px solid #E0E0E0;
+  padding: 0px 10px;
+  line-height: 40px;
 }

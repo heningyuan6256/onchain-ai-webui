@@ -126,23 +126,24 @@ const ContentParts = memo(
           <MemoryArtifacts attachments={attachments} />
           <Sources messageId={messageId} conversationId={conversationId || undefined} />
           {hasReasoningParts && (
-            <div className="mb-5">
-              {/* <ThinkingButton
-                isExpanded={isExpanded}
-                onClick={() =>
-                  setIsExpanded((prev) => {
-                    const val = !prev;
-                    setShowThinking(val);
-                    return val;
-                  })
-                }
-                label={
-                  effectiveIsSubmitting && isLast
-                    ? localize('com_ui_thinking')
-                    : localize('com_ui_thoughts')
-                }
-              /> */}
-            </div>
+            <div></div>
+            // <div className="mb-5">
+            //   <ThinkingButton
+            //     isExpanded={isExpanded}
+            //     onClick={() =>
+            //       setIsExpanded((prev) => {
+            //         const val = !prev;
+            //         setShowThinking(val);
+            //         return val;
+            //       })
+            //     }
+            //     label={
+            //       effectiveIsSubmitting && isLast
+            //         ? localize('com_ui_thinking')
+            //         : localize('com_ui_thoughts')
+            //     }
+            //   />
+            // </div>
           )}
           {content
             .filter((part) => part)

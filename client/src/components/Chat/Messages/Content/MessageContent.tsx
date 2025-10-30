@@ -95,6 +95,7 @@ const DisplayMessage = ({ text, isCreatedByUser, message, showCursor }: TDisplay
           'markdown prose message-content dark:prose-invert light w-full break-words',
           isCreatedByUser && !enableUserMsgMarkdown && 'whitespace-pre-wrap',
           isCreatedByUser ? 'dark:text-gray-20' : 'dark:text-gray-100',
+          "user_message_box"
         )}
       >
         {content}
