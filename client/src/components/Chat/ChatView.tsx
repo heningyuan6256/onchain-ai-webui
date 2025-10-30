@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { FC, memo, useCallback, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useForm } from 'react-hook-form';
 import { Spinner } from '@librechat/client';
@@ -18,6 +18,21 @@ import Header from './Header';
 import Footer from './Footer';
 import { cn } from '~/utils';
 import store from '~/store';
+import { motion, AnimatePresence } from "framer-motion";
+import UPLOADLIGHTGREYSVG from "@/assets/image/front-uploadLightGrey.svg";
+import KNOWLEDGEUNITSVG from "@/assets/image/front-knowledgeunitlightgrey.svg";
+
+import LIBRARYLIGHTSVG from "@/assets/image/front-libraryGrey.svg";
+import { useUploadData } from "@/contexts/UploadDataContext";
+import { CountUp } from 'countup.js';
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import ADDSVG from "@/assets/image/front-add.svg";
+
+import ARROWBLACKSVG from "@/assets/image/front-arrowBlack.svg";
+import Icon from "@/components/icon";
+import { LibraryModel } from '../nav-projects';
+
+
 
 function LoadingSpinner() {
   return (
@@ -28,6 +43,43 @@ function LoadingSpinner() {
     </div>
   );
 }
+
+const CardData: FC<{ title: string; icon: string; count: number; index: number }> = (props) => {
+  const dataRef = useRef(null);
+  useEffect(() => {
+    const countUp = new CountUp(dataRef.current!, Number(props.count), {
+      duration: 1.0,
+    });
+    countUp.start();
+    // return () => {
+    //   countUp.d
+    // }
+  }, [props.count]);
+  return (
+    <div className="flex-1 card_data cursor-pointer">
+      <motion.div
+        key={props.index} // 用唯一标识
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: (props.index + 1) * 0.2, // 顺序进入
+        }}
+      >
+        <div className="text-[#333333] text-xs mb-2">{props.title}</div>
+        <div className="flex justify-between">
+          <div>
+            <img src={props.icon} className="h-[64px]" />
+          </div>
+          <div className="items-end flex text-[#333333] text-4xl" ref={dataRef}>
+            {/* {props.count} */}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 
 function ChatView({ index = 0 }: { index?: number }) {
   const { conversationId } = useParams();
@@ -47,6 +99,8 @@ function ChatView({ index = 0 }: { index?: number }) {
     ),
     enabled: !!fileMap,
   });
+
+
 
   const chatHelpers = useChatHelpers(index, conversationId);
   const addedChatHelpers = useAddedResponse({ rootIndex: index });
@@ -74,6 +128,26 @@ function ChatView({ index = 0 }: { index?: number }) {
     content = <Landing centerFormOnLanding={centerFormOnLanding} />;
   }
 
+  const libraryContentData = [
+    {
+      title: "工业知识库",
+      count: 1,
+      icon: LIBRARYLIGHTSVG,
+    },
+    {
+      title: "已上传文件",
+      count: 3,
+      icon: UPLOADLIGHTGREYSVG,
+    },
+    {
+      title: "知识单元",
+      count: 28,
+      icon: KNOWLEDGEUNITSVG,
+    },
+  ];
+  const { chunksLength, filesLength, libraryData, refreshChatData, thinking } = useUploadData();
+
+
   return (
     <ChatFormProvider {...methods}>
       <ChatContext.Provider value={chatHelpers}>
@@ -98,6 +172,34 @@ function ChatView({ index = 0 }: { index?: number }) {
                     )}
                   >
                     <ChatForm index={index} />
+                    <div className="chat_box h-[180px]">
+                      <div className="flex gap-2.5 mb-2">
+                        {libraryContentData.map((item, index) => {
+                          if (item.title === "已上传文件") {
+                            item.count = filesLength;
+                          } else if (item.title === "知识单元") {
+                            item.count = chunksLength;
+                          } else if (item.title === "工业知识库") {
+                            item.count = libraryData.length;
+                          }
+                          return <CardData key={index} {...item} index={index}></CardData>;
+                        })}
+                      </div>
+                      <Dialog>
+                        <DialogTrigger>
+                          <div className="flex justify-between items-center enter_library h-8 px-4 cursor-pointer w-[548px] border border-[#E0E0E0] hover:border-[#0563B2] transition-all hover:border">
+                            <div className="flex">
+                              <Icon className="w-4 h-4 rotate-180 mr-1.5" src={ADDSVG}></Icon>
+                              <div className="text-xs text-[#333333]">构建知识库</div>
+                            </div>
+                            <div>
+                              <img className="h-4 w-4 rotate-270" src={ARROWBLACKSVG} />
+                            </div>
+                          </div>
+                        </DialogTrigger>
+                        <LibraryModel></LibraryModel>
+                      </Dialog>
+                    </div>
                     {/* {isLandingPage ? <ConversationStarters /> : <Footer />} */}
                   </div>
                 </div>
