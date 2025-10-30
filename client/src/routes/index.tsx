@@ -150,7 +150,7 @@ export const router = createBrowserRouter(
               element: <Search />,
             },
             { path: 'setting', element: <Settings /> },
-            // { path: "appChat", element: <AppChat /> },
+            { path: 'conversations', element: <Conversations /> },
             { path: 'application', element: <AppList /> },
             { path: 'application/:id', element: <AppChat /> },
             {
