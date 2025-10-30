@@ -1,0 +1,35 @@
+.chat_box {
+  background: #ffffff;
+  border-radius: 15px;
+  border: 1px solid #e0e0e0;
+  width: 570px;
+  /* height: 175px; */
+  padding: 10px;
+}
+
+.textarea_bg {
+  background: linear-gradient(160deg, #ffffff 0%, #f4f4f5 100%);
+}
+
+.chat_sub {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card_data {
+  background: linear-gradient(160deg, #ffffff 0%, #f4f4f5 100%);
+  border-radius: 10px;
+  height: 120px;
+  padding: 12px 20px 18px 20px;
+}
+
+.enter_library {
+  background: linear-gradient(160deg, #ffffff 0%, #f4f4f5 100%);
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.enter_library:hover {
+  border: 1px solid #0563b2;
+}

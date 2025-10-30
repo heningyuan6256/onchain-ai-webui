@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>front-unchoose</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="front-unchoose" fill="#333333" fill-rule="nonzero">
+            <g id="front--successgrey-(3)备份">
+                <path d="M8,0 C12.418278,0 16,3.581722 16,8 C16,12.418278 12.418278,16 8,16 C3.581722,16 0,12.418278 0,8 C0,3.581722 3.581722,0 8,0 Z M8,0.8 C4.0235498,0.8 0.8,4.0235498 0.8,8 C0.8,11.9764502 4.0235498,15.2 8,15.2 C11.9764502,15.2 15.2,11.9764502 15.2,8 C15.2,4.0235498 11.9764502,0.8 8,0.8 Z" id="形状结合"></path>
+            </g>
+            <polygon id="路径" points="11.28 5.201 7.05 9.434 4.94 7.326 4.233 8.033 6.773 10.575 7.057 10.87 12.008 5.92 11.28 5.2"></polygon>
+        </g>
+    </g>
+</svg>

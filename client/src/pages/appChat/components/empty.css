@@ -1,0 +1,26 @@
+.listitem{
+background-color: #fafafb;
+}
+.listitem:hover{
+  background-color: #f8f8fa;
+}
+/* .listitem .ant-list-item-meta-avatar {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.listitem .ant-list-item-meta-content {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+} */
+:global(.ant-list-item-meta-avatar){
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+:global(.ant-list-item-meta-content){
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}

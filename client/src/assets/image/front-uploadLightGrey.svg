@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>front-upload</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-21">
+            <g id="front-UploadCheckin" transform="translate(0.4, 0.8)" fill="#EBEBEC" fill-rule="nonzero">
+                <polygon id="路径" points="14.3810645 14.5728783 0 14.5728783 0 0 5.65204655 0 7.48471296 2.28983915 15.2 2.28983915 15.2 14.5738721 14.3810645 14.5738721 14.3810645 3.13063947 7.12394403 3.13063947 5.27537596 0.841794168 0.783156794 0.841794168 0.783156794 13.8145678 14.3810645 13.8145678"></polygon>
+                <polygon id="路径" points="7.0364849 5.79714921 8.03033869 5.79714921 8.03033869 11.6231202 7.0364849 11.6231202"></polygon>
+                <polygon id="路径" points="7.54533804 4.82317249 10.6372172 7.9140578 10.0756898 8.47657905 7.54533804 5.94722113 5.01498627 8.47657905 4.45345887 7.91505165"></polygon>
+            </g>
+            <rect id="矩形" x="0" y="0" width="16" height="16"></rect>
+        </g>
+    </g>
+</svg>

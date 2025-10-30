@@ -1,0 +1,170 @@
+@import "tailwindcss";
+/* 消息相关样式 - 极简黑白灰风格 */
+.message-container {
+  @apply relative mb-2 w-full;
+}
+
+.message-container-user {
+  @apply flex justify-end;
+}
+
+.message-container-assistant {
+  @apply flex justify-start;
+}
+
+.message-bubble {
+  @apply rounded-2xl px-4 py-3 max-w-full;
+}
+
+.message-user,
+.message-user {
+  @apply bg-[#FFFFFF] dark:bg-[#FFFFFF] text-[#333333] dark:text-[#333333];
+  border-radius: 15px 15px 0px 15px;
+  border: 1px solid #e0e0e0;
+  font-size: 12px !important;
+}
+
+/* 新增 - 复制按钮定位 */
+.copy-button-user {
+  @apply absolute left-0 top-0 -translate-x-[50%] -translate-y-[50%] opacity-0 group-hover:opacity-100;
+}
+
+.copy-button-assistant {
+  @apply absolute right-0 top-0 translate-x-[50%] -translate-y-[50%] opacity-0 group-hover:opacity-100;
+}
+
+/* 代码块和行内代码特殊处理 */
+.message-user .prose code,
+.message-user .prose pre {
+  @apply bg-gray-800/80 dark:bg-gray-700/80 text-gray-100 dark:text-gray-200 border-gray-700/50;
+}
+
+/* 链接样式 */
+.message-user .prose a {
+  /* @apply text-accent-300 hover:text-accent-500 dark:text-accent-500 dark:hover:text-accent-700; */
+}
+
+/* 图片消息优化 */
+.message-user.message-user-image {
+  @apply p-0 max-w-fit rounded-3xl bg-white;
+}
+
+.message-user.message-user-image div {
+  @apply bg-white;
+}
+
+.message-assistant {
+  @apply p-2;
+}
+
+/* 确保用户消息内的所有文本元素可见 */
+.message-user .prose p,
+.message-user .prose li,
+.message-user .prose h1,
+.message-user .prose h2,
+.message-user .prose h3,
+.message-user .prose h4,
+.message-user .prose h5,
+.message-user .prose h6,
+.message-user .prose strong,
+.message-user .prose em,
+.message-user .prose blockquote,
+.message-user .prose code {
+  @apply text-white dark:text-gray-100;
+}
+
+/* 确保助手消息内的所有文本元素在暗黑模式下可见 */
+.message-assistant .prose li,
+.message-assistant .prose h1,
+.message-assistant .prose h2,
+.message-assistant .prose h3,
+.message-assistant .prose h4,
+.message-assistant .prose h5,
+.message-assistant .prose h6,
+.message-assistant .prose strong,
+.message-assistant .prose em,
+.message-assistant .prose blockquote {
+  font-size: 14px !important;
+  @apply dark:text-gray-200;
+}
+
+
+.message-system {
+  @apply bg-gray-50 dark:bg-gray-800/40 text-gray-700 dark:text-gray-300 max-w-full mx-auto;
+}
+
+.message-gap {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+/* 消息分组样式 */
+.message-group-container {
+  @apply relative mb-8;
+}
+
+.assistant-response-container {
+  @apply space-y-1 relative;
+}
+
+/* 中间思考步骤容器 */
+.thinking-steps-container {
+  @apply space-y-1 overflow-hidden;
+}
+
+/* 中间消息和环境消息样式 */
+.intermediate-message {
+  @apply mb-1 text-sm;
+}
+
+/* 加载动画 - 传统版本，保留用于降级 */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.typing-indicator span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation: pulse-subtle 1s infinite 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation: pulse-subtle 1s infinite 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation: pulse-subtle 1s infinite 0.4s;
+}
+
+@keyframes pulse-subtle {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 环境状态按钮样式 */
+.environment-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.environment-button:hover {
+  transform: translateY(-2px);
+}
+
+.environment-button:active {
+  transform: scale(0.98);
+}

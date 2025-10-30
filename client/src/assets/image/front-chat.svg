@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>front-chat</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="front-chat" transform="translate(0.8, 1.6)" fill="#000000" fill-rule="nonzero">
+            <g id="front-comment-(2)" transform="translate(0, -0)">
+                <path d="M14.4,0 L14.4,10.29312 L5.06496,10.29312 L1.87776,13.37184 L1.87776,10.29312 L0,10.29312 L0,0 L14.4,0 Z M13.45344,0.9744 L0.95616,0.9744 L0.95616,9.34368 L2.81664,9.34368 L2.81664,11.16288 L4.71552,9.34368 L13.45344,9.34368 L13.45344,0.9744 Z" id="形状"></path>
+                <path d="M3.168,4.4928 L4.608,4.4928 L4.608,5.9328 L3.168,5.9328 L3.168,4.4928 Z M6.528,4.4928 L7.968,4.4928 L7.968,5.9328 L6.528,5.9328 L6.528,4.4928 Z M9.888,4.4928 L11.328,4.4928 L11.328,5.9328 L9.888,5.9328 L9.888,4.4928 Z" id="形状"></path>
+            </g>
+        </g>
+    </g>
+</svg>

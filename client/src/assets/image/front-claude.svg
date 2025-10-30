@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>front-claude</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="front-claude" transform="translate(0.8, 2.8)" fill="#313538" fill-rule="nonzero">
+            <g id="Claude" transform="translate(0, 0)">
+                <path d="M10.382472,0 L8.179416,0 L12.196944,10.4 L14.4,10.4 L10.382472,0 Z M4.017528,0 L0,10.4 L2.2465152,10.4 L3.0681072,8.21600059 L7.271208,8.21600059 L8.0928,10.4 L10.3393152,10.4 L6.3217872,0 L4.017528,0 Z M3.7948464,6.28451975 L5.1696576,2.62956574 L6.5444688,6.28451975 L3.7948464,6.28451975 Z" id="形状"></path>
+            </g>
+        </g>
+    </g>
+</svg>

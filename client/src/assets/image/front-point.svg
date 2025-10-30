@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>front-point</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="front-point" transform="translate(0.8, 0.8)" fill="#000000" fill-rule="nonzero">
+            <g id="front-prompt-(5)">
+                <path d="M7.2,0 C11.1764502,0 14.4,3.2235498 14.4,7.2 C14.4,11.1764502 11.1764502,14.4 7.2,14.4 C3.2235498,14.4 0,11.1764502 0,7.2 C0,3.2235498 3.2235498,0 7.2,0 Z M7.2,0.800399995 C3.66592989,0.800399995 0.801,3.66532988 0.801,7.1994 C0.801,10.7334701 3.66592989,13.5984 7.2,13.5984 C10.7340701,13.5984 13.599,10.7334701 13.599,7.1994 C13.599,3.66532988 10.7340701,0.800399995 7.2,0.800399995 Z M7.8,10.8 L7.8,12 L6.6,12 L6.6,10.8 L7.8,10.8 Z M7.8,3.6 L7.8,9.6 L6.6,9.6 L6.6,3.6 L7.8,3.6 Z" id="形状"></path>
+            </g>
+        </g>
+    </g>
+</svg>

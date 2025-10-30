@@ -1,0 +1,63 @@
+/* 外层整行：始终 flex，水平方向根据 data- 属性决定 */
+.chat-line {
+  display: flex;
+}
+.chat-line[data-sender="user"] {
+  justify-content: flex-end; /* 原来 justify-end */
+}
+.chat-line[data-sender="bot"] {
+  justify-content: flex-start; /* 原来 justify-start */
+}
+
+/* 第二层：限制最大宽度、子元素方向、间距 */
+.chat-bubble-wrapper {
+  display: flex;
+  gap: 12px; /* gap-3 ≈ 0.75rem */
+}
+
+/* 子元素方向：user 为 row-reverse，bot 为 row */
+.chat-bubble-wrapper[data-sender="user"] {
+  flex-direction: row-reverse; /* 原来 flex-row-reverse */
+}
+.chat-bubble-wrapper[data-sender="bot"] {
+  flex-direction: row; /* 原来 flex-row */
+}
+
+/* 气泡本体：圆角、内边距、字体颜色、背景、边框 */
+.chat-bubble {
+  padding: 0.75rem 1rem;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.chat-bubble[data-sender="user"] {
+  border-radius: 15px 15px 0px 15px;
+  border: 1px solid #e0e0e0;
+  /* background:#fff; */
+  color: #26244ce0;
+}
+.chat-bubble[data-sender="bot"] {
+  width: 100%;
+  /* background:#fff; */
+  color: #26244ce0;
+}
+
+/* 文本段落：保留换行与空格 */
+.chat-text {
+  font-size: 12px;
+  /* white-space: pre-wrap; */
+}
+/* 对应 flex-1 overflow-y-auto p-6 space-y-6 */
+.chat-container {
+  max-width: 850px;
+  min-width: 850px;
+  margin: 0 auto;
+  flex: 1 1 0%; /* flex-1 */
+  overflow-y: auto; /* overflow-y-auto */
+  padding: 1rem; /* p-6 = 24px */
+  /* background-color: #fff; */
+}
+
+/* .chat-container > * + * {
+  margin-top: 1.5rem;
+} */

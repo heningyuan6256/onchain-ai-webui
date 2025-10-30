@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>front-gemini</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="front-gemini" transform="translate(1.2, 1.6)" fill="#000000" fill-rule="nonzero">
+            <g id="gemini">
+                <path d="M13.59728,6.81224245 C9.94976,7.03260652 7.03120001,9.95175035 6.81088001,13.6 L6.78368,13.6 C6.56608001,9.95175035 3.64684001,7.03260652 0,6.81224245 L0,6.785037 C3.64683999,6.56739348 6.56607999,3.64756951 6.78640001,0 L6.81359999,0 C7.03391999,3.64756951 9.95315999,6.56739348 13.6,6.78775755 L13.6,6.81224245 L13.59728,6.81224245 Z" id="路径"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,12 @@
+#root {
+    background: url("assets/背景花纹.png") top center / 100% auto no-repeat;
+}
+
+.bg-nav-bar {
+    background: #f4f4f5;
+}
+
+.top_logo {
+    width: 150px;
+    height: 24px;
+}

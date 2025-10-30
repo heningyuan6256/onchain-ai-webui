@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>1/2</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-11" transform="translate(0, 0)">
+            <rect id="矩形" x="0" y="0" width="16" height="16"></rect>
+            <path d="M8,0 C9.22814743,0 10.3916566,0.276749476 11.4315669,0.771287948 L10.8419321,1.60094669 C9.97346718,1.21466913 9.01180292,1 8,1 C4.13400675,1 1,4.13400675 1,8 C1,11.5261219 3.60718824,14.4433024 6.99898993,14.9289666 L6.99804117,15.9378617 C3.05267796,15.4448941 -4.54747351e-13,12.0789426 -4.54747351e-13,8 C-4.54747351e-13,3.581722 3.581722,0 8,0 Z" id="形状结合" fill="#333333" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

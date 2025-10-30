@@ -1,0 +1,51 @@
+.bubble-loader {
+  margin-left: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.bubble-wrapper {
+  display: flex;
+  gap: 0.75rem;     
+  max-width: 20rem;  
+}
+@media (min-width: 1024px) {
+  .bubble-wrapper { max-width: 28rem; } 
+}
+@media (min-width: 1280px) {
+  .bubble-wrapper { max-width: 32rem; } 
+}
+
+.bubble {
+  background-color: rgba(255, 255, 255, 0.5); 
+  border-radius: 1rem;
+  border-top-left-radius: 0.125rem;
+  padding: 0.75rem 1rem;          
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+}
+
+.dots {
+  display: flex;
+  gap: 0.5rem;         
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: black;
+  border-radius: 9999px;
+  animation: bounce 1s infinite;
+}
+.dot:nth-child(2) { animation-delay: 0.1s; }
+.dot:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-100%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}

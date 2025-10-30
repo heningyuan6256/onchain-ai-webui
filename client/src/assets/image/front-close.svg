@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>front-close</title>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="front-close" transform="translate(1.6, 1.6)" fill="#000000" fill-rule="nonzero">
+            <g id="关闭按钮-(1)">
+                <polygon id="路径" points="0.976352888 6.85264104e-16 0 0.96836692 5.42846691 6.40000001 2.2933063e-16 11.8316331 0.976352888 12.8 6.40068855 7.37248179 11.8250242 12.8 12.8 11.8316331 7.37153309 6.40000001 12.8 0.96836692 11.8250242 0 6.39931145 5.42751821 0.977729967 6.85264104e-16"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
