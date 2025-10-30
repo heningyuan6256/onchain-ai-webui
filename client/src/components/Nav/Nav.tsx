@@ -166,13 +166,13 @@ const Nav = memo(
       () => (
         <>
           <Suspense fallback={null}>
-            <AgentMarketplaceButton isSmallScreen={isSmallScreen} toggleNav={toggleNavVisible} />
+            {/* <AgentMarketplaceButton isSmallScreen={isSmallScreen} toggleNav={toggleNavVisible} /> */}
           </Suspense>
           {hasAccessToBookmarks && (
             <>
               <div className="mt-1.5" />
               <Suspense fallback={null}>
-                <BookmarkNav tags={tags} setTags={setTags} isSmallScreen={isSmallScreen} />
+                {/* <BookmarkNav tags={tags} setTags={setTags} isSmallScreen={isSmallScreen} /> */}
               </Suspense>
             </>
           )}
@@ -242,32 +242,7 @@ const Nav = memo(
                           />
                         </div>
                       </div>
-                      <NavProjects projects={[
-                        {
-                          name: "开启新对话",
-                          url: "/",
-                          icon: <Icon src={ADDSVG}></Icon>,
-                          key: "home",
-                        },
-                        {
-                          name: "我的对话",
-                          url: "/conversations",
-                          icon: <Icon src={CHATSVG}></Icon>,
-                          key: "conversations",
-                        },
-                        {
-                          name: "工业知识库",
-                          url: "",
-                          key: "library",
-                          icon: <Icon src={LIBRARYSVG}></Icon>,
-                        },
-                        {
-                          name: "应用广场",
-                          url: "application",
-                          icon: <Icon src={appsSvg}></Icon>,
-                          key: "app",
-                        },
-                      ]} />
+                     
                       <MemoNewChat
                         subHeaders={subHeaders}
                         toggleNav={toggleNavVisible}

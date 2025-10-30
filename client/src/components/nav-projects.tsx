@@ -56,8 +56,6 @@ export const api_key = location.search?.split("=")[1] || "ragflow-EwNGQxYmM4NjY5
 
 export const userid = "101";
 
-export const api_request_url = "http://192.168.0.129:3000";
-
 export const waitUserSelectExcelFile = (params: {
   onSelect?: (result: File) => void;
   onCancel?: () => void;
@@ -606,6 +604,7 @@ export function NavProjects({
     icon: any;
     key?: string;
     collapseHidden?: boolean;
+    onClick?: any
   }[];
 }) {
   const navigate = useNavigate();
@@ -634,9 +633,7 @@ export function NavProjects({
                 <SidebarMenuItem key={item.key}>
                   <SidebarMenuButton asChild className="text-xs sidebar_collapse_btn cursor-pointer">
                     <a
-                      onClick={() => {
-                        navigate(item.url);
-                      }}
+                      onClick={item.onClick}
                     >
                       {item.icon}
                     </a>
@@ -678,9 +675,7 @@ export function NavProjects({
                 <SidebarMenuItem key={item.key} className="side_item_start cursor-pointer">
                   <SidebarMenuButton asChild className="text-xs">
                     <a
-                      onClick={() => {
-                        navigate(item.url);
-                      }}
+                      onClick={item.onClick}
                     >
                       {item.icon}
                       <span>{item.name}</span>
