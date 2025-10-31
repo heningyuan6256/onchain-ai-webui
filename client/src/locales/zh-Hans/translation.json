@@ -684,7 +684,7 @@
   "com_ui_analyzing": "正在分析",
   "com_ui_analyzing_finished": "完成分析",
   "com_ui_api_key": "API 密钥",
-  "com_ui_archive": "归档",
+  "com_ui_archive": "收藏",
   "com_ui_archive_delete_error": "删除已归档对话失败",
   "com_ui_archive_error": "归档对话失败",
   "com_ui_artifact_click": "点击以打开",

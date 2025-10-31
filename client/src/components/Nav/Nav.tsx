@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState, useMemo, memo, lazy, Suspense, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Button, TooltipAnchor, useMediaQuery, MobileSidebar } from '@librechat/client';
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
-import type { ConversationListResponse } from 'librechat-data-provider';
+import { Constants, PermissionTypes, Permissions } from 'librechat-data-provider';
+import type { ConversationListParams, ConversationListResponse } from 'librechat-data-provider';
 import type { InfiniteQueryObserverResult } from '@tanstack/react-query';
 import {
   useLocalize,
@@ -10,6 +10,7 @@ import {
   useAuthContext,
   useLocalStorage,
   useNavScrolling,
+  useNavigateToConvo,
 } from '~/hooks';
 import { useConversationsInfiniteQuery } from '~/data-provider';
 import { Conversations } from '~/components/Conversations';
@@ -19,6 +20,9 @@ import { cn } from '~/utils';
 import store from '~/store';
 import Restract from '../Icons/restract';
 import { SidebarMenuHorizentol, SidebarMenuTitle } from '../ui/sidebar';
+import Icon from '../icon';
+import startSvg from '@/assets/image/front-lightupcollect.svg';
+import { useParams } from 'react-router-dom';
 const BookmarkNav = lazy(() => import('./Bookmarks/BookmarkNav'));
 const AccountSettings = lazy(() => import('./AccountSettings'));
 const AgentMarketplaceButton = lazy(() => import('./AgentMarketplaceButton'));
@@ -46,6 +50,7 @@ const NavMask = memo(
 
 const MemoNewChat = memo(NewChat);
 
+
 const Nav = memo(
   ({
     navVisible,
@@ -56,6 +61,23 @@ const Nav = memo(
   }) => {
     const localize = useLocalize();
     const { isAuthenticated } = useAuthContext();
+
+    const DEFAULT_PARAMS: ConversationListParams = {
+      isArchived: true,
+      sortBy: 'createdAt',
+      sortDirection: 'desc',
+      search: '',
+    };
+
+    const { data: dataFav } =
+      useConversationsInfiniteQuery(DEFAULT_PARAMS, {
+        staleTime: 0,
+        cacheTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+      });
+
+    const favData = dataFav?.pages?.[0]?.conversations || []
 
     const [navWidth, setNavWidth] = useState(NAV_WIDTH_DESKTOP);
     const isSmallScreen = useMediaQuery('(max-width: 768px)');
@@ -189,6 +211,10 @@ const Nav = memo(
       }
     }, [search.query, search.isTyping, isLoading, isFetching]);
 
+    const params = useParams()
+
+    const currentConvoId = useMemo(() => params.conversationId, [params.conversationId]);
+    const { navigateToConvo } = useNavigateToConvo();
 
     return (
       <>
@@ -248,7 +274,34 @@ const Nav = memo(
                       </div>
                       <SidebarMenuTitle
                         title="收藏对话"
-                        data={[]}
+                        data={favData.map((item) => {
+                          return {
+                            ...item, icon: <Icon src={startSvg}></Icon>, name: item.title, onClick: (ctrlOrMetaKey: boolean) => {
+                              // if (ctrlOrMetaKey) {
+                              //   itemToggleNav();
+                              //   const baseUrl = window.location.origin;
+                              //   const path = `/c/${item.conversationId}`;
+                              //   window.open(baseUrl + path, '_blank');
+                              //   return;
+                              // }
+
+                              if (currentConvoId === item.conversationId) {
+                                return;
+                              }
+
+                              itemToggleNav();
+
+                              if (typeof item.title === 'string' && item.title.length > 0) {
+                                document.title = item.title;
+                              }
+
+                              navigateToConvo(item, {
+                                currentConvoId,
+                                resetLatestMessage: !(item.conversationId ?? '') || item.conversationId === Constants.NEW_CONVO,
+                              });
+                            }
+                          };
+                        }) as any}
                       ></SidebarMenuTitle>
                       <div className="px-1 mb-2 mt-2">
                         <SidebarMenuHorizentol></SidebarMenuHorizentol>

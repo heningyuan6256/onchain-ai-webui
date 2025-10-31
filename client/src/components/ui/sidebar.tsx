@@ -704,7 +704,7 @@ function SidebarMenuTitle({
   ...props
 }: React.ComponentProps<"div"> & {
   title: string;
-  data: { name?: string; icon?: any; id?: any }[];
+  data: { name?: string; icon?: any; id?: any, onClick?:any }[];
 }) {
   const { checkServerStatus, loadSessions } = useSession();
 
@@ -735,8 +735,8 @@ function SidebarMenuTitle({
 
   const navigate = useNavigate();
   return (
-    <div className={cn("w-full mb-2", className)} {...props}>
-      <div className="text-xs text-[#898989] px-9 pt-4 pb-3 whitespace-nowrap overflow-hidden">{props.title}</div>
+    <div className={cn("w-full", className)} {...props}>
+      <div className="text-xs text-[#898989] px-9 pt-3 pb-3 whitespace-nowrap overflow-hidden">{props.title}</div>
       <div className="flex-1 overflow-auto">
         {props.data.map((item: any, key) => {
           return (
@@ -751,9 +751,7 @@ function SidebarMenuTitle({
             >
               <div
                 key={key}
-                onClick={() => {
-                  navigate(`/conversations/${item.id}`);
-                }}
+                onClick={item.onClick}
                 className="px-5 py-2 mb-0.5 text-xs text-[#333333] flex items-center hover:bg-[#333333] hover:text-[#ffffff] duration-100 cursor-pointer overflow-hidden whitespace-nowrap"
               >
                 <div className="w-3 h-3 mr-1 min-w-3">{item.icon}</div>
