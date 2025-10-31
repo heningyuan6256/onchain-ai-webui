@@ -81,20 +81,25 @@
   font-weight: normal;
 }
 
-.chat_form_input{
-  background: linear-gradient(160deg,#fff,#f4f4f5);
+.chat_form_input {
+  background: linear-gradient(160deg, #fff, #f4f4f5);
   padding: 8px 12px !important;
 }
 
-.chat_form_input{
+.chat_form_input {
   border-radius: 10px !important;
   border: 1px solid #E0E0E0;
 }
 
-textarea.chat_form_input:hover{
+textarea.chat_form_input:hover {
   border: 1px solid #0563B2
 }
 
-.chat_form_input::placeholder{
-  font-size: 12px!important;
+.chat_form_input::placeholder {
+  font-size: 12px !important;
+}
+
+.setting_title {
+  background: linear-gradient(180deg, #e0e0e0, #f4f4f54d);
+  border-bottom: 1px solid #e0e0e0;
 }
