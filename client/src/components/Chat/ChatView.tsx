@@ -2,11 +2,11 @@ import { FC, memo, useCallback, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useForm } from 'react-hook-form';
 import { Spinner } from '@librechat/client';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Constants, buildTree } from 'librechat-data-provider';
 import type { TMessage } from 'librechat-data-provider';
 import type { ChatFormValues } from '~/common';
-import { ChatContext, AddedChatContext, useFileMapContext, ChatFormProvider } from '~/Providers';
+import { ChatContext, AddedChatContext, useFileMapContext, ChatFormProvider, useChatContext } from '~/Providers';
 import { useChatHelpers, useAddedResponse, useSSE } from '~/hooks';
 import ConversationStarters from './Input/ConversationStarters';
 import { useGetMessagesByConvoId } from '~/data-provider';
@@ -87,6 +87,14 @@ function ChatView({ index = 0 }: { index?: number }) {
   const addedSubmission = useRecoilValue(store.submissionByIndex(index + 1));
   const centerFormOnLanding = useRecoilValue(store.centerFormOnLanding);
 
+  const searchParams = new URLSearchParams(location.search);
+
+  const endpoint = searchParams.get('endpoint'); // 获取 name 参数
+
+  const model = searchParams.get('model'); // 获取 name 参数
+
+  console.log(model, endpoint, "endpoint");
+
   const fileMap = useFileMapContext();
 
   const { data: messagesTree = null, isLoading } = useGetMessagesByConvoId(conversationId ?? '', {
@@ -147,14 +155,24 @@ function ChatView({ index = 0 }: { index?: number }) {
   ];
   const { chunksLength, filesLength, libraryData, refreshChatData, thinking } = useUploadData();
 
+  // console.log(conversationId,model,isLoading,"conversationIdconversationId")
 
+  const conversation = useRecoilValue(store.conversationByIndex(0));
+
+  const isdd =
+    conversation &&
+    conversation.conversationId != null &&
+    conversation.conversationId !== 'new' &&
+    conversation.conversationId !== 'search';
+
+    console.log(isLandingPage,"isLandingPage")
   return (
     <ChatFormProvider {...methods}>
       <ChatContext.Provider value={chatHelpers}>
         <AddedChatContext.Provider value={addedChatHelpers}>
           <Presentation>
             <div className="flex h-full w-full flex-col">
-              {!isLoading && <Header />}
+              {!isLoading && isLandingPage && <Header />}
               <>
                 <div
                   className={cn(
@@ -168,20 +186,24 @@ function ChatView({ index = 0 }: { index?: number }) {
                   <div
                     className={cn(
                       'w-full',
-                      isLandingPage && 'max-w-3xl transition-all duration-200 xl:max-w-4xl',
+                      isLandingPage && 'max-w-3xl xl:max-w-xl',
                     )}
                   >
                     <ChatForm index={index} />
-                    <div className="chat_box h-[180px]">
+                    <div
+                      className={cn(
+                        "chat_box transition-all duration-30 ease-in-out overflow-hidden mx-auto",
+                        !isdd
+                          ? 
+                          "opacity-100 translate-y-0 h-[180px]"
+                          : "opacity-0 -translate-y-4 pointer-events-none h-[0px]"
+                      )}
+                    >
                       <div className="flex gap-2.5 mb-2">
                         {libraryContentData.map((item, index) => {
-                          if (item.title === "已上传文件") {
-                            item.count = filesLength;
-                          } else if (item.title === "知识单元") {
-                            item.count = chunksLength;
-                          } else if (item.title === "工业知识库") {
-                            item.count = libraryData.length;
-                          }
+                          if (item.title === "已上传文件") item.count = filesLength;
+                          else if (item.title === "知识单元") item.count = chunksLength;
+                          else if (item.title === "工业知识库") item.count = libraryData.length;
                           return <CardData key={index} {...item} index={index}></CardData>;
                         })}
                       </div>
@@ -197,9 +219,10 @@ function ChatView({ index = 0 }: { index?: number }) {
                             </div>
                           </div>
                         </DialogTrigger>
-                        <LibraryModel></LibraryModel>
+                        <LibraryModel />
                       </Dialog>
                     </div>
+
                     {/* {isLandingPage ? <ConversationStarters /> : <Footer />} */}
                   </div>
                 </div>

@@ -201,7 +201,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     () =>
       cn(
         'md:py-3.5 m-0 w-full resize-none py-[13px] placeholder-black/50 bg-transparent dark:placeholder-white/50 [&:has(textarea:focus)]:shadow-[0_2px_6px_rgba(0,0,0,.05)]',
-        isCollapsed ? 'max-h-[52px]' : 'max-h-[45vh] md:max-h-[55vh]',
+        isCollapsed ? 'max-h-[121px]' : 'max-h-[45vh] md:max-h-[55vh]',
         isMoreThanThreeRows ? 'pl-5' : 'px-5',
       ),
     [isCollapsed, isMoreThanThreeRows],
@@ -211,14 +211,14 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     <form
       onSubmit={methods.handleSubmit(submitMessage)}
       className={cn(
-        'mx-auto flex w-full flex-row gap-3 transition-[max-width] duration-300 sm:px-2',
-        maximizeChatSpace ? 'max-w-full' : 'md:max-w-3xl xl:max-w-4xl',
+        'mx-auto flex w-full flex-row gap-3 transition-[max-width] duration-300',
+        maximizeChatSpace ? 'max-w-full' : 'md:max-w-xl xl:max-w-xl',
         centerFormOnLanding &&
           (conversationId == null || conversationId === Constants.NEW_CONVO) &&
           !isSubmitting &&
           conversation?.messages?.length === 0
-          ? 'transition-all duration-200 sm:mb-28'
-          : 'sm:mb-10',
+          ? 'transition-all duration-200 sm:mb-2.5'
+          : 'sm:mb-2.5',
       )}
     >
       <div className="relative flex h-full flex-1 items-stretch md:flex-col">
@@ -246,8 +246,8 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
           <div
             onClick={handleContainerClick}
             className={cn(
-              'relative flex w-full flex-grow flex-col overflow-hidden rounded-t-3xl border pb-4 text-text-primary transition-all duration-200 sm:rounded-3xl sm:pb-0',
-              isTextAreaFocused ? 'shadow-lg' : 'shadow-md',
+              'relative flex w-full flex-grow flex-col overflow-hidden rounded-t-3xl border pb-4 text-text-primary transition-all duration-200 sm:rounded-[15px] sm:pb-0',
+              // isTextAreaFocused ? 'shadow-lg' : 'shadow-md',
               isTemporary
                 ? 'border-violet-800/60 bg-violet-950/10'
                 : 'border-border-light bg-surface-chat',
@@ -262,7 +262,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
             />
             <FileFormChat conversation={conversation} />
             {endpoint && (
-              <div className={cn('flex', isRTL ? 'flex-row-reverse' : 'flex-row')}>
+              <div className={cn('flex', "p-2.5", "rounded-[10px]", isRTL ? 'flex-row-reverse' : 'flex-row')}>
                 <TextareaAutosize
                   {...registerProps}
                   ref={(e) => {
@@ -278,7 +278,9 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                   id={mainTextareaId}
                   tabIndex={0}
                   data-testid="text-input"
-                  rows={1}
+                  rows={5}
+                  minRows={5}
+                  maxRows={5}
                   onFocus={() => {
                     handleFocusOrClick();
                     setIsTextAreaFocused(true);
@@ -286,20 +288,21 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                   onBlur={setIsTextAreaFocused.bind(null, false)}
                   aria-label={localize('com_ui_message_input')}
                   onClick={handleFocusOrClick}
-                  style={{ height: 44, overflowY: 'auto' }}
+                  style={{ height: 121, overflowY: 'auto' }}
                   className={cn(
                     baseClasses,
                     removeFocusRings,
                     'transition-[max-height] duration-200 disabled:cursor-not-allowed',
+                    "chat_form_input"
                   )}
                 />
-                <div className="flex flex-col items-start justify-start pt-1.5">
+                {/* <div className="flex flex-col items-start justify-start pt-1.5">
                   <CollapseChat
                     isCollapsed={isCollapsed}
                     isScrollable={isMoreThanThreeRows}
                     setIsCollapsed={setIsCollapsed}
                   />
-                </div>
+                </div> */}
               </div>
             )}
             <div
