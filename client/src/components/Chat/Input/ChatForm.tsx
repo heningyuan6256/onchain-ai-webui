@@ -36,6 +36,10 @@ import Mention from './Mention';
 import store from '~/store';
 import ModelSelector from '../Menus/Endpoints/ModelSelector';
 import { useGetStartupConfig } from '~/data-provider';
+import { Toggle } from '~/components/ui/toggle';
+import Icon from '~/components/icon';
+import AISVG from "@/assets/image/front-ai.svg";
+import AIWhiteSVG from "@/assets/image/front-ai-white.svg";
 
 const ChatForm = memo(({ index = 0 }: { index?: number }) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
@@ -207,6 +211,8 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     [isCollapsed, isMoreThanThreeRows],
   );
 
+  const [thinking, setThinking] = useState(false)
+
   return (
     <form
       onSubmit={methods.handleSubmit(submitMessage)}
@@ -307,14 +313,28 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
             )}
             <div
               className={cn(
-                'items-between flex gap-2 pb-2',
+                'items-between flex gap-2.5 pb-2 h-[34px]',
                 isRTL ? 'flex-row-reverse' : 'flex-row',
               )}
             >
-              <div className={`${isRTL ? 'mr-2' : 'ml-2'}`}>
+              <div className={`${isRTL ? 'mr-2' : 'ml-2'} ml-[20px]`}>
                 <AttachFileChat conversation={conversation} disableInputs={disableInputs} />
               </div>
-              <div><ModelSelector startupConfig={startupConfig} /></div>
+
+              <Toggle
+                pressed={thinking}
+                onPressedChange={(value) => {
+                  setThinking(value);
+                }}
+                className="rounded-[12px] h-[24px] text-xs font-[400] w-[82px] cursor-pointer"
+              >
+                <div className="w-3.5">
+                  <Icon className={!thinking ? "w-3.5 h-3.5" : "w-0 h-0"} src={AISVG}></Icon>
+                  <Icon className={!thinking ? "w-0 h-0" : "w-3.5 h-3.5"} src={AIWhiteSVG}></Icon>
+                </div>
+                深入研究
+              </Toggle>
+              {/* <div><ModelSelector startupConfig={startupConfig} /></div> */}
 
               <BadgeRow
                 showEphemeralBadges={!isAgentsEndpoint(endpoint) && !isAssistantsEndpoint(endpoint)}

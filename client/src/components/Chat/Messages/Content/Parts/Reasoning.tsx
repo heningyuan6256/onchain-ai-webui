@@ -37,7 +37,7 @@ const Reasoning = memo(({ reasoning, isSubmitting }: ReasoningProps) => {
     <div
       className={cn(
         'grid transition-all duration-300 ease-out',
-        nextType !== ContentTypes.THINK && isExpanded && 'mb-8',
+        nextType !== ContentTypes.THINK && isExpanded && 'mb-2',
       )}
       style={{
         gridTemplateRows: isExpanded ? '1fr' : '0fr',

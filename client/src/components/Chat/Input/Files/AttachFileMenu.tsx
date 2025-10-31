@@ -35,6 +35,8 @@ import { useGetStartupConfig } from '~/data-provider';
 import { ephemeralAgentByConvoId } from '~/store';
 import { MenuItemProps } from '~/common';
 import { cn } from '~/utils';
+import ATTACHMENTSVG from '@/assets/image/front-document.svg';
+import Icon from '~/components/icon';
 
 interface AttachFileMenuProps {
   agentId?: string | null;
@@ -223,11 +225,12 @@ const AttachFileMenu = ({
           id="attach-file-menu-button"
           aria-label="Attach File Options"
           className={cn(
-            'flex size-9 items-center justify-center rounded-full p-1 transition-colors hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50',
+            'bg-[#F4F4F5] flex size-6 items-center justify-center rounded-full transition-colors hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50',
           )}
         >
           <div className="flex w-full items-center justify-center gap-2">
-            <AttachmentIcon />
+            {/* <AttachmentIcon /> */}
+            <Icon className='w-3.5 h-3.5' src={ATTACHMENTSVG} />
           </div>
         </Ariakit.MenuButton>
       }

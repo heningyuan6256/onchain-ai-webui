@@ -59,7 +59,7 @@ export default function Badge({
       className={cn(
         'group relative inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
         'border border-border-medium text-sm font-medium transition-shadow md:w-full',
-        'size-9 p-2 md:p-3',
+        'size-9',
         isActive
           ? 'bg-surface-active shadow-md'
           : 'bg-surface-chat shadow-sm hover:bg-surface-hover hover:shadow-md',
