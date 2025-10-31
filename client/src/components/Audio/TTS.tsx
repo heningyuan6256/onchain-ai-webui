@@ -6,6 +6,8 @@ import { VolumeIcon, VolumeMuteIcon, Spinner } from '@librechat/client';
 import { useLocalize, useTTSBrowser, useTTSExternal } from '~/hooks';
 import { logger } from '~/utils';
 import store from '~/store';
+import Icon from '~/components/icon';
+import AIVolumeSVG from "@/assets/image/front-volume.svg";
 
 export function BrowserTTS({
   isLast,
@@ -27,14 +29,14 @@ export function BrowserTTS({
 
   const renderIcon = () => {
     if (isLoading === true) {
-      return <Spinner className="icon-md-heavy h-[18px] w-[18px]" />;
+      return <Spinner className="h-[18px] w-[18px]" />;
     }
 
     if (isSpeaking === true) {
-      return <VolumeMuteIcon className="icon-md-heavy h-[18px] w-[18px]" />;
+      return <VolumeMuteIcon className="h-[18px] w-[18px]" />;
     }
 
-    return <VolumeIcon className="icon-md-heavy h-[18px] w-[18px]" />;
+    return <Icon className="h-[18px] w-[18px]" src={AIVolumeSVG}></Icon>;
   };
 
   useEffect(() => {

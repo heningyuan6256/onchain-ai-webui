@@ -8,6 +8,10 @@ import MessageAudio from './MessageAudio';
 import Feedback from './Feedback';
 import { cn } from '~/utils';
 import store from '~/store';
+import EditSvg from "@/assets/image/front-edit.svg";
+import CopySvg from "@/assets/image/front-copy.svg";
+import RefreshSvg from "@/assets/image/front-refresh.svg";
+import Icon from '~/components/icon';
 
 type THoverButtons = {
   isEditing: boolean;
@@ -208,7 +212,7 @@ const HoverButtons = ({
         title={
           isCopied ? localize('com_ui_copied_to_clipboard') : localize('com_ui_copy_to_clipboard')
         }
-        icon={isCopied ? <CheckMark className="h-[18px] w-[18px]" /> : <Clipboard size="19" />}
+        icon={isCopied ? <CheckMark className="h-[18px] w-[18px]" /> : <Icon className="h-[18px] w-[18px]" src={CopySvg} />}
         isLast={isLast}
         className={`ml-0 flex items-center gap-1.5 text-xs ${isSubmitting && isCreatedByUser ? 'md:opacity-0 md:group-hover:opacity-100' : ''}`}
       />
@@ -219,7 +223,7 @@ const HoverButtons = ({
           id={`edit-${message.messageId}`}
           onClick={onEdit}
           title={localize('com_ui_edit')}
-          icon={<EditIcon size="19" />}
+          icon={<Icon className="h-[18px] w-[18px]" src={EditSvg} />}
           isActive={isEditing}
           isVisible={!hideEditButton}
           isDisabled={hideEditButton}
@@ -229,13 +233,13 @@ const HoverButtons = ({
       )}
 
       {/* Fork Button */}
-      <Fork
+      {/* <Fork
         messageId={message.messageId}
         conversationId={conversation.conversationId}
         forkingSupported={forkingSupported}
         latestMessageId={latestMessage?.messageId}
         isLast={isLast}
-      />
+      /> */}
 
       {/* Feedback Buttons */}
       {!isCreatedByUser && handleFeedback != null && (
@@ -247,7 +251,7 @@ const HoverButtons = ({
         <HoverButton
           onClick={regenerate}
           title={localize('com_ui_regenerate')}
-          icon={<RegenerateIcon size="19" />}
+          icon={<Icon className="h-[18px] w-[18px]" src={RefreshSvg} />}
           isLast={isLast}
           className="active"
         />

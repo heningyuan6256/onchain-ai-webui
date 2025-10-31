@@ -16,6 +16,8 @@ import MCPSubMenu from '~/components/Chat/Input/MCPSubMenu';
 import { useGetStartupConfig } from '~/data-provider';
 import { useBadgeRowContext } from '~/Providers';
 import { cn } from '~/utils';
+import Icon from '~/components/icon';
+import AdjustSvg from "@/assets/image/front-adjust.svg";
 
 interface ToolsDropdownProps {
   disabled?: boolean;
@@ -310,7 +312,8 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
           )}
         >
           <div className="flex w-full items-center justify-center gap-2">
-            <Settings2 className="icon-md" />
+            {/* <Settings2 className="icon-md" /> */}
+            <Icon className='h-3.5 w-3.5' src={AdjustSvg}></Icon>
           </div>
         </Ariakit.MenuButton>
       }

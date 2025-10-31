@@ -21,6 +21,9 @@ import {
 } from 'lucide-react';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
+import Icon from '~/components/icon';
+import LikeSvg from "@/assets/image/front-like.svg";
+import DisLikeSvg from "@/assets/image/front-dislike.svg";
 
 interface FeedbackProps {
   handleFeedback: ({ feedback }: { feedback: TFeedback | undefined }) => void;
@@ -154,7 +157,8 @@ function FeedbackButtons({
             aria-pressed={feedback?.rating === 'thumbsUp'}
             aria-haspopup="menu"
           >
-            <ThumbUpIcon size="19" bold={feedback?.rating === 'thumbsUp'} />
+            <Icon className="h-[18px] w-[18px]" src={LikeSvg}></Icon>
+            {/* <ThumbUpIcon size="19" bold={feedback?.rating === 'thumbsUp'} /> */}
           </button>
         }
       />
@@ -188,7 +192,8 @@ function FeedbackButtons({
             aria-pressed={feedback?.rating === 'thumbsDown'}
             aria-haspopup="menu"
           >
-            <ThumbDownIcon size="19" bold={feedback?.rating === 'thumbsDown'} />
+            <Icon className="h-[18px] w-[18px]" src={DisLikeSvg}></Icon>
+            {/* <ThumbDownIcon size="19" bold={feedback?.rating === 'thumbsDown'} /> */}
           </button>
         }
       />
@@ -286,17 +291,17 @@ export default function Feedback({
       <button
         className={buttonClasses(true, isLast)}
         onClick={() => {
-          if (isThumbsUp) {
+          // if (isThumbsUp) {
             handleButtonFeedback(undefined);
-          } else {
-            setOpenDialog(true);
-          }
+          // } else {
+          //   // setOpenDialog(true);
+          // }
         }}
         type="button"
         title={label}
         aria-pressed="true"
       >
-        <Icon size="19" bold />
+        <Icon size="18" bold />
       </button>
     );
   };

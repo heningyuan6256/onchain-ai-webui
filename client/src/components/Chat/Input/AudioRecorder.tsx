@@ -4,6 +4,8 @@ import { useLocalize, useSpeechToText, useGetAudioSettings } from '~/hooks';
 import { useChatFormContext } from '~/Providers';
 import { globalAudioId } from '~/common';
 import { cn } from '~/utils';
+import Icon from '~/components/icon';
+import RecordSvg from "@/assets/image/front-record.svg";
 
 const isExternalSTT = (speechToTextEndpoint: string) => speechToTextEndpoint === 'external';
 export default function AudioRecorder({
@@ -100,7 +102,7 @@ export default function AudioRecorder({
     if (isLoading === true) {
       return <Spinner className="stroke-text-secondary" />;
     }
-    return <ListeningIcon className="stroke-text-secondary" />;
+    return <Icon className="h-[18px] w-[18px]" src={RecordSvg}></Icon>;
   };
 
   return (
