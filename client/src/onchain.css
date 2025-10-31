@@ -61,7 +61,7 @@
 }
 
 .user_message_box {
-  height: 40px;
+  min-height: 40px;
   background: #FFFFFF;
   border-radius: 15px 15px 0px 15px;
   border: 1px solid #E0E0E0;
