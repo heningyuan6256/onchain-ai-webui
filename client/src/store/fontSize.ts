@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { applyFontSize } from '@librechat/client';
 
-const DEFAULT_FONT_SIZE = 'text-base';
+const DEFAULT_FONT_SIZE = 'text-sm';
 
 /**
  * Base storage atom for font size
