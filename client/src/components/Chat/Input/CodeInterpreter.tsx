@@ -24,11 +24,11 @@ function CodeInterpreter() {
     (runCode || isPinned) && (
       <CheckboxButton
         ref={badgeTriggerRef}
-        className="max-w-fit"
+        className="max-w-fit h-[24px] text-xs"
         checked={runCode}
         setValue={debouncedChange}
         label={localize('com_assistants_code_interpreter')}
-        isCheckedClassName="border-purple-600/40 bg-purple-500/10 hover:bg-purple-700/10"
+        // isCheckedClassName="border-purple-600/40 bg-purple-500/10 hover:bg-purple-700/10"
         icon={<TerminalSquareIcon className="icon-md" />}
       />
     )

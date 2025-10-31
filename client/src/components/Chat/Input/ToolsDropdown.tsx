@@ -161,59 +161,59 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
     });
   }
 
-  if (canUseWebSearch && webSearchEnabled) {
-    dropdownItems.push({
-      onClick: handleWebSearchToggle,
-      hideOnClick: false,
-      render: (props) => (
-        <div {...props}>
-          <div className="flex items-center gap-2">
-            <Globe className="icon-md" />
-            <span>{localize('com_ui_web_search')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {showWebSearchSettings && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsSearchDialogOpen(true);
-                }}
-                className={cn(
-                  'rounded p-1 transition-all duration-200',
-                  'hover:bg-surface-secondary hover:shadow-sm',
-                  'text-text-secondary hover:text-text-primary',
-                )}
-                aria-label="Configure web search"
-                ref={searchMenuTriggerRef}
-              >
-                <div className="h-4 w-4">
-                  <Settings className="h-4 w-4" />
-                </div>
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsSearchPinned(!isSearchPinned);
-              }}
-              className={cn(
-                'rounded p-1 transition-all duration-200',
-                'hover:bg-surface-secondary hover:shadow-sm',
-                !isSearchPinned && 'text-text-secondary hover:text-text-primary',
-              )}
-              aria-label={isSearchPinned ? 'Unpin' : 'Pin'}
-            >
-              <div className="h-4 w-4">
-                <PinIcon unpin={isSearchPinned} />
-              </div>
-            </button>
-          </div>
-        </div>
-      ),
-    });
-  }
+  // if (canUseWebSearch && webSearchEnabled) {
+  //   dropdownItems.push({
+  //     onClick: handleWebSearchToggle,
+  //     hideOnClick: false,
+  //     render: (props) => (
+  //       <div {...props}>
+  //         <div className="flex items-center gap-2">
+  //           <Globe className="icon-md" />
+  //           <span>{localize('com_ui_web_search')}</span>
+  //         </div>
+  //         <div className="flex items-center gap-1">
+  //           {showWebSearchSettings && (
+  //             <button
+  //               type="button"
+  //               onClick={(e) => {
+  //                 e.stopPropagation();
+  //                 setIsSearchDialogOpen(true);
+  //               }}
+  //               className={cn(
+  //                 'rounded p-1 transition-all duration-200',
+  //                 'hover:bg-surface-secondary hover:shadow-sm',
+  //                 'text-text-secondary hover:text-text-primary',
+  //               )}
+  //               aria-label="Configure web search"
+  //               ref={searchMenuTriggerRef}
+  //             >
+  //               <div className="h-4 w-4">
+  //                 <Settings className="h-4 w-4" />
+  //               </div>
+  //             </button>
+  //           )}
+  //           <button
+  //             type="button"
+  //             onClick={(e) => {
+  //               e.stopPropagation();
+  //               setIsSearchPinned(!isSearchPinned);
+  //             }}
+  //             className={cn(
+  //               'rounded p-1 transition-all duration-200',
+  //               'hover:bg-surface-secondary hover:shadow-sm',
+  //               !isSearchPinned && 'text-text-secondary hover:text-text-primary',
+  //             )}
+  //             aria-label={isSearchPinned ? 'Unpin' : 'Pin'}
+  //           >
+  //             <div className="h-4 w-4">
+  //               <PinIcon unpin={isSearchPinned} />
+  //             </div>
+  //           </button>
+  //         </div>
+  //       </div>
+  //     ),
+  //   });
+  // }
 
   if (canRunCode && codeEnabled) {
     dropdownItems.push({
@@ -226,7 +226,7 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
             <span>{localize('com_assistants_code_interpreter')}</span>
           </div>
           <div className="flex items-center gap-1">
-            {showCodeSettings && (
+            {/* {showCodeSettings && (
               <button
                 type="button"
                 onClick={(e) => {
@@ -245,7 +245,7 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
                   <Settings className="h-4 w-4" />
                 </div>
               </button>
-            )}
+            )} */}
             <button
               type="button"
               onClick={(e) => {
@@ -269,22 +269,22 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
     });
   }
 
-  if (artifactsEnabled) {
-    dropdownItems.push({
-      hideOnClick: false,
-      render: (props) => (
-        <ArtifactsSubMenu
-          {...props}
-          isArtifactsPinned={isArtifactsPinned}
-          setIsArtifactsPinned={setIsArtifactsPinned}
-          artifactsMode={artifacts.toggleState as string}
-          handleArtifactsToggle={handleArtifactsToggle}
-          handleShadcnToggle={handleShadcnToggle}
-          handleCustomToggle={handleCustomToggle}
-        />
-      ),
-    });
-  }
+  // if (artifactsEnabled) {
+  //   dropdownItems.push({
+  //     hideOnClick: false,
+  //     render: (props) => (
+  //       <ArtifactsSubMenu
+  //         {...props}
+  //         isArtifactsPinned={isArtifactsPinned}
+  //         setIsArtifactsPinned={setIsArtifactsPinned}
+  //         artifactsMode={artifacts.toggleState as string}
+  //         handleArtifactsToggle={handleArtifactsToggle}
+  //         handleShadcnToggle={handleShadcnToggle}
+  //         handleCustomToggle={handleCustomToggle}
+  //       />
+  //     ),
+  //   });
+  // }
 
   const { configuredServers } = mcpServerManager;
   if (configuredServers && configuredServers.length > 0) {

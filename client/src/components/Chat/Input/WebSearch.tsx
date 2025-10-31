@@ -24,11 +24,11 @@ function WebSearch() {
     (isPinned || (webSearch && authData?.authenticated)) && (
       <CheckboxButton
         ref={badgeTriggerRef}
-        className="max-w-fit"
+        className="max-w-fit p-0 text-xs"
         checked={webSearch}
         setValue={debouncedChange}
         label={localize('com_ui_search')}
-        isCheckedClassName="border-blue-600/40 bg-blue-500/10 hover:bg-blue-700/10"
+        // isCheckedClassName="border-blue-600/40 bg-blue-500/10 hover:bg-blue-700/10"
         icon={<Globe className="icon-md" />}
       />
     )
