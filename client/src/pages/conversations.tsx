@@ -74,7 +74,7 @@ const conversations: FC = () => {
     useConversationsInfiniteQuery(
       {
         tags: tags.length === 0 ? undefined : tags,
-        search: search.debouncedQuery
+        search: search.debouncedQuery,
       },
       {
         enabled: isAuthenticated,
