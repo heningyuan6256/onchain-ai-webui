@@ -62,11 +62,11 @@ const conversations: FC = () => {
     <div className="home_container h-full w-full flex justify-center items-center">
       <div style={{ height: "400px" }}>
         <div className="flex justify-between">
-          <div className="font-semibold text-2xl text-[#333333] mb-4.5 ml-6">我的对话</div>
+          <div className="font-semibold text-2xl text-[#333333] mb-4 ml-6">我的对话</div>
           <div>
             <Button
               onClick={() => {
-                navigate("/");
+                navigate("/c/new");
               }}
               className="h-[32px] text-xs cursor-pointer"
             >
@@ -76,7 +76,7 @@ const conversations: FC = () => {
         </div>
         <Command className="rounded-[20px] md:min-w-[563px]">
           <CommandInput placeholder="搜索你想知道的" />
-          <CommandList className="mt-6.5">
+          <CommandList className="mt-6">
             <CommandEmpty>没有找到结果</CommandEmpty>
             <CommandGroup>
               {sessions.map((item, index) => {
@@ -99,12 +99,12 @@ const conversations: FC = () => {
                       >
                         <div>
                           <div className="mb-1 flex">
-                            <div className="w-4.5 h-4.5 flex justify-center items-center">
-                              {/* {item.is_favorite ? <Icon src={STARSVG} className="w-3 h-3" /> : null} */}
+                            <div className="w-4 h-4 flex justify-center items-center">
+                              {item.is_favorite ? <Icon src={STARSVG} className="w-3 h-3" /> : null}
                             </div>
                             {item.name}
                           </div>
-                          <div className="text-xs font-normal text-[rgba(0,0,0,0.3)] ml-4.5">
+                          <div className="text-xs font-normal text-[rgba(0,0,0,0.3)] ml-4">
                             {formatISODate(item.updatedAt)}
                           </div>
                         </div>

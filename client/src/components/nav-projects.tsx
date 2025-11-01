@@ -619,7 +619,7 @@ export function NavProjects({
               return (
                 <Dialog key={item.key}>
                   <DialogTrigger>
-                    <SidebarMenuItem key={item.name} className="side_item_start cursor-pointer">
+                    <SidebarMenuItem key={item.name} className="side_item_start cursor-pointer hover:bg-surface-hover">
                       <SidebarMenuButton asChild className="text-xs">
                         <a>{item.icon}</a>
                       </SidebarMenuButton>
@@ -631,7 +631,7 @@ export function NavProjects({
             } else {
               return (
                 <SidebarMenuItem key={item.key}>
-                  <SidebarMenuButton asChild className="text-xs sidebar_collapse_btn cursor-pointer">
+                  <SidebarMenuButton asChild className="text-xs sidebar_collapse_btn cursor-pointer hover:bg-surface-hover">
                     <a
                       onClick={item.onClick}
                     >
@@ -658,7 +658,7 @@ export function NavProjects({
               return (
                 <Dialog key={item.key}>
                   <DialogTrigger>
-                    <SidebarMenuItem key={item.name} className="side_item_start cursor-pointer">
+                    <SidebarMenuItem key={item.name} className="side_item_start cursor-pointer hover:bg-surface-hover">
                       <SidebarMenuButton asChild className="text-xs">
                         <a>
                           {item.icon}
@@ -672,7 +672,7 @@ export function NavProjects({
               );
             } else {
               return (
-                <SidebarMenuItem key={item.key} className="side_item_start cursor-pointer">
+                <SidebarMenuItem key={item.key} className="side_item_start cursor-pointer hover:bg-surface-hover">
                   <SidebarMenuButton asChild className="text-xs">
                     <a
                       onClick={item.onClick}
