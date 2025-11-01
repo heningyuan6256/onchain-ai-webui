@@ -1,5 +1,5 @@
 import { useState, useId, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import * as Ariakit from '@ariakit/react';
 import { Upload, Share2 } from 'lucide-react';
 import { DropdownPopup, TooltipAnchor, useMediaQuery } from '@librechat/client';
@@ -8,9 +8,10 @@ import ExportModal from '~/components/Nav/ExportConversation/ExportModal';
 import { ShareButton } from '~/components/Conversations/ConvoOptions';
 import { useLocalize } from '~/hooks';
 import store from '~/store';
-import ShareSvg from "@/assets/image/front-share.svg";
+import CollectSvg from "@/assets/image/front-collect.svg";
 import StarSVG from "@/assets/image/front-lightupcollect.svg";
 import Icon from "@/components/icon";
+import { useArchiveConvoMutation } from '~/data-provider';
 
 export default function ExportAndShareMenu({
   isSharedButtonEnabled,
@@ -26,7 +27,10 @@ export default function ExportAndShareMenu({
   const shareButtonRef = useRef<HTMLButtonElement>(null);
   const exportButtonRef = useRef<HTMLButtonElement>(null);
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
-  const conversation = useRecoilValue(store.conversationByIndex(0));
+  // const conversation = useRecoilValue(store.conversationByIndex(0));
+  const [conversation, setConversation] = useRecoilState(store.conversationByIndex(0));
+
+  const archiveConvoMutation = useArchiveConvoMutation();
 
   const exportable =
     conversation &&
@@ -68,10 +72,39 @@ export default function ExportAndShareMenu({
     },
   ];
 
+
+  console.log(conversation, 'conversation')
   return (
     <>
-      
-      <div onClick={exportHandler}><Icon className={"w-5 mr-5 cursor-pointer"} src={StarSVG}></Icon></div>
+
+      <div onClick={() => {
+        archiveConvoMutation.mutate(
+          { conversationId: conversation?.conversationId!, isArchived: !conversation?.isArchived },
+          {
+            onSuccess: (res) => {
+              setConversation((prev:any) => ({
+                ...prev,
+                isArchived: res.isArchived, // 更新状态
+              }));
+              // conversation.isArchived = res.isArchived
+
+              // if (currentConvoId === convoId || currentConvoId === 'new') {
+              //   newConversation();
+              //   navigate('/c/new', { replace: true });
+              // }
+              // retainView();
+              // setIsPopoverActive(false);
+            },
+            onError: () => {
+              // showToast({
+              //   message: localize('com_ui_archive_error'),
+              //   severity: NotificationSeverity.ERROR,
+              //   showIcon: true,
+              // });
+            },
+          },
+        );
+      }}><Icon className={"w-5 mr-5 cursor-pointer"} src={conversation?.isArchived ? StarSVG : CollectSvg}></Icon></div>
       {/* <div onClick={shareHandler}><Icon className={"w-5 cursor-pointer"} src={ShareSvg}></Icon></div> */}
       {/*       
 

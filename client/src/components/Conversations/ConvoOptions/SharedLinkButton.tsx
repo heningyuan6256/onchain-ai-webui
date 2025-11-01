@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { QrCode, RotateCw, Trash2 } from 'lucide-react';
 import {
-  // Button,
   OGDialog,
   Spinner,
   TooltipAnchor,

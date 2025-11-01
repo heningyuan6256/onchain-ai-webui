@@ -577,7 +577,7 @@ function SidebarMenuAction({
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
         showOnHover &&
-          "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
+        "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
         className
       )}
       {...props}
@@ -704,7 +704,7 @@ function SidebarMenuTitle({
   ...props
 }: React.ComponentProps<"div"> & {
   title: string;
-  data: { name?: string; icon?: any; id?: any, onClick?:any }[];
+  data: { name?: string; icon?: any; id?: any, onClick?: any }[];
 }) {
   const { checkServerStatus, loadSessions } = useSession();
 
@@ -737,7 +737,7 @@ function SidebarMenuTitle({
   return (
     <div className={cn("w-full", className)} {...props}>
       <div className="text-xs text-[#898989] px-9 pt-3 pb-3 whitespace-nowrap overflow-hidden">{props.title}</div>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto" style={{ maxHeight: '136px' }}>
         {props.data.map((item: any, key) => {
           return (
             <motion.div
