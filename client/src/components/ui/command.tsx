@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import Icon from "../icon"
+import { Input } from "./input"
 
 function Command({
   className,
@@ -64,11 +65,11 @@ function CommandInput({
     >
       <Icon src={SEARCHSVG}></Icon>
       {/* <SearchIcon className="size-4 shrink-0 opacity-50" /> */}
-      <CommandPrimitive.Input
+      <Input
         data-slot="command-input"
         style={{outline: "none"}}
         className={cn(
-          "placeholder:text-[rgba(0,0,0,0.3)] text-xs flex h-10 w-full rounded-md bg-transparent py-3 outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+          "border-none pl-0 placeholder:text-[rgba(0,0,0,0.3)] text-xs flex h-10 w-full rounded-md bg-transparent py-3 outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         {...props}
