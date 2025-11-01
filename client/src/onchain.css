@@ -104,7 +104,7 @@ textarea.chat_form_input:hover {
   border-bottom: 1px solid #e0e0e0;
 } 
 
-.convon_item:hover .convon_button {
+/* .convon_item:hover .convon_button {
   opacity: 100;
   max-width: 28px;
   transform: scaleX(100);
@@ -112,4 +112,4 @@ textarea.chat_form_input:hover {
 .convon_item:hover .convon_button_inner {
     opacity: 100;
     color: white;
-}
+} */

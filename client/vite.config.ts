@@ -10,7 +10,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://vitejs.dev/config/
 const backendPort = process.env.BACKEND_PORT && Number(process.env.BACKEND_PORT) || 3080;
 // const backendURL = process.env.HOST ? `http://${process.env.HOST}:${backendPort}` : `http://localhost:${backendPort}`;
-const backendURL = "http://192.168.0.106:3080"
+const backendURL = "http://localhost:3080"
 
 export default defineConfig(({ command }) => ({
   base: '',

@@ -51,7 +51,7 @@ export default function useAppStartup({
     if (!appTitle) {
       return;
     }
-    document.title = appTitle;
+    document.title = "OnChain AI Agent";
     localStorage.setItem(LocalStorageKeys.APP_TITLE, appTitle);
   }, [startupConfig]);
 
