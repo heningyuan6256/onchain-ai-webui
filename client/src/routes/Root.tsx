@@ -22,6 +22,7 @@ import { useHealthCheck } from '~/data-provider';
 import { Banner } from '~/components/Banners';
 import { SidebarProvider } from '~/components/ui/sidebar';
 import { UploadDataProvider } from '~/contexts/UploadDataContext';
+import { AppSidebar } from '~/components/app-sidebar';
 
 export default function Root() {
   const [showTerms, setShowTerms] = useState(false);
@@ -77,7 +78,8 @@ export default function Root() {
                   <Banner onHeightChange={setBannerHeight} />
                   <div className="flex w-full" style={{ height: `calc(100dvh - ${bannerHeight}px)` }}>
                     <div className="relative z-0 flex h-full w-full overflow-hidden">
-                      <Nav navVisible={navVisible} setNavVisible={setNavVisible} />
+                      {/* <Nav navVisible={navVisible} setNavVisible={setNavVisible} /> */}
+                      <AppSidebar navVisible={navVisible} setNavVisible={setNavVisible} />
                       <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
                         <MobileNav setNavVisible={setNavVisible} />
                         <Outlet context={{ navVisible, setNavVisible } satisfies ContextType} />

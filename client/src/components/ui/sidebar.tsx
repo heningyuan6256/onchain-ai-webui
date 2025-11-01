@@ -17,6 +17,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { generateSnowId } from "@/utils";
 import { useSession } from "@/tars/common/hooks/useSession";
 
+import {
+  useLocalStorage,
+} from '~/hooks';
+
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
@@ -215,7 +219,7 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         className={cn(
-          "border-r-[#E0E0E0] fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+          "border-r-[#E0E0E0] relative inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
           side === "left"
             ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -245,9 +249,21 @@ function SidebarTrigger({
   isFooter,
   ...props
 }: React.ComponentProps<typeof Button> & { isFooter?: boolean }) {
-  const { toggleSidebar, open } = useSidebar();
+  const [newUser, setNewUser] = useLocalStorage('newUser', true);
+  const { navVisible, setNavVisible } = props
+  // const { toggleSidebar, open } = useSidebar();
+
+  const toggleNavVisible = React.useCallback(() => {
+    setNavVisible((prev: boolean) => {
+      localStorage.setItem('navVisible', JSON.stringify(!prev));
+      return !prev;
+    });
+    if (newUser) {
+      setNewUser(false);
+    }
+  }, [newUser, setNavVisible, setNewUser]);
   if (isFooter) {
-    if (open) {
+    if (navVisible) {
       return <></>;
     } else {
       return (
@@ -256,10 +272,10 @@ function SidebarTrigger({
           data-slot="sidebar-trigger"
           variant="ghost"
           size="icon"
-          className={cn("size-7", className)}
+          className={cn("size-6", className)}
           onClick={(event) => {
             onClick?.(event);
-            toggleSidebar();
+            toggleNavVisible();
           }}
           {...props}
         >
@@ -275,14 +291,14 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7", className)}
+      className={cn("size-6 w-[24px] h-[24px]", className)}
       onClick={(event) => {
         onClick?.(event);
-        toggleSidebar();
+        toggleNavVisible();
       }}
       {...props}
     >
-      {open ? (
+      {navVisible ? (
         <>
           <Icon className="rotate-180 cursor-pointer" src={RetractSvg}></Icon>
           <span className="sr-only">Toggle Sidebar</span>
@@ -298,27 +314,27 @@ function SidebarTrigger({
 
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
   const { toggleSidebar } = useSidebar();
-
-  return (
-    <button
-      data-sidebar="rail"
-      data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
-      tabIndex={-1}
-      onClick={toggleSidebar}
-      title="Toggle Sidebar"
-      className={cn(
-        "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
-        "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
-        "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
-        "hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
-        "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
-        "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
-        className
-      )}
-      {...props}
-    />
-  );
+  return <></>
+  // return (
+  //   <button
+  //     data-sidebar="rail"
+  //     data-slot="sidebar-rail"
+  //     aria-label="Toggle Sidebar"
+  //     tabIndex={-1}
+  //     onClick={toggleSidebar}
+  //     title="Toggle Sidebar"
+  //     className={cn(
+  //       "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
+  //       "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
+  //       "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
+  //       "hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
+  //       "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
+  //       "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
+  //       className
+  //     )}
+  //     {...props}
+  //   />
+  // );
 }
 
 function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
@@ -346,14 +362,13 @@ function SidebarInput({ className, ...props }: React.ComponentProps<typeof Input
   );
 }
 
-function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
-  const { open } = useSidebar();
+function SidebarHeader({ className,navVisible, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
       className={cn(
-        `flex flex-col gap-2 ${open ? "py-4.5 px-4" : "py-4.5 px-0 justify-center items-center"}`,
+        `flex flex-col gap-2 ${navVisible ? "py-4 px-4" : "py-4 px-0 justify-center items-center"}`,
         className
       )}
       {...props}

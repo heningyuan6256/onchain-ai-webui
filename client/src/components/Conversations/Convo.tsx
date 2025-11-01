@@ -132,7 +132,7 @@ export default function Conversation({ conversation, retainView, toggleNav }: Co
   return (
     <div
       className={cn(
-        'group relative flex h-8 w-full items-center transition-colors duration-200 md:h-8',
+        'convon_item group relative flex h-8 w-full items-center transition-colors duration-200 md:h-8',
         isActiveConvo ? 'bg-[#333333] text-white' : 'hover:bg-[#333333] hover:text-white',
       )}
       role="button"
@@ -184,7 +184,7 @@ export default function Conversation({ conversation, retainView, toggleNav }: Co
       )}
       <div
         className={cn(
-          'mr-2 flex origin-left',
+          'mr-2 flex origin-left convon_button',
           isPopoverActive || isActiveConvo
             ? 'pointer-events-auto max-w-[28px] scale-x-100 opacity-100'
             : 'pointer-events-none max-w-0 scale-x-0 opacity-0 group-focus-within:pointer-events-auto group-focus-within:max-w-[28px] group-focus-within:scale-x-100 group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:max-w-[28px] group-hover:scale-x-100 group-hover:opacity-100',

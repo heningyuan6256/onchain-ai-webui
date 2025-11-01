@@ -40,8 +40,8 @@ import MATCHSVG from "../assets/image/front-match.svg";
 import INCORRECTSVG from "../assets/image/incorrect.svg";
 import AISVG from "../assets/image/front-ai.svg";
 import Icon from "./icon";
-import { FC, Fragment, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { ContextType, FC, Fragment, useEffect, useMemo, useState } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -608,9 +608,12 @@ export function NavProjects({
   }[];
 }) {
   const navigate = useNavigate();
-  const { isMobile, open } = useSidebar();
+  // const { isMobile, open } = useSidebar();
+  // const { navVisible, setNavVisible } = useOutletContext<any>();
+  const savedNavVisible = localStorage.getItem('navVisible');
 
-  if (!open) {
+  
+  if (!savedNavVisible || savedNavVisible == "false") {
     return (
       <SidebarGroup>
         <SidebarMenu>
@@ -619,8 +622,8 @@ export function NavProjects({
               return (
                 <Dialog key={item.key}>
                   <DialogTrigger>
-                    <SidebarMenuItem key={item.name} className="side_item_start cursor-pointer hover:bg-surface-hover">
-                      <SidebarMenuButton asChild className="text-xs">
+                    <SidebarMenuItem key={item.name} className="side_item_start cursor-pointer hover:bg-surface-hover p-0">
+                      <SidebarMenuButton asChild className={`text-xs p-0 flex justify-center items-center`}>
                         <a>{item.icon}</a>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -630,8 +633,8 @@ export function NavProjects({
               );
             } else {
               return (
-                <SidebarMenuItem key={item.key}>
-                  <SidebarMenuButton asChild className="text-xs sidebar_collapse_btn cursor-pointer hover:bg-surface-hover">
+                <SidebarMenuItem key={item.key} className="p-0">
+                  <SidebarMenuButton asChild className={`text-xs sidebar_collapse_btn cursor-pointer hover:bg-surface-hover p-0 flex justify-center items-center`}>
                     <a
                       onClick={item.onClick}
                     >

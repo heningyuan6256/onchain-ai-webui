@@ -225,11 +225,11 @@ const Nav = memo(
             'md:max-w-[254px]',
           )}
           style={{
-            width: navVisible ? navWidth : '0px',
-            transform: navVisible ? 'translateX(0)' : 'translateX(-100%)',
+            width: navVisible ? navWidth : '48px',
+            transform: navVisible ? 'translateX(0)' : 'translateX(0)',
           }}
         >
-          <div className="h-full w-[320px] md:w-[254px]">
+          <div className={`h-full ${navVisible ? navWidth : '48px'}`}>
             <div className="flex h-full flex-col">
               <div
                 className={`flex h-full flex-col transition-opacity duration-200 ease-in-out ${navVisible ? 'opacity-100' : 'opacity-0'}`}
@@ -269,60 +269,72 @@ const Nav = memo(
                         headerButtons={headerButtons}
                         isSmallScreen={isSmallScreen}
                       />
-                      <div className="px-1 mb-2 mt-2">
-                        <SidebarMenuHorizentol></SidebarMenuHorizentol>
-                      </div>
-                      <SidebarMenuTitle
-                        title="收藏对话"
-                        data={favData.map((item) => {
-                          return {
-                            ...item, icon: <Icon src={startSvg}></Icon>, name: item.title, onClick: (ctrlOrMetaKey: boolean) => {
-                              // if (ctrlOrMetaKey) {
-                              //   itemToggleNav();
-                              //   const baseUrl = window.location.origin;
-                              //   const path = `/c/${item.conversationId}`;
-                              //   window.open(baseUrl + path, '_blank');
-                              //   return;
-                              // }
 
-                              if (currentConvoId === item.conversationId) {
-                                return;
-                              }
+                      {
+                        navVisible && <div className="px-1 mb-2 mt-2">
+                          <SidebarMenuHorizentol></SidebarMenuHorizentol>
+                        </div>
+                      }
 
-                              itemToggleNav();
+                      {
+                        navVisible && <>
+                          <SidebarMenuTitle
+                            title="收藏对话"
+                            data={favData.map((item) => {
+                              return {
+                                ...item, icon: <Icon src={startSvg}></Icon>, name: item.title, onClick: (ctrlOrMetaKey: boolean) => {
+                                  // if (ctrlOrMetaKey) {
+                                  //   itemToggleNav();
+                                  //   const baseUrl = window.location.origin;
+                                  //   const path = `/c/${item.conversationId}`;
+                                  //   window.open(baseUrl + path, '_blank');
+                                  //   return;
+                                  // }
 
-                              if (typeof item.title === 'string' && item.title.length > 0) {
-                                document.title = item.title;
-                              }
+                                  if (currentConvoId === item.conversationId) {
+                                    return;
+                                  }
 
-                              navigateToConvo(item, {
-                                currentConvoId,
-                                resetLatestMessage: !(item.conversationId ?? '') || item.conversationId === Constants.NEW_CONVO,
-                              });
-                            }
-                          };
-                        }) as any}
-                      ></SidebarMenuTitle>
-                      <div className="px-1 mb-2 mt-2">
-                        <SidebarMenuHorizentol></SidebarMenuHorizentol>
-                      </div>
-                      <SidebarMenuTitle
-                        title="近期对话"
-                        data={[]}
-                      ></SidebarMenuTitle>
-                      <Conversations
-                        conversations={conversations}
-                        moveToTop={moveToTop}
-                        toggleNav={itemToggleNav}
-                        containerRef={listRef}
-                        loadMoreConversations={loadMoreConversations}
-                        isLoading={isFetchingNextPage || showLoading || isLoading}
-                        isSearchLoading={isSearchLoading}
-                      />
+                                  itemToggleNav();
+
+                                  if (typeof item.title === 'string' && item.title.length > 0) {
+                                    document.title = item.title;
+                                  }
+
+                                  navigateToConvo(item, {
+                                    currentConvoId,
+                                    resetLatestMessage: !(item.conversationId ?? '') || item.conversationId === Constants.NEW_CONVO,
+                                  });
+                                }
+                              };
+                            }) as any}
+                          ></SidebarMenuTitle>
+                          <div className="px-1 mb-2 mt-2">
+                            <SidebarMenuHorizentol></SidebarMenuHorizentol>
+                          </div>
+                          <SidebarMenuTitle
+                            title="近期对话"
+                            data={[]}
+                          ></SidebarMenuTitle>
+                          <Conversations
+                            conversations={conversations}
+                            moveToTop={moveToTop}
+                            toggleNav={itemToggleNav}
+                            containerRef={listRef}
+                            loadMoreConversations={loadMoreConversations}
+                            isLoading={isFetchingNextPage || showLoading || isLoading}
+                            isSearchLoading={isSearchLoading}
+                          />
+                        </>
+                      }
+
                     </div>
-                    <Suspense fallback={null}>
-                      <AccountSettings />
-                    </Suspense>
+                    {
+                      navVisible && <Suspense fallback={null}>
+                        <AccountSettings />
+                      </Suspense>
+                    }
+
                   </nav>
                 </div>
               </div>

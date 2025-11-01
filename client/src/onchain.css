@@ -102,4 +102,14 @@ textarea.chat_form_input:hover {
 .setting_title {
   background: linear-gradient(180deg, #e0e0e0, #f4f4f54d);
   border-bottom: 1px solid #e0e0e0;
+} 
+
+.convon_item:hover .convon_button {
+  opacity: 100;
+  max-width: 28px;
+  transform: scaleX(100);
+}
+.convon_item:hover .convon_button_inner {
+    opacity: 100;
+    color: white;
 }
