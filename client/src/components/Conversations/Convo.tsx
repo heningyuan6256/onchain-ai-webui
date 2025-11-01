@@ -132,8 +132,8 @@ export default function Conversation({ conversation, retainView, toggleNav }: Co
   return (
     <div
       className={cn(
-        'group relative flex h-8 w-full items-center rounded-lg transition-colors duration-200 md:h-8',
-        isActiveConvo ? 'bg-surface-active-alt' : 'hover:bg-surface-active-alt',
+        'group relative flex h-8 w-full items-center transition-colors duration-200 md:h-8',
+        isActiveConvo ? 'bg-[#333333] text-white' : 'hover:bg-[#333333] hover:text-white',
       )}
       role="button"
       tabIndex={renaming ? -1 : 0}

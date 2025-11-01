@@ -130,20 +130,20 @@ function ConvoOptions({
 
   const dropdownItems = useMemo(
     () => [
-      {
-        label: localize('com_ui_share'),
-        onClick: handleShareClick,
-        icon: <Share2 className="icon-sm mr-2 text-text-primary" />,
-        show: startupConfig && startupConfig.sharedLinksEnabled,
-        hideOnClick: false,
-        ref: shareButtonRef,
-        render: (props) => <button {...props} />,
-      },
-      {
-        label: localize('com_ui_rename'),
-        onClick: renameHandler,
-        icon: <Pen className="icon-sm mr-2 text-text-primary" />,
-      },
+      // {
+      //   label: localize('com_ui_share'),
+      //   onClick: handleShareClick,
+      //   icon: <Share2 className="icon-sm mr-2 text-text-primary" />,
+      //   show: startupConfig && startupConfig.sharedLinksEnabled,
+      //   hideOnClick: false,
+      //   ref: shareButtonRef,
+      //   render: (props) => <button {...props} />,
+      // },
+      // {
+      //   label: localize('com_ui_rename'),
+      //   onClick: renameHandler,
+      //   icon: <Pen className="icon-sm mr-2 text-text-primary" />,
+      // },
       {
         label: localize('com_ui_duplicate'),
         onClick: handleDuplicateClick,
@@ -217,7 +217,7 @@ function ConvoOptions({
               }
             }}
           >
-            <Ellipsis className="icon-md text-text-secondary" aria-hidden={true} />
+            <Ellipsis className="icon-md text-text-secondary text-white" aria-hidden={true} />
           </Menu.MenuButton>
         }
         items={dropdownItems}
