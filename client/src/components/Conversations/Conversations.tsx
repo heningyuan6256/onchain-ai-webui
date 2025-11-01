@@ -75,6 +75,7 @@ const Conversations: FC<ConversationsProps> = ({
   loadMoreConversations,
   isLoading,
   isSearchLoading,
+  desc
 }) => {
   const localize = useLocalize();
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
@@ -162,7 +163,7 @@ const Conversations: FC<ConversationsProps> = ({
   );
 
   const getRowHeight = useCallback(
-    ({ index }: { index: number }) => cache.getHeight(index, 0),
+    ({ index }: { index: number }) => cache.getHeight(index, 0) + (desc ? 6 : 0),
     [cache],
   );
 

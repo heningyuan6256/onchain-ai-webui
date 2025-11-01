@@ -48,7 +48,7 @@ const ConvoLink: React.FC<ConvoLinkProps> = ({
         {title || localize('com_ui_untitled')}
       </div>
       {
-        desc && <div className='absolute text-xs bottom-0 left-[36px] text-[rgba(0,0,0,0.3)]'>
+        desc && <div className='absolute text-xs bottom-[6px] left-[36px] text-[rgba(0,0,0,0.3)]'>
         {date}
       </div>
       }

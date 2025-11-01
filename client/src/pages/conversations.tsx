@@ -196,6 +196,7 @@ const conversations: FC = () => {
           loadMoreConversations={loadMoreConversations}
           isLoading={isFetchingNextPage || showLoading || isLoading}
           isSearchLoading={isSearchLoading}
+          desc={true}
         />
       </div>
     </div>

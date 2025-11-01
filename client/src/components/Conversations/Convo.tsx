@@ -133,7 +133,7 @@ export default function Conversation({ conversation, retainView, toggleNav }: Co
     <div
       className={cn(
         `convon_item group relative flex w-full items-center transition-colors duration-200 ${conversation.desc ? "md:h-[52px] h-[52px]" : "md:h-8 h-8"}`,
-        isActiveConvo ? `${conversation.desc ? "bg-[#EFEFEF]" : "bg-[#333333] text-white"}` : `${conversation.desc ? "hover:bg-[#EFEFEF]" : "hover:bg-[#333333] hover:text-white"}`,
+        isActiveConvo ? `${conversation.desc ? "bg-[#EFEFEF] mb-[6px]" : "bg-[#333333] text-white"}` : `${conversation.desc ? "hover:bg-[#EFEFEF] mb-[6px]" : "hover:bg-[#333333] hover:text-white"}`,
       )}
       role="button"
       tabIndex={renaming ? -1 : 0}
