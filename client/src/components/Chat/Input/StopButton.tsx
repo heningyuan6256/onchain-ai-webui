@@ -12,7 +12,7 @@ export default function StopButton({ stop, setShowStopButton }) {
         <button
           type="button"
           className={cn(
-            'rounded-full bg-text-primary p-1.5 text-text-primary outline-offset-4 transition-all duration-200 disabled:cursor-not-allowed disabled:text-text-secondary disabled:opacity-10',
+            'rounded-full size-6 flex items-center justify-center bg-text-primary p-1.5 text-text-primary outline-offset-4 transition-all duration-200 disabled:cursor-not-allowed disabled:text-text-secondary disabled:opacity-10',
           )}
           aria-label={localize('com_nav_stop_generating')}
           onClick={(e) => {
@@ -28,7 +28,7 @@ export default function StopButton({ stop, setShowStopButton }) {
             xmlns="http://www.w3.org/2000/svg"
             className="icon-lg text-surface-primary"
           >
-            <rect x="7" y="7" width="10" height="10" rx="1.25" fill="currentColor"></rect>
+            <rect x="6" y="6" width="12" height="12" rx="1.25" fill="currentColor"></rect>
           </svg>
         </button>
       }

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { QrCode, RotateCw, Trash2 } from 'lucide-react';
 import {
-  Button,
+  // Button,
   OGDialog,
   Spinner,
   TooltipAnchor,
@@ -10,6 +10,7 @@ import {
   useToastContext,
 } from '@librechat/client';
 import type { TSharedLinkGetResponse } from 'librechat-data-provider';
+import { Button } from "@/components/ui/button"
 import {
   useCreateSharedLinkMutation,
   useUpdateSharedLinkMutation,

@@ -8,6 +8,9 @@ import ExportModal from '~/components/Nav/ExportConversation/ExportModal';
 import { ShareButton } from '~/components/Conversations/ConvoOptions';
 import { useLocalize } from '~/hooks';
 import store from '~/store';
+import ShareSvg from "@/assets/image/front-share.svg";
+import StarSVG from "@/assets/image/front-lightupcollect.svg";
+import Icon from "@/components/icon";
 
 export default function ExportAndShareMenu({
   isSharedButtonEnabled,
@@ -67,6 +70,11 @@ export default function ExportAndShareMenu({
 
   return (
     <>
+      
+      <div onClick={exportHandler}><Icon className={"w-5 mr-5 cursor-pointer"} src={StarSVG}></Icon></div>
+      {/* <div onClick={shareHandler}><Icon className={"w-5 cursor-pointer"} src={ShareSvg}></Icon></div> */}
+      {/*       
+
       <DropdownPopup
         portal={true}
         menuId={menuId}
@@ -94,7 +102,7 @@ export default function ExportAndShareMenu({
         }
         items={dropdownItems}
         className={isSmallScreen ? '' : 'absolute right-0 top-0 mt-2'}
-      />
+      /> */}
       <ExportModal
         open={showExports}
         onOpenChange={setShowExports}
