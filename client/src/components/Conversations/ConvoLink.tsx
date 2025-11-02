@@ -10,6 +10,20 @@ interface ConvoLinkProps {
   children: React.ReactNode;
 }
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+  const milliseconds = String(date.getUTCMilliseconds()).padStart(3, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+}
+
 const ConvoLink: React.FC<ConvoLinkProps> = ({
   isActiveConvo,
   title,
@@ -25,7 +39,7 @@ const ConvoLink: React.FC<ConvoLinkProps> = ({
       className={cn(
         'flex grow items-center gap-2 overflow-hidden rounded-lg px-2',
         // isActiveConvo ? 'bg-surface-active-alt' : '',
-        desc? "h-full py-1.5": ""
+        desc ? "h-full py-1.5" : ""
       )}
       title={title ?? undefined}
       aria-current={isActiveConvo ? 'page' : undefined}
@@ -33,7 +47,7 @@ const ConvoLink: React.FC<ConvoLinkProps> = ({
     >
       {children}
       <div
-        className={`relative flex-1 grow overflow-hidden whitespace-nowrap text-xs h-full ${desc ? "text-[14px]":""}`}
+        className={`relative flex-1 grow overflow-hidden whitespace-nowrap h-full ${desc ? "text-[14px]" : "text-xs"}`}
         style={{ textOverflow: 'clip' }}
         onDoubleClick={(e) => {
           if (isSmallScreen) {
@@ -49,8 +63,8 @@ const ConvoLink: React.FC<ConvoLinkProps> = ({
       </div>
       {
         desc && <div className='absolute text-xs bottom-[6px] left-[36px] text-[rgba(0,0,0,0.3)]'>
-        {date}
-      </div>
+          {date && formatDate(date)}
+        </div>
       }
 
       {/* <div
