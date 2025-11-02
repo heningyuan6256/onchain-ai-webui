@@ -132,8 +132,8 @@ export default function Conversation({ conversation, retainView, toggleNav }: Co
   return (
     <div
       className={cn(
-        'convon_item group relative flex h-8 w-full items-center transition-colors duration-200 md:h-8',
-        isActiveConvo ? 'bg-[#333333] text-white' : 'hover:bg-[#333333] hover:text-white',
+        `convon_item group relative flex w-full items-center transition-colors duration-200 ${conversation.desc ? "md:h-[52px] h-[52px]" : "md:h-8 h-8"}`,
+        isActiveConvo ? `${conversation.desc ? "bg-[#EFEFEF] mb-[6px]" : "bg-[#333333] text-white"}` : `${conversation.desc ? "hover:bg-[#EFEFEF] mb-[6px]" : "hover:bg-[#333333] hover:text-white"}`,
       )}
       role="button"
       tabIndex={renaming ? -1 : 0}
@@ -173,6 +173,8 @@ export default function Conversation({ conversation, retainView, toggleNav }: Co
           onRename={handleRename}
           isSmallScreen={isSmallScreen}
           localize={localize}
+          desc={conversation.desc}
+          date={conversation.updatedAt}
         >
           <EndpointIcon
             conversation={conversation}
@@ -191,7 +193,7 @@ export default function Conversation({ conversation, retainView, toggleNav }: Co
         )}
         aria-hidden={!(isPopoverActive || isActiveConvo)}
       >
-        {!renaming && <ConvoOptions {...convoOptionsProps} />}
+        {!renaming && <ConvoOptions desc={conversation.desc} {...convoOptionsProps} />}
       </div>
     </div>
   );

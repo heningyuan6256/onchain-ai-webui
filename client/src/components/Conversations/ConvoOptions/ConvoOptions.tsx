@@ -24,6 +24,7 @@ function ConvoOptions({
   isPopoverActive,
   setIsPopoverActive,
   isActiveConvo,
+  desc
 }: {
   conversationId: string | null;
   title: string | null;
@@ -32,6 +33,7 @@ function ConvoOptions({
   isPopoverActive: boolean;
   setIsPopoverActive: React.Dispatch<React.SetStateAction<boolean>>;
   isActiveConvo: boolean;
+  desc: any
 }) {
   const localize = useLocalize();
   const { index } = useChatContext();
@@ -217,7 +219,7 @@ function ConvoOptions({
               }
             }}
           >
-            <Ellipsis className="icon-md text-text-secondary text-white" aria-hidden={true} />
+            <Ellipsis className={`icon-md text-text-secondary ${desc ? "":"text-white"}`} aria-hidden={true} />
           </Menu.MenuButton>
         }
         items={dropdownItems}

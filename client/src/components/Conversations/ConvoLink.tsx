@@ -17,12 +17,15 @@ const ConvoLink: React.FC<ConvoLinkProps> = ({
   isSmallScreen,
   localize,
   children,
+  desc,
+  date
 }) => {
   return (
     <div
       className={cn(
         'flex grow items-center gap-2 overflow-hidden rounded-lg px-2',
         // isActiveConvo ? 'bg-surface-active-alt' : '',
+        desc? "h-full py-1.5": ""
       )}
       title={title ?? undefined}
       aria-current={isActiveConvo ? 'page' : undefined}
@@ -30,7 +33,7 @@ const ConvoLink: React.FC<ConvoLinkProps> = ({
     >
       {children}
       <div
-        className="relative flex-1 grow overflow-hidden whitespace-nowrap text-xs"
+        className={`relative flex-1 grow overflow-hidden whitespace-nowrap text-xs h-full ${desc ? "text-[14px]":""}`}
         style={{ textOverflow: 'clip' }}
         onDoubleClick={(e) => {
           if (isSmallScreen) {
@@ -44,6 +47,12 @@ const ConvoLink: React.FC<ConvoLinkProps> = ({
       >
         {title || localize('com_ui_untitled')}
       </div>
+      {
+        desc && <div className='absolute text-xs bottom-[6px] left-[36px] text-[rgba(0,0,0,0.3)]'>
+        {date}
+      </div>
+      }
+
       {/* <div
         className={cn(
           'absolute bottom-0 right-0 top-0 w-20 rounded-r-lg bg-gradient-to-l',

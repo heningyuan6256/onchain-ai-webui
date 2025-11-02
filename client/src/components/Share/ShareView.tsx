@@ -25,7 +25,7 @@ function SharedView() {
     docTitle = data?.title ?? config?.appTitle ?? document.title;
   }
 
-  useDocumentTitle(docTitle);
+  useDocumentTitle("OnChain AI Agent");
 
   let content: JSX.Element;
   if (isLoading) {

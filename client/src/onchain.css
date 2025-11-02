@@ -4,6 +4,7 @@
 
 .bg-nav-bar {
   background: linear-gradient(180deg, #f4f4f500, #f4f4f5 47%, #f4f4f57a) !important;
+  border-right: 1px solid #E0E0E0;
 }
 
 .top_logo {
@@ -61,12 +62,12 @@
 }
 
 .user_message_box {
-  min-height: 40px;
+  min-height: 20px;
   background: #FFFFFF;
   border-radius: 15px 15px 0px 15px;
   border: 1px solid #E0E0E0;
-  padding: 0px 10px;
-  line-height: 40px;
+  padding: 10px;
+  line-height: 20px;
 }
 
 
@@ -104,7 +105,7 @@ textarea.chat_form_input:hover {
   border-bottom: 1px solid #e0e0e0;
 } 
 
-.convon_item:hover .convon_button {
+/* .convon_item:hover .convon_button {
   opacity: 100;
   max-width: 28px;
   transform: scaleX(100);
@@ -112,4 +113,4 @@ textarea.chat_form_input:hover {
 .convon_item:hover .convon_button_inner {
     opacity: 100;
     color: white;
-}
+} */

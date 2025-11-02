@@ -611,9 +611,9 @@ export function NavProjects({
   // const { isMobile, open } = useSidebar();
   // const { navVisible, setNavVisible } = useOutletContext<any>();
   const savedNavVisible = localStorage.getItem('navVisible');
-
   
-  if (!savedNavVisible || savedNavVisible == "false") {
+  
+  if (savedNavVisible == "false") {
     return (
       <SidebarGroup>
         <SidebarMenu>

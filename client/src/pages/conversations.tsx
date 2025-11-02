@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Calculator, Calendar, CreditCard, Settings, Smile, User } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -36,7 +36,14 @@ import { generateSnowId } from "@/utils";
 import { useUploadData } from "@/contexts/UploadDataContext";
 import { toast } from "sonner";
 import { useSession } from "@/tars/common/hooks/useSession";
-
+import { useConversationsInfiniteQuery } from "~/data-provider";
+import { useAuthContext, useNavScrolling } from "~/hooks";
+import { Conversations } from "~/components/Conversations";
+import { useRecoilState, useRecoilValue } from "recoil";
+import store from '~/store';
+import { ConversationListResponse } from "librechat-data-provider/dist/types";
+import { InfiniteQueryObserverResult } from "@tanstack/react-query";
+import { useMediaQuery } from '@librechat/client';
 const formatISODate = (isoString: number) => {
   const date = new Date(isoString);
 
@@ -52,15 +59,113 @@ const formatISODate = (isoString: number) => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
+
 const conversations: FC = () => {
+  const [search, setSearch] = useRecoilState(store.searchcon);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuthContext();
+
 
   const { sessions, deleteSession, updateSessionMetadata, loadSessions } = useSession();
   console.log(sessions, "sessions");
+  const [tags, setTags] = useState<string[]>([]);
 
+  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching, refetch } =
+    useConversationsInfiniteQuery(
+      {
+        tags: tags.length === 0 ? undefined : tags,
+        search: search.debouncedQuery,
+      },
+      {
+        enabled: isAuthenticated,
+        staleTime: 30000,
+        cacheTime: 300000,
+      },
+    );
+
+  const conversations = useMemo(() => {
+    return data ? data.pages.flatMap((page) => page.conversations) : [];
+  }, [data])
+
+
+  const [isSearchLoading, setIsSearchLoading] = useState(
+    !!search.query && (search.isTyping || isLoading || isFetching),
+  );
+  const computedHasNextPage = useMemo(() => {
+    if (data?.pages && data.pages.length > 0) {
+      const lastPage: ConversationListResponse = data.pages[data.pages.length - 1];
+      return lastPage.nextCursor !== null;
+    }
+    return false;
+  }, [data?.pages]);
+  const [showLoading, setShowLoading] = useState(false);
+  const { moveToTop } = useNavScrolling<ConversationListResponse>({
+    setShowLoading,
+    fetchNextPage: async (options?) => {
+      if (computedHasNextPage) {
+        return fetchNextPage(options);
+      }
+      return Promise.resolve(
+        {} as InfiniteQueryObserverResult<ConversationListResponse, unknown>,
+      );
+    },
+    isFetchingNext: isFetchingNextPage,
+  });
+
+  // const toggleNavVisible = useCallback(() => {
+  //   setNavVisible((prev: boolean) => {
+  //     localStorage.setItem('navVisible', JSON.stringify(!prev));
+  //     return !prev;
+  //   });
+  //   if (newUser) {
+  //     setNewUser(false);
+  //   }
+  // }, [newUser, setNavVisible, setNewUser]);
+  const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  // const itemToggleNav = useCallback(() => {
+  //   if (isSmallScreen) {
+  //     toggleNavVisible();
+  //   }
+  // }, [isSmallScreen, toggleNavVisible]);
+
+  const listRef = useRef<any>(null);
+  const loadMoreConversations = useCallback(() => {
+    if (isFetchingNextPage || !computedHasNextPage) {
+      return;
+    }
+
+    fetchNextPage();
+  }, [isFetchingNextPage, computedHasNextPage, fetchNextPage]);
+
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    // 清除之前的定时器
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    // 设置新的定时器（防抖：在用户停止输入后触发）
+    timerRef.current = window.setTimeout(() => {
+      setSearch(prev => ({
+        ...prev,
+        debouncedQuery: search.query
+      }));
+    }, 500);
+  }, [
+    search.query
+  ])
+
+  // 清理定时器（组件卸载时）
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
   return (
     <div className="home_container h-full w-full flex justify-center items-center">
-      <div style={{ height: "400px" }}>
+      <div className="w-[563px]" style={{ height: "400px" }}>
         <div className="flex justify-between">
           <div className="font-semibold text-2xl text-[#333333] mb-4 ml-6">我的对话</div>
           <div>
@@ -70,117 +175,29 @@ const conversations: FC = () => {
               }}
               className="h-[32px] text-xs cursor-pointer"
             >
-              <Icon src={ADDWHITESVG}></Icon>开启新对话
+              <Icon src={ADDWHITESVG}></Icon>
+              <div className="flex items-center h-full">开启新对话</div>
             </Button>
           </div>
         </div>
-        <Command className="rounded-[20px] md:min-w-[563px]">
-          <CommandInput placeholder="搜索你想知道的" />
-          <CommandList className="mt-6">
-            <CommandEmpty>没有找到结果</CommandEmpty>
-            <CommandGroup>
-              {sessions.map((item, index) => {
-                return (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.8,
-                      delay: index * 0.05, // 顺序进入
-                    }}
-                  >
-                    <CommandItem>
-                      <div
-                        className="flex justify-between w-full conversation_list_item"
-                        onClick={() => {
-                          navigate(`/conversations/${item.id}`);
-                        }}
-                      >
-                        <div>
-                          <div className="mb-1 flex">
-                            <div className="w-4 h-4 flex justify-center items-center">
-                              {item.is_favorite ? <Icon src={STARSVG} className="w-3 h-3" /> : null}
-                            </div>
-                            {item.name}
-                          </div>
-                          <div className="text-xs font-normal text-[rgba(0,0,0,0.3)] ml-4">
-                            {formatISODate(item.updatedAt)}
-                          </div>
-                        </div>
-                        <div className="flex justify-center items-center pr-4">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                data-sidebar="trigger"
-                                data-slot="sidebar-trigger"
-                                variant="ghost"
-                                size="icon"
-                                className={cn("size-7", "h-6 w-6 cursor-pointer conversation_more")}
-                              >
-                                <Icon src={MORESVG}></Icon>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-[90px] rounded-lg" align="start" sideOffset={4}>
-                              {/* <DropdownMenuItem className="gap-2 p-2 cursor-pointer">
-                                <div className="text-[rgba(51,51,51,0.8)] text-xs cursor-pointer flex">
-                                  <Icon src={EDITSVG} className="mr-[7px]" /> 重命名
-                                </div>
-                              </DropdownMenuItem> */}
-                              <DropdownMenuItem className="gap-2 p-2 cursor-pointer">
-                                <div
-                                  className="text-[rgba(51,51,51,0.8)] text-xs cursor-pointer flex"
-                                  onClick={async (e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    const tags = (item.tags || [])?.filter((item) => item != "fav");
-                                    await updateSessionMetadata({
-                                      sessionId: item.id,
-                                      metadata: {
-                                        tags: [...tags, "fav"],
-                                        name: item.name,
-                                      },
-                                    });
-                                    // await chatService.toggleFavorite(item.id, true);
-                                    toast.success(`收藏成功`);
-                                    loadSessions()
-                                  }}
-                                >
-                                  <Icon src={COLLECTSVG} className="mr-[7px]" /> 收藏
-                                </div>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="gap-2 p-2 cursor-pointer"
-                                onClick={async (e) => {
-                                  e.stopPropagation();
-                                  e.preventDefault();
-                                  await deleteSession(item.id);
-                                  toast.success(`删除成功`);
-                                }}
-                              >
-                                <div className="text-[rgba(51,51,51,0.8)] text-xs cursor-pointer flex">
-                                  <Icon src={TRASHSVG} className="mr-[7px]" /> 删除对话
-                                </div>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                    </CommandItem>
-                  </motion.div>
-                );
-              })}
-            </CommandGroup>
-
-            {/* <CommandGroup heading="Settings">
-              <CommandItem>
-                <User />
-                <span>Profile</span>
-                <CommandShortcut>⌘P</CommandShortcut>
-              </CommandItem>
-            </CommandGroup> */}
-          </CommandList>
-        </Command>
+        <div className="mb-6">
+          <CommandInput value={search.query} placeholder="搜索你想知道的" onChange={(value) => {
+            setSearch(prev => ({
+              ...prev,
+              query: value.target.value
+            }));
+          }} />
+        </div>
+        <Conversations
+          conversations={conversations.map(item => ({ ...item, desc: true }))}
+          moveToTop={moveToTop}
+          toggleNav={() => { }}
+          containerRef={listRef}
+          loadMoreConversations={loadMoreConversations}
+          isLoading={isFetchingNextPage || showLoading || isLoading}
+          isSearchLoading={isSearchLoading}
+          desc={true}
+        />
       </div>
     </div>
   );

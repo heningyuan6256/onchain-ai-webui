@@ -33,17 +33,18 @@ const Reasoning = memo(({ reasoning, isSubmitting }: ReasoningProps) => {
       icon: 'success'
     })) as any;
 
+
   return (
     <div
       className={cn(
-        'grid transition-all duration-300 ease-out',
+        'grid transition-all duration-300 ease-out mb-3',
         nextType !== ContentTypes.THINK && isExpanded && 'mb-2',
       )}
       style={{
         gridTemplateRows: isExpanded ? '1fr' : '0fr',
       }}
     >
-      <div className="overflow-hidden thought_table">
+      <div className="thought_table">
         <OnChainThoughtChain items={result} isEnd={!isSubmitting}></OnChainThoughtChain>
         {/* <ThinkingContent isPart={true}>{reasoningText}</ThinkingContent> */}
       </div>
