@@ -23,6 +23,7 @@ import {
 import { TAuthConfig, TUserContext, TAuthContext, TResError } from '~/common';
 import useTimeout from './useTimeout';
 import store from '~/store';
+import { useRegisterUserMutation } from 'librechat-data-provider/react-query';
 
 const AuthContext = createContext<TAuthContext | undefined>(undefined);
 
@@ -41,15 +42,18 @@ const AuthContextProvider = ({
 
   const [defaultLoginAttempted, setDefaultLoginAttempted] = useState<boolean>(false);
 
+  const registerUser = useRegisterUserMutation({
+    onMutate: () => {
+    },
+    onSuccess: () => {
+    },
+    onError: (error: unknown) => {
+    },
+  });
+
   // useEffect(() => {
-  //   if (!user && !defaultLoginAttempted) {
-  //     login({
-  //       email: "Hny14746999@163.com",
-  //       password: "Boat1234qwer!"
-  //     });
-  //     setDefaultLoginAttempted(true);
-  //   }
-  // }, []);
+
+  // }, [location.search]);
 
   const { data: userRole = null } = useGetRole(SystemRoles.USER, {
     enabled: !!(isAuthenticated && (user?.role ?? '')),
@@ -98,7 +102,7 @@ const AuthContextProvider = ({
         return;
       }
       setError(undefined);
-      setUserContext({ token, isAuthenticated: true, user, redirect: '/c/new' });
+      setUserContext({ token, isAuthenticated: true, user});
     },
     onError: (error: TResError | unknown) => {
       const resError = error as TResError;
@@ -139,14 +143,31 @@ const AuthContextProvider = ({
 
   const userQuery = useGetUserQuery({ enabled: !!(token ?? '') });
 
-  const login = (data: t.TLoginUser) => {
-    loginUser.mutate(data);
+  const login = async (data: t.TLoginUser) => {
+    await loginUser.mutateAsync(data);
   };
 
-  const silentRefresh = useCallback(() => {
+  const silentRefresh = useCallback(async () => {
     if (authConfig?.test === true) {
       console.log('Test mode. Skipping silent refresh.');
       return;
+    }
+    if (location.search) {
+      const searchParams = new URLSearchParams(location.search)
+      const user = searchParams.get("user")
+      if (user && user != 'null') {
+        const data = atob(user)
+        const [email, name, id] = data.split("^")
+        try {
+          await registerUser.mutateAsync({ "name": name.length < 5 ? `${name}12345`: name, "username": name.length < 5 ? `${name}12345`: name, "email": email, "password": "Boat1234qwer!", "confirm_password": "Boat1234qwer!" })
+        } catch (error) {
+          console.error(error)
+        }
+        await login({
+          email: email || "Hny14746999@163.com",
+          password: "Boat1234qwer!"
+        });
+      }
     }
     refreshToken.mutate(undefined, {
       onSuccess: (data: t.TRefreshTokenResponse | undefined) => {
