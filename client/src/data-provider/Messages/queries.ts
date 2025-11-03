@@ -19,6 +19,7 @@ export const useGetMessagesByConvoId = <TData = t.TMessage[]>(
         const currentMessages = queryClient.getQueryData<t.TMessage[]>([QueryKeys.messages, id]);
         if (currentMessages?.length === 1) {
           return result;
+
         }
         if (currentMessages && currentMessages?.length > 1) {
           logger.warn(
@@ -35,7 +36,7 @@ export const useGetMessagesByConvoId = <TData = t.TMessage[]>(
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      refetchOnMount: false,
+      refetchOnMount: true,
       ...config,
     },
   );
