@@ -41,15 +41,15 @@ const AuthContextProvider = ({
 
   const [defaultLoginAttempted, setDefaultLoginAttempted] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!user && !defaultLoginAttempted) {
-      login({
-        email: "Hny14746999@163.com",
-        password: "Boat1234qwer!"
-      });
-      setDefaultLoginAttempted(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!user && !defaultLoginAttempted) {
+  //     login({
+  //       email: "Hny14746999@163.com",
+  //       password: "Boat1234qwer!"
+  //     });
+  //     setDefaultLoginAttempted(true);
+  //   }
+  // }, []);
 
   const { data: userRole = null } = useGetRole(SystemRoles.USER, {
     enabled: !!(isAuthenticated && (user?.role ?? '')),

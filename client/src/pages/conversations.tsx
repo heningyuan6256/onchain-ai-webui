@@ -171,7 +171,9 @@ const conversations: FC = () => {
           <div>
             <Button
               onClick={() => {
-                navigate("/c/new");
+                const searchParams = new URLSearchParams(location.search);
+                const user = searchParams.get('user');
+                navigate(`/c/new?user=${user}`);
               }}
               className="h-[32px] text-xs cursor-pointer"
             >

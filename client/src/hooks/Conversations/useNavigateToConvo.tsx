@@ -47,6 +47,8 @@ const useNavigateToConvo = (index = 0) => {
 
   const fetchFreshData = async (conversation?: Partial<TConversation>) => {
     const conversationId = conversation?.conversationId;
+    const searchParams = new URLSearchParams(location.search);
+    const user = searchParams.get('user');
     if (!conversationId) {
       return;
     }
@@ -56,12 +58,12 @@ const useNavigateToConvo = (index = 0) => {
       );
       logger.log('conversation', 'Fetched fresh conversation data', data);
       setConversation(data);
-      navigate(`/c/${conversationId ?? Constants.NEW_CONVO}`, { state: { focusChat: true } });
+      navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?user=${user}`, { state: { focusChat: true } });
     } catch (error) {
       console.error('Error fetching conversation data on navigation', error);
       if (conversation) {
         setConversation(conversation as TConversation);
-        navigate(`/c/${conversationId}`, { state: { focusChat: true } });
+        navigate(`/c/${conversationId}${location.search}?user=${user}`, { state: { focusChat: true } });
       }
     }
   };

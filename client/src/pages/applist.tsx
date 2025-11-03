@@ -141,7 +141,9 @@ export default function AppMarket() {
 									whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
 									className='border-[#e6e8ee] border app_card_bg h-[168px] rounded-sm p-5 hover:border-[#0563B2] transition-all duration-500 cursor-pointer'
 									onClick={() => {
-										navigate(`/application/${app.app_url}?appId=${encodeURIComponent(app.app_id)}`);
+										const searchParams = new URLSearchParams(location.search);
+										const user = searchParams.get('user');
+										navigate(`/application/${app.app_url}?user=${user}&appId=${encodeURIComponent(app.app_id)}`);
 									}}
 								>
 									<div className='font-semibold text-[13px] text-[#333333] h-[32px] flex items-center'>

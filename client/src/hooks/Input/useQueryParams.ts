@@ -340,8 +340,16 @@ export default function useQueryParams({
 
         // Only clean URL if there's no pending submission
         if (!pendingSubmitRef.current) {
-          const newUrl = window.location.pathname;
-          window.history.replaceState({}, '', newUrl);
+          // 仅清除 URL 中的 endpoint 和 model 参数，其余保留
+          const url = new URL(window.location.href);
+
+          // 删除指定参数
+          url.searchParams.delete('endpoint');
+          url.searchParams.delete('model');
+
+          // 更新浏览器地址但不刷新页面
+          window.history.replaceState({}, '', url);
+
         }
       };
 

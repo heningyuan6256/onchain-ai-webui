@@ -36,14 +36,16 @@ export default function NewChat({
 
   const clickHandler: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
+      const searchParams = new URLSearchParams(location.search);
+      const user = searchParams.get('user');
       if (e.button === 0 && (e.ctrlKey || e.metaKey)) {
-        window.open('/c/new', '_blank');
+        window.open(`/c/new?user=${user}`, '_blank');
         return;
       }
       clearMessagesCache(queryClient, conversation?.conversationId);
       queryClient.invalidateQueries([QueryKeys.messages]);
       newConvo();
-      navigate('/c/new', { state: { focusChat: true } });
+      navigate(`/c/new?user=${user}`, { state: { focusChat: true } });
       if (isSmallScreen) {
         toggleNav();
       }
@@ -90,7 +92,7 @@ export default function NewChat({
               icon: <Icon src={CHATSVG}></Icon>,
               key: "conversations",
               onClick: () => {
-                navigate("/conversations")
+                navigate(`/conversations${location.search}`)
               }
             },
             {
@@ -98,7 +100,7 @@ export default function NewChat({
               url: "",
               key: "library",
               icon: <Icon src={LIBRARYSVG}></Icon>,
-              onClick: () => {}
+              onClick: () => { }
             },
             {
               name: "应用广场",
@@ -106,7 +108,7 @@ export default function NewChat({
               icon: <Icon src={appsSvg}></Icon>,
               key: "app",
               onClick: () => {
-                navigate("/application")
+                navigate(`/application${location.search}`)
               }
             },
           ]} />
