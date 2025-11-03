@@ -10,7 +10,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://vitejs.dev/config/
 const backendPort = process.env.BACKEND_PORT && Number(process.env.BACKEND_PORT) || 3080;
 // const backendURL = process.env.HOST ? `http://${process.env.HOST}:${backendPort}` : `http://localhost:${backendPort}`;
-const backendURL = "http://192.168.0.106:3080"
+const backendURL = "http://localhost:3080"
 
 export default defineConfig(({ command }) => ({
   base: '',
@@ -28,6 +28,30 @@ export default defineConfig(({ command }) => ({
         target: backendURL,
         changeOrigin: true,
       },
+      '/rag': {
+				target: 'http://59.175.92.126:17777/rag',
+				changeOrigin: true,
+				rewrite(path) {
+					return path.replace(/^\/rag/, '');
+				},
+			},
+			'/chat': {
+				target: 'http://heningyuan.synology.me:35678',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/chat/, ''),
+			},
+			'/workflow': {
+				target: `http://59.175.92.126:17777/workflow`,
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/workflow/, ''),
+			},
+			'/apps': {
+				target: 'http://59.175.92.126:17777/apps',
+				changeOrigin: true,
+				rewrite(path) {
+					return path.replace(/^\/apps/, '');
+				},
+			},
     },
   },
   // Set the directory where environment variables are loaded from and restrict prefixes
