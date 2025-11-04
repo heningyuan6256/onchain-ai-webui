@@ -48,9 +48,31 @@ const {
   prepareAzureImageURL,
   processAzureAvatar,
 } = require('./Azure');
+const { uploadOpenAIVisionOCR } = require('./DeepseekOCR/crud');
 const { uploadOpenAIFile, deleteOpenAIFile, getOpenAIFileStream } = require('./OpenAI');
 const { getCodeOutputDownloadStream, uploadCodeEnvFile } = require('./Code');
 const { uploadVectors, deleteVectors } = require('./VectorDB');
+
+const openAIVisionOCRStrategy = () => ({
+  /** @type {typeof saveFileFromURL | null} */
+  saveURL: null,
+  /** @type {typeof getLocalFileURL | null} */
+  getFileURL: null,
+  /** @type {typeof saveLocalBuffer | null} */
+  saveBuffer: null,
+  /** @type {typeof processLocalAvatar | null} */
+  processAvatar: null,
+  /** @type {typeof uploadLocalImage | null} */
+  handleImageUpload: null,
+  /** @type {typeof prepareImagesLocal | null} */
+  prepareImagePayload: null,
+  /** @type {typeof deleteLocalFile | null} */
+  deleteFile: null,
+  /** @type {typeof getLocalFileStream | null} */
+  getDownloadStream: null,
+  handleFileUpload: uploadOpenAIVisionOCR,
+});
+
 
 /**
  * Firebase Storage Strategy Functions
@@ -270,6 +292,8 @@ const getStrategyFunctions = (fileSource) => {
     return azureMistralOCRStrategy();
   } else if (fileSource === FileSources.vertexai_mistral_ocr) {
     return vertexMistralOCRStrategy();
+  } else if (fileSource === "deepseek_ocr") {
+    return openAIVisionOCRStrategy();
   } else if (fileSource === FileSources.text) {
     return localStrategy(); // Text files use local strategy
   } else {

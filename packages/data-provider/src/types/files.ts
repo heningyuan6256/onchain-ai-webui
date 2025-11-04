@@ -12,6 +12,7 @@ export enum FileSources {
   mistral_ocr = 'mistral_ocr',
   azure_mistral_ocr = 'azure_mistral_ocr',
   vertexai_mistral_ocr = 'vertexai_mistral_ocr',
+  deepseek_ocr = 'deepseek_ocr',
   text = 'text',
 }
 
