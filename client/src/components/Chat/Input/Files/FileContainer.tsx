@@ -5,6 +5,7 @@ import FilePreview from './FilePreview';
 import RemoveFile from './RemoveFile';
 import Icon from '~/components/icon';
 import FileSvg from "@/assets/image/file.svg";
+import INCORRECTSVG from "@/assets/image/incorrect.svg";
 
 const FileContainer = ({
   file,
@@ -52,7 +53,7 @@ const FileContainer = ({
           </div>
         </div>
       </button>
-      {onDelete && <RemoveFile onRemove={onDelete} />}
+      {onDelete && <span onClick={onDelete} className='absolute right-[-3px] top-[-3px]' style={{ cursor: 'pointer' }}><Icon src={INCORRECTSVG} className='w-[12px]'></Icon></span>}
       <div className='absolute bottom-0 bg-[#31D780] h-[3px] w-full'>
       </div>
     </div>
