@@ -12,12 +12,14 @@ const { logger } = require('~/config');
  * @param {string} params.filePath 文件路径
  * @returns {Promise<Object>} OCR 结果
  */
-async function performVisionOCR({ filePath }) {
+async function performVisionOCR({ filePath}) {
   try {
     const formData = new FormData();
 
+    const imageData =  fs.createReadStream(filePath)
     // 附加图片文件
-    formData.append('image', fs.createReadStream(filePath));
+    formData.append('image', imageData);
+    formData.append('file', imageData);
 
     // 其他参数
     formData.append('mode', 'plain_ocr');
@@ -29,14 +31,14 @@ async function performVisionOCR({ filePath }) {
     formData.append('image_size', '640');
     formData.append('crop_mode', 'true');
     formData.append('test_compress', 'false');
+    formData.append("prompt_type",'ocr')
+    formData.append("grounding","true")
 
-    console.log(filePath, 'filePath')
-
-    const response = await axios.post('http://localhost:3000/api/ocr', formData, {
+    const response = await axios.post(process.env.DEEPSEEK_OCR_URL, formData, {
       headers: formData.getHeaders(),
       maxBodyLength: Infinity,
     });
-    logger.info('ppp:', response.data);
+    logger.info('结果:', response.data);
 
     return response.data;
   } catch (error) {
