@@ -28,7 +28,7 @@ import Conversations from '~/pages/conversations';
 import Settings from '~/pages/setting';
 import AppList from '~/pages/applist';
 import AppChat from '~/pages/appChat';
-
+import Ocr from '~/pages/ocrapp';
 const AuthLayout = () => (
   <AuthContextProvider>
     <Outlet />
@@ -153,6 +153,7 @@ export const router = createBrowserRouter(
             { path: 'conversations', element: <Conversations /> },
             { path: 'application', element: <AppList /> },
             { path: 'application/:id', element: <AppChat /> },
+            { path: 'ocr', element: <Ocr /> },
             {
               path: 'agents',
               element: (
