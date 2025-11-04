@@ -54,6 +54,13 @@ export default defineConfig(({ command }) => ({
           return path.replace(/^\/apps/, '');
         },
       },
+      '/model': {
+        target: 'http://192.168.0.178:4050',
+        changeOrigin: true,
+        rewrite(path) {
+          return path.replace(/^\/model/, '');
+        },
+      },
     },
   },
   // Set the directory where environment variables are loaded from and restrict prefixes
