@@ -63,7 +63,7 @@ const FileContainer = ({
         </div>
       </button>
       {onDelete && <span onClick={onDelete} className='absolute right-[-3px] top-[-3px]' style={{ cursor: 'pointer' }}><Icon src={INCORRECTSVG} className='w-[12px]'></Icon></span>}
-      <div className={`absolute bottom-0 bg-[#31D780] h-[3px] ${file.progress == 1 ? "w-full" : "w-[60%]"}`}>
+      <div className={`absolute bottom-0 bg-[#31D780] h-[3px] ${file.progress < 1 ? "w-[60%]" : "w-full"}`}>
       </div>
     </div>
   );
