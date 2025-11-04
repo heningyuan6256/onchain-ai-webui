@@ -90,7 +90,7 @@ const createErrorMessage = ({
     const latestPartValue = latestContentPart?.[latestContentPart.type ?? ''];
     isValidContentPart =
       latestContentPart.type !== ContentTypes.TEXT ||
-      (latestContentPart.type === ContentTypes.TEXT && typeof latestPartValue === 'string')
+        (latestContentPart.type === ContentTypes.TEXT && typeof latestPartValue === 'string')
         ? true
         : latestPartValue?.value !== '';
   }
@@ -493,7 +493,7 @@ export default function useEventHandlers({
 
       const hasNoResponse =
         responseMessage?.content?.[0]?.['text']?.value ===
-          submission.initialResponse?.content?.[0]?.['text']?.value ||
+        submission.initialResponse?.content?.[0]?.['text']?.value ||
         !!responseMessage?.content?.[0]?.['tool_call']?.auth;
 
       /** Handle edge case where stream is cancelled before any response, which creates a blank page */
@@ -556,23 +556,23 @@ export default function useEventHandlers({
       }
 
       if (setConversation && isAddedRequest !== true) {
-        setConversation((prevState) => {
-          const update = {
-            ...prevState,
-            ...(conversation as TConversation),
-          };
-          if (prevState?.model != null && prevState.model !== submissionConvo.model) {
-            update.model = prevState.model;
-          }
-          const cachedConvo = queryClient.getQueryData<TConversation>([
-            QueryKeys.conversation,
-            conversation.conversationId,
-          ]);
-          if (!cachedConvo) {
-            queryClient.setQueryData([QueryKeys.conversation, conversation.conversationId], update);
-          }
-          return update;
-        });
+        // setConversation((prevState) => {
+        //   const update = {
+        //     ...prevState,
+        //     ...(conversation as TConversation),
+        //   };
+        //   if (prevState?.model != null && prevState.model !== submissionConvo.model) {
+        //     update.model = prevState.model;
+        //   }
+        //   const cachedConvo = queryClient.getQueryData<TConversation>([
+        //     QueryKeys.conversation,
+        //     conversation.conversationId,
+        //   ]);
+        //   if (!cachedConvo) {
+        //     queryClient.setQueryData([QueryKeys.conversation, conversation.conversationId], update);
+        //   }
+        //   return update;
+        // });
 
         if (conversation.conversationId && submission.ephemeralAgent) {
           applyAgentTemplate({
@@ -585,7 +585,10 @@ export default function useEventHandlers({
         }
 
         if (location.pathname === `/c/${Constants.NEW_CONVO}`) {
-          navigate(`/c/${conversation.conversationId}`, { replace: true });
+          const searchParams = new URLSearchParams(location.search);
+          // const searchParamsString = searchParams?.toString();
+          const user = searchParams.get('user');
+          navigate(`/c/${conversation.conversationId}?user=${localStorage.getItem("user")}`, { replace: true });
         }
       }
 
@@ -787,9 +790,9 @@ export default function useEventHandlers({
         } else {
           throw new Error(
             'Unexpected response from server; Status: ' +
-              response.status +
-              ' ' +
-              response.statusText,
+            response.status +
+            ' ' +
+            response.statusText,
           );
         }
       } catch (error) {

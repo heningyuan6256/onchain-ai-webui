@@ -167,6 +167,10 @@ const AuthContextProvider = ({
           email: email || "Hny14746999@163.com",
           password: "Boat1234qwer!"
         });
+        localStorage.setItem("id",id)
+        localStorage.setItem("email",email)
+        localStorage.setItem("name",name)
+        localStorage.setItem("user",user)
       }
     }
     refreshToken.mutate(undefined, {
