@@ -120,3 +120,7 @@ textarea.chat_form_input:hover {
   font-size: 12px !important;
   font-weight: normal !important;
 }
+
+.user_message_box{
+  font-size: 13px;
+}
