@@ -152,10 +152,10 @@ const Home: FC = () => {
   useEffect(() => {
     const typed = el.current
       ? new Typed(el.current, {
-          strings: ["今天有什么可以帮到你？"],
-          typeSpeed: 100,
-          showCursor: false,
-        })
+        strings: ["今天有什么可以帮到你？"],
+        typeSpeed: 100,
+        showCursor: false,
+      })
       : null;
 
     return () => {
@@ -357,7 +357,7 @@ const Home: FC = () => {
                     <div className="text-xs text-[#333333]">构建知识库</div>
                   </div>
                   <div>
-                    <img className="h-4 w-4 rotate-270" src={ARROWBLACKSVG} />
+                    <img className="h-4 w-4" style={{ transform: 'rotate(270deg)' }} src={ARROWBLACKSVG} />
                   </div>
                 </div>
               </DialogTrigger>
