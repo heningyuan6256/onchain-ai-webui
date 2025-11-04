@@ -14,6 +14,7 @@ services:
       - MEILI_HOST=http://192.168.0.106:7700
       - RAG_PORT=${RAG_PORT:-8000}
       - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
+      - NODE_ENV=development  # Allow cookies to be transmitted over HTTP, avoiding login issues due to missing cookies
     env_file:
       - .env
     volumes:
