@@ -97,17 +97,18 @@ const AttachFileMenu = ({
       return;
     }
     inputRef.current.value = '';
-    if (fileType === 'image') {
-      inputRef.current.accept = 'image/*';
-    } else if (fileType === 'document') {
-      inputRef.current.accept = '.pdf,application/pdf';
-    } else if (fileType === 'multimodal') {
-      inputRef.current.accept = 'image/*,.pdf,application/pdf';
-    } else if (fileType === 'google_multimodal') {
-      inputRef.current.accept = 'image/*,.pdf,application/pdf,video/*,audio/*';
-    } else {
-      inputRef.current.accept = '';
-    }
+    // if (fileType === 'image') {
+    //   inputRef.current.accept = 'image/*';
+    // } else if (fileType === 'document') {
+    //   inputRef.current.accept = '.pdf,application/pdf';
+    // } else if (fileType === 'multimodal') {
+    //   inputRef.current.accept = 'image/*,.pdf,application/pdf';
+    // } else if (fileType === 'google_multimodal') {
+    //   inputRef.current.accept = 'image/*,.pdf,application/pdf,video/*,audio/*';
+    // } else {
+    //   inputRef.current.accept = '';
+    // }
+    inputRef.current.accept = 'image/*';
     inputRef.current.click();
     inputRef.current.accept = '';
   };
@@ -121,25 +122,25 @@ const AttachFileMenu = ({
       const currentProvider = provider || endpoint;
 
       if (isDocumentSupportedProvider(currentProvider || endpointType)) {
-        items.push({
-          label: localize('com_ui_upload_provider'),
-          onClick: () => {
-            setToolResource(undefined);
-            onAction(
-              (provider || endpoint) === EModelEndpoint.google ? 'google_multimodal' : 'multimodal',
-            );
-          },
-          icon: <FileImageIcon className="icon-md" />,
-        });
+        // items.push({
+        //   label: localize('com_ui_upload_provider'),
+        //   onClick: () => {
+        //     setToolResource(undefined);
+        //     onAction(
+        //       (provider || endpoint) === EModelEndpoint.google ? 'google_multimodal' : 'multimodal',
+        //     );
+        //   },
+        //   icon: <FileImageIcon className="icon-md" />,
+        // });
       } else {
-        items.push({
-          label: localize('com_ui_upload_image_input'),
-          onClick: () => {
-            setToolResource(undefined);
-            onAction('image');
-          },
-          icon: <ImageUpIcon className="icon-md" />,
-        });
+        // items.push({
+        //   label: localize('com_ui_upload_image_input'),
+        //   onClick: () => {
+        //     setToolResource(undefined);
+        //     onAction('image');
+        //   },
+        //   icon: <ImageUpIcon className="icon-md" />,
+        // });
       }
 
       if (capabilities.contextEnabled) {

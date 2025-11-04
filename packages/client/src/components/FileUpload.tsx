@@ -18,6 +18,7 @@ const FileUpload = forwardRef<HTMLInputElement, FileUploadProps>(
           type="file"
           style={{ display: 'none' }}
           onChange={handleFileChange}
+          accept=".png,.jpg,.jpeg,.gif"
         />
       </>
     );

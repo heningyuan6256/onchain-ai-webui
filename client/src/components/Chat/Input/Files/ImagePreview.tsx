@@ -112,13 +112,13 @@ const ImagePreview = ({
   return (
     <>
       <div
-        className={cn('relative size-14 rounded-xl', className)}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className={cn('relative size-14', className)}
+        // onMouseEnter={() => setIsHovered(true)}
+        // onMouseLeave={() => setIsHovered(false)}
       >
         <button
           type="button"
-          className="size-full overflow-hidden rounded-xl"
+          className="size-full overflow-hidden"
           style={style}
           aria-label={`View ${alt} in full size`}
           aria-haspopup="dialog"
@@ -138,7 +138,7 @@ const ImagePreview = ({
         ) : (
           <div
             className={cn(
-              'absolute inset-0 flex transform-gpu cursor-pointer items-center justify-center rounded-xl transition-opacity duration-200 ease-in-out',
+              'absolute inset-0 flex transform-gpu cursor-pointer items-center justify-center transition-opacity duration-200 ease-in-out',
               isHovered ? 'bg-black/20 opacity-100' : 'opacity-0',
             )}
             onClick={(e) => {
@@ -158,7 +158,7 @@ const ImagePreview = ({
         <SourceIcon source={source} aria-label={source ? `Source: ${source}` : undefined} />
       </div>
 
-      <OGDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      {/* <OGDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <OGDialogContent
           showCloseButton={false}
           className="w-11/12 overflow-x-auto bg-transparent p-0 sm:w-auto"
@@ -170,7 +170,7 @@ const ImagePreview = ({
             className="max-w-screen h-full max-h-screen w-full object-contain"
           />
         </OGDialogContent>
-      </OGDialog>
+      </OGDialog> */}
     </>
   );
 };
