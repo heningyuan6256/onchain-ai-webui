@@ -334,7 +334,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                 </div>
                 深入研究
               </Toggle>
-              {/* <div><ModelSelector startupConfig={startupConfig} /></div> */}
+              <div><ModelSelector startupConfig={startupConfig} /></div>
 
               <BadgeRow
                 showEphemeralBadges={!isAgentsEndpoint(endpoint) && !isAssistantsEndpoint(endpoint)}
