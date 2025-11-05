@@ -176,7 +176,7 @@ export default function ToolCall({
         />
       </div>
       <div
-        className="relative"
+        className="relative mb-3"
         style={{
           height: showInfo ? contentHeight : 0,
           overflow: 'hidden',
@@ -192,8 +192,8 @@ export default function ToolCall({
       >
         <div
           className={cn(
-            'overflow-hidden rounded-xl border border-border-light bg-surface-secondary shadow-md',
-            showInfo && 'shadow-lg',
+            'overflow-hidden rounded-xl border border-border-light bg-surface-secondary',
+            // showInfo && 'shadow-lg',
           )}
           style={{
             transform: showInfo ? 'translateY(0) scale(1)' : 'translateY(-8px) scale(0.98)',
