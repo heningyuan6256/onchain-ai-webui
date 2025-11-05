@@ -135,3 +135,11 @@ textarea.chat_form_input:hover {
 .mcp_select button{
   border: 1px solid #E0E0E0;
 }
+
+#tools-dropdown-menu{
+  font-size: 12px !important;
+}
+
+.text-sm{
+  font-size: 12px !important;
+}
