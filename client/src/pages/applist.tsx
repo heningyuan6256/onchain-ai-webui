@@ -197,13 +197,83 @@ export default function AppMarket() {
                 whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
                 className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
                 onClick={() => {
-                  navigate(`/ocr`);
+                  navigate(`/ocr?mode=ocr`);
                 }}
               >
                 <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
                   <Icon src={appsLog} className="mr-2 h-4 w-4" />
                   <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                    {'OCR'}
+                    {'通用OCR'}
+                  </div>
+                </div>
+                <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
+                  {'OCR应用'}
+                </p>
+                <div className="mt-[20px] flex justify-between">
+                  <div className="flex flex-nowrap gap-2">
+                    {['数字人视频', '智能体'].map((tag, i) => (
+                      <span
+                        key={i}
+                        className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
+                    <Icon className="w-3 cursor-pointer" src={startSvg} />
+                    {577}
+                  </div>
+                </div>
+              </motion.div>{' '}
+              <motion.div
+                key={'ocr'}
+                variants={cardVariants}
+                whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
+                className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
+                onClick={() => {
+                  navigate(`/ocr?mode=describe`);
+                }}
+              >
+                <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
+                  <Icon src={appsLog} className="mr-2 h-4 w-4" />
+                  <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    {'图像描述'}
+                  </div>
+                </div>
+                <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
+                  {'OCR应用'}
+                </p>
+                <div className="mt-[20px] flex justify-between">
+                  <div className="flex flex-nowrap gap-2">
+                    {['数字人视频', '智能体'].map((tag, i) => (
+                      <span
+                        key={i}
+                        className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
+                    <Icon className="w-3 cursor-pointer" src={startSvg} />
+                    {577}
+                  </div>
+                </div>
+              </motion.div>{' '}
+              <motion.div
+                key={'ocr'}
+                variants={cardVariants}
+                whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
+                className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
+                onClick={() => {
+                  navigate(`/ocr?mode=find`);
+                }}
+              >
+                <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
+                  <Icon src={appsLog} className="mr-2 h-4 w-4" />
+                  <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    {'查找定位'}
                   </div>
                 </div>
                 <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">

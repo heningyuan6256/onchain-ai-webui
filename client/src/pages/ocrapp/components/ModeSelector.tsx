@@ -2,84 +2,129 @@ import { motion } from 'framer-motion';
 import { FileText, Eye, Search, Wand2 } from 'lucide-react';
 
 const modes = [
-	{ id: 'ocr', name: '通用OCR', icon: FileText, color: 'from-blue-500 to-cyan-500', desc: 'Extract raw text', needsInput: false },
-	{ id: 'describe', name: '图像描述', icon: Eye, color: 'from-violet-500 to-purple-500', desc: 'Image description', needsInput: false },
-	{ id: 'find', name: '查找定位', icon: Search, color: 'from-yellow-500 to-orange-500', desc: 'Locate specific terms', needsInput: 'findTerm' },
-	{ id: 'freeform', name: '自定义提示', icon: Wand2, color: 'from-fuchsia-500 to-pink-500', desc: 'Custom prompt', needsInput: 'prompt' },
+  {
+    id: 'ocr',
+    name: '通用OCR',
+    icon: FileText,
+    color: 'from-blue-500 to-cyan-500',
+    desc: 'Extract raw text',
+    needsInput: false,
+  },
+  {
+    id: 'describe',
+    name: '图像描述',
+    icon: Eye,
+    color: 'from-violet-500 to-purple-500',
+    desc: 'Image description',
+    needsInput: false,
+  },
+  {
+    id: 'find',
+    name: '查找定位',
+    icon: Search,
+    color: 'from-yellow-500 to-orange-500',
+    desc: 'Locate specific terms',
+    needsInput: 'findTerm',
+  },
+  {
+    id: 'freeform',
+    name: '自定义提示',
+    icon: Wand2,
+    color: 'from-fuchsia-500 to-pink-500',
+    desc: 'Custom prompt',
+    needsInput: 'prompt',
+  },
 ];
 
-export default function ModeSelector({ mode, onModeChange, prompt, onPromptChange, findTerm, onFindTermChange }) {
-	const selectedMode = modes.find((m) => m.id === mode);
-	const needsInput = selectedMode?.needsInput;
+export default function ModeSelector({
+  mode,
+  onModeChange,
+  prompt,
+  onPromptChange,
+  findTerm,
+  onFindTermChange,
+}) {
+  const selectedMode = modes.find((m) => m.id === mode);
+  const needsInput = selectedMode?.needsInput;
 
-	return (
-		<div className=' p-4 rounded-2xl space-y-3' style={{ backgroundColor: '#ffff', color: 'black', border: '1px solid #e0e0e0' }}>
-			<h3 className='text-sm font-semibold '>识别模式</h3>
+  return (
+    <div
+      className="space-y-3 p-4"
+      style={{
+        backgroundColor: '#ffff',
+        color: 'black',
+        border: '1px solid #e0e0e0',
+        borderRadius: '10px',
+      }}
+    >
+      <h3 className="text-sm font-semibold">{modes.find((m) => m.id === mode).name}</h3>
 
-			<div className='grid grid-cols-4 gap-2'>
-				{modes.map((m) => {
-					const Icon = m.icon;
-					const isSelected = mode === m.id;
+      {/* <div className="grid grid-cols-4 gap-2">
+        {modes.map((m) => {
+          const Icon = m.icon;
+          const isSelected = mode === m.id;
 
-					return (
-						<motion.button
-							key={m.id}
-							onClick={() => onModeChange(m.id)}
-							className={`
-                relative p-2 rounded-xl text-center transition-all
-                ${isSelected ? 'glass border-white/20 shadow-lg' : 'bg-white/5 border border-white/10 hover:border-white/20'}
-              `}
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-						>
-							{isSelected && (
-								<motion.div
-									layoutId='selected-mode'
-									className={`absolute inset-0 bg-gradient-to-br   rounded-xl`}
-									style={{ backgroundColor: '#868788ff' }}
-									// transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-								/>
-							)}
+          return (
+            <motion.button
+              key={m.id}
+              onClick={() => onModeChange(m.id)}
+              className={`relative rounded-xl p-2 text-center transition-all ${isSelected ? 'glass border-white/20 shadow-lg' : 'border border-white/10 bg-white/5 hover:border-white/20'} `}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isSelected && (
+                <motion.div
+                  layoutId="selected-mode"
+                  className={`absolute inset-0 rounded-xl bg-gradient-to-br`}
+                  style={{ backgroundColor: '#eeeeee' }}
+                  // transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                />
+              )}
 
-							<div className='relative space-y-1'>
-								<div
-									className={`
-                  w-8 h-8 mx-auto rounded-lg flex items-center justify-center
-                  ${isSelected ? `bg-gradient-to-br` : 'bg-white/10'}
-                `}
-								>
-									<Icon className='w-4 h-4' />
-								</div>
-								<p className={`text-xs font-medium `}>{m.name}</p>
-							</div>
-						</motion.button>
-					);
-				})}
-			</div>
+              <div className="relative space-y-1">
+                <div
+                  className={`mx-auto flex h-8 w-8 items-center justify-center rounded-lg ${isSelected ? `bg-gradient-to-br` : 'bg-white/10'} `}
+                >
+                  <Icon className="h-4 w-4" />
+                </div>
+                <p className={`text-xs`}>{m.name}</p>
+              </div>
+            </motion.button>
+          );
+        })}
+      </div> */}
 
-			{needsInput === 'findTerm' && (
-				<motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-					<input
-						type='text'
-						value={findTerm}
-						onChange={(e) => onFindTermChange(e.target.value)}
-						placeholder='输入要查找的术语（例如，总计、发票号）'
-						className='w-full bg-white/5 border border-black/10 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500 transition-colors'
-					/>
-				</motion.div>
-			)}
+      {needsInput === 'findTerm' && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+        >
+          <input
+            type="text"
+            value={findTerm}
+            onChange={(e) => onFindTermChange(e.target.value)}
+            placeholder="输入要查找的术语（例如，总计、发票号）"
+            className="w-full rounded-xl border border-black/10 bg-white/5 px-3 py-2 text-sm transition-colors focus:border-blue-500 focus:outline-none"
+          />
+        </motion.div>
+      )}
 
-			{needsInput === 'prompt' && (
-				<motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-					<textarea
-						value={prompt}
-						onChange={(e) => onPromptChange(e.target.value)}
-						placeholder='输入你的提示词...'
-						className='w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition-colors resize-none'
-						rows={2}
-					/>
-				</motion.div>
-			)}
-		</div>
-	);
+      {needsInput === 'prompt' && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+        >
+          <textarea
+            value={prompt}
+            onChange={(e) => onPromptChange(e.target.value)}
+            placeholder="输入你的提示词..."
+            className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm transition-colors focus:border-purple-500 focus:outline-none"
+            rows={2}
+          />
+        </motion.div>
+      )}
+    </div>
+  );
 }
