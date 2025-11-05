@@ -124,3 +124,10 @@ textarea.chat_form_input:hover {
 .user_message_box{
   font-size: 13px;
 }
+
+.onchain_btn{
+  font-size:  12px !important;
+  height: 32px !important;
+  border-radius: 0px !important;
+  border: 1px solid #E0E0E0 !important
+}

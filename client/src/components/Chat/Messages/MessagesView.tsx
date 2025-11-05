@@ -67,20 +67,22 @@ function MessagesViewContent({
   return (
     <>
       <div ref={wrapRef} className="relative flex flex-1 overflow-hidden overflow-y-auto">
-        <div className="relative h-full flex-1">
-          <Tooltip title="排队人数" color="#fff" getPopupContainer={() => wrapRef.current}>
-            <div className="absolute right-8 top-0 z-10 mr-3 mt-3 flex items-center gap-1">
-              <span className="h-3 w-3 rounded-full bg-red-500" />
-              <span className="text-xs font-medium text-red-600">{quequetotal.inque}</span>
-            </div>
-          </Tooltip>
+        <div className="relative h-full flex-1 w-32">
+          {/* <Tooltip title="排队人数" color="#fff" getPopupContainer={() => wrapRef.current}> */}
+          <div className="absolute right-8 top-0 z-10 mt-3 flex items-center gap-1 text-xs text-[#E34542]">
+            <span className="h-2 w-2 rounded-full bg-[#E34542]" />
+            排队
+            <span className="text-xs font-normal w-6">{quequetotal.inque}</span>
+          </div>
+          {/* </Tooltip> */}
 
-          <Tooltip title="在线人数" color="#fff" getPopupContainer={() => wrapRef.current}>
-            <div className="absolute right-8 top-4 z-10 mr-3 mt-3 flex items-center gap-1">
-              <span className="h-3 w-3 rounded-full bg-green-500" />
-              <span className="text-xs font-medium text-green-600">{quequetotal.inline}</span>
+          {/* <Tooltip title="在线人数" color="#fff" getPopupContainer={() => wrapRef.current}> */}
+            <div className="absolute right-8 top-4 z-10 mt-3 flex items-center gap-1 text-xs text-[#3AAE39]">
+              <span className="h-2 w-2 rounded-full bg-[#3AAE39]" />
+              在线
+              <span className="text-xs font-normal w-6">{quequetotal.inline}</span>
             </div>
-          </Tooltip>
+          {/* </Tooltip> */}
 
           <div
             className="scrollbar-gutter-stable h-full overflow-y-auto"

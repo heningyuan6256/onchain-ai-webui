@@ -151,7 +151,7 @@ const EditMessage = ({
 
   return (
     <Container message={message}>
-      <div className="bg-token-main-surface-primary relative flex w-full flex-grow flex-col overflow-hidden rounded-2xl border border-border-medium text-text-primary [&:has(textarea:focus)]:border-border-heavy [&:has(textarea:focus)]:shadow-[0_2px_6px_rgba(0,0,0,.05)]">
+      <div className="bg-token-main-surface-primary relative flex w-full flex-grow flex-col overflow-hidden border border-[#E0E0E0] text-text-primary">
         <TextareaAutosize
           {...registerProps}
           ref={(e) => {
@@ -178,7 +178,7 @@ const EditMessage = ({
           render={
             <button
               ref={submitButtonRef}
-              className="btn btn-primary relative mr-2"
+              className="btn btn-neutral relative mr-2 onchain_btn"
               disabled={isSubmitting}
               onClick={handleSubmit(resubmitMessage)}
             >
@@ -191,7 +191,7 @@ const EditMessage = ({
           render={
             <button
               ref={saveButtonRef}
-              className="btn btn-secondary relative mr-2"
+              className="btn btn-neutral relative mr-2 onchain_btn"
               disabled={isSubmitting}
               onClick={handleSubmit(updateMessage)}
             >
@@ -202,7 +202,7 @@ const EditMessage = ({
         <TooltipAnchor
           description="Esc"
           render={
-            <button className="btn btn-neutral relative" onClick={() => enterEdit(true)}>
+            <button className="btn btn-neutral relative onchain_btn" onClick={() => enterEdit(true)}>
               {localize('com_ui_cancel')}
             </button>
           }
