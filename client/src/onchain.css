@@ -131,3 +131,7 @@ textarea.chat_form_input:hover {
   border-radius: 0px !important;
   border: 1px solid #E0E0E0 !important
 }
+
+.mcp_select button{
+  border: 1px solid #E0E0E0;
+}

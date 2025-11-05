@@ -7,6 +7,7 @@ import {
   renderEndpoints,
   renderSearchResults,
   renderCustomGroups,
+  EndpointModelItem,
 } from './components';
 import { getSelectedIcon, getDisplayValue } from './utils';
 import { CustomMenu as Menu } from './CustomMenu';
@@ -60,14 +61,14 @@ function ModelSelectorContent() {
 
   const trigger = (
     <button
-      className="my-1 flex h-10 w-full max-w-[70vw] items-center justify-center gap-2 rounded-xl border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary hover:bg-surface-tertiary"
+      className="flex w-full max-w-[70vw] items-center justify-center gap-2 rounded-[12px] bg-surface-secondary flex item-center justify-center text-xs hover:bg-surface-tertiary h-[24px]"
       aria-label={localize('com_ui_select_model')}
     >
-      {selectedIcon && React.isValidElement(selectedIcon) && (
+      {/* {selectedIcon && React.isValidElement(selectedIcon) && (
         <div className="flex flex-shrink-0 items-center justify-center overflow-hidden">
           {selectedIcon}
         </div>
-      )}
+      )} */}
       <span className="flex-grow truncate text-left">{selectedDisplayValue}</span>
     </button>
   );
@@ -83,25 +84,38 @@ function ModelSelectorContent() {
             modelSpec: values.modelSpec || '',
           });
         }}
-        onSearch={(value) => setSearchValue(value)}
-        combobox={<input placeholder={localize('com_endpoint_search_models')} />}
+
+        // onSearch={(value) => setSearchValue(value)}
+        // combobox={<input placeholder={localize('com_endpoint_search_models')} />}
+        input={<></>}
         trigger={trigger}
       >
-        {searchResults ? (
+        {/* {searchResults ? (
           renderSearchResults(searchResults, localize, searchValue)
         ) : (
-          <>
-            {/* Render ungrouped modelSpecs (no group field) */}
-            {renderModelSpecs(
-              modelSpecs?.filter((spec) => !spec.group) || [],
-              selectedValues.modelSpec || '',
-            )}
-            {/* Render endpoints (will include grouped specs matching endpoint names) */}
-            {renderEndpoints(mappedEndpoints ?? [])}
-            {/* Render custom groups (specs with group field not matching any endpoint) */}
-            {renderCustomGroups(modelSpecs || [], mappedEndpoints ?? [])}
-          </>
-        )}
+          <> */}
+        {/* Render ungrouped modelSpecs (no group field) */}
+        {/* {renderModelSpecs(
+          (mappedEndpoints[0].models || []).map(item => ({ ...item, ...mappedEndpoints[0], preset: {}, label: item.name })),
+          selectedValues.modelSpec || '',
+        )} */}
+        {/* Render endpoints (will include grouped specs matching endpoint names) */}
+        {/* {renderEndpoints((mappedEndpoints || []) ?? [])} */}
+        {/* Render custom groups (specs with group field not matching any endpoint) */}
+        {/* {renderCustomGroups(modelSpecs || [], mappedEndpoints ?? [])} */}
+        {/* </>
+        )} */}
+        {
+          (mappedEndpoints?.[0]?.models || []).map(item => {
+            return <EndpointModelItem
+              key={item.name}
+              modelId={item.name}
+              endpoint={mappedEndpoints[0]}
+              isSelected={selectedValues.model === item.name}
+            />
+          })
+        }
+
       </Menu>
       <DialogManager
         keyDialogOpen={keyDialogOpen}

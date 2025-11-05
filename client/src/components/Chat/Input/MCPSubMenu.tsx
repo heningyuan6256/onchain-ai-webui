@@ -107,7 +107,8 @@ const MCPSubMenu = React.forwardRef<HTMLDivElement, MCPSubMenuProps>(
                     'data-[active-item]:bg-black/[0.075] dark:data-[active-item]:bg-white/10',
                     'w-full min-w-0 justify-between text-sm',
                     isServerInitializing &&
-                      'opacity-50 hover:bg-transparent dark:hover:bg-transparent',
+                    'opacity-50 hover:bg-transparent dark:hover:bg-transparent',
+                    "border border-[#E0E0E0]",
                   )}
                 >
                   <div className="flex flex-grow items-center gap-2">

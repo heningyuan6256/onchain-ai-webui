@@ -4,6 +4,8 @@ import { isAgentsEndpoint, isAssistantsEndpoint } from 'librechat-data-provider'
 import type { Endpoint } from '~/common';
 import { useModelSelectorContext } from '../ModelSelectorContext';
 import { CustomMenuItem as MenuItem } from '../CustomMenu';
+import Icon from '~/components/icon';
+import OpenAISVG from '@/assets/image/openai.svg';
 
 interface EndpointModelItemProps {
   modelId: string | null;
@@ -39,7 +41,7 @@ export function EndpointModelItem({ modelId, endpoint, isSelected }: EndpointMod
       className="flex w-full cursor-pointer items-center justify-between rounded-lg px-2 text-sm"
     >
       <div className="flex w-full min-w-0 items-center gap-2 px-1 py-1">
-        {avatarUrl ? (
+        {/* {avatarUrl ? (
           <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center overflow-hidden rounded-full">
             <img src={avatarUrl} alt={modelName ?? ''} className="h-full w-full object-cover" />
           </div>
@@ -48,8 +50,9 @@ export function EndpointModelItem({ modelId, endpoint, isSelected }: EndpointMod
           <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center overflow-hidden rounded-full">
             {endpoint.icon}
           </div>
-        ) : null}
-        <span className="truncate text-left">{modelName}</span>
+        ) : null} */}
+        <Icon src={OpenAISVG} className='size-3'></Icon>
+        <span className="truncate text-left text-xs">{modelName}</span>
         {isGlobal && (
           <EarthIcon className="ml-auto size-4 flex-shrink-0 self-center text-green-400" />
         )}
