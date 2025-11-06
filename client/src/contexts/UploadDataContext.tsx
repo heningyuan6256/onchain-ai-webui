@@ -60,52 +60,52 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const fetchUploadData = async () => {
     const params = new URLSearchParams({
       // api_key: api_key, // 假设你有这个变量
-      user_id: userid,
+      other_id: userid,
     });
-    // const { rows: ListDataSets } = await fetch(`/rag/system/kb/user/list_sys_kb?${params.toString()}`, {
-    //   method: "GET",
-    //   // headers: { Authorization: `Bearer ${ragflowAPI}` },
-    // }).then((response) => response.json());
-    const ListDataSets = [
-      {
-        avatar: "",
-        chunk_count: 2,
-        chunk_method: "naive",
-        create_date: "Fri, 22 Aug 2025 14:29:39 GMT",
-        create_time: 1755844179524,
-        created_by: "c3e636206dd111f097189ad6bc6a72cc",
-        description: "示例数据集",
-        document_count: 1,
-        embedding_model: "BAAI/bge-large-zh-v1.5@BAAI",
-        id: "6183e4447f2111f09c3fb2f8f377b76a",
-        language: "English",
-        name: "工业知识库",
-        pagerank: 0,
-        parser_config: {
-          auto_keywords: 0,
-          auto_questions: 0,
-          chunk_token_num: 128,
-          delimiter: "\\n",
-          graphrag: {
-            use_graphrag: false,
-          },
-          html4excel: false,
-          layout_recognize: "DeepDOC",
-          raptor: {
-            use_raptor: false,
-          },
-        },
-        permission: "team",
-        similarity_threshold: 0.2,
-        status: "1",
-        tenant_id: "c3e636206dd111f097189ad6bc6a72cc",
-        token_num: 819,
-        update_date: "Fri, 05 Sep 2025 16:08:32 GMT",
-        update_time: 1757059712098,
-        vector_similarity_weight: 0.3,
-        permission_own: "me",
-      },
-    ];
+    const { rows: ListDataSets } = await fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
+      method: "GET",
+      // headers: { Authorization: `Bearer ${ragflowAPI}` },
+    }).then((response) => response.json());
+    // const ListDataSets = [
+    //   {
+    //     avatar: "",
+    //     chunk_count: 2,
+    //     chunk_method: "naive",
+    //     create_date: "Fri, 22 Aug 2025 14:29:39 GMT",
+    //     create_time: 1755844179524,
+    //     created_by: "c3e636206dd111f097189ad6bc6a72cc",
+    //     description: "示例数据集",
+    //     document_count: 1,
+    //     embedding_model: "BAAI/bge-large-zh-v1.5@BAAI",
+    //     id: "6183e4447f2111f09c3fb2f8f377b76a",
+    //     language: "English",
+    //     name: "工业知识库",
+    //     pagerank: 0,
+    //     parser_config: {
+    //       auto_keywords: 0,
+    //       auto_questions: 0,
+    //       chunk_token_num: 128,
+    //       delimiter: "\\n",
+    //       graphrag: {
+    //         use_graphrag: false,
+    //       },
+    //       html4excel: false,
+    //       layout_recognize: "DeepDOC",
+    //       raptor: {
+    //         use_raptor: false,
+    //       },
+    //     },
+    //     permission: "team",
+    //     similarity_threshold: 0.2,
+    //     status: "1",
+    //     tenant_id: "c3e636206dd111f097189ad6bc6a72cc",
+    //     token_num: 819,
+    //     update_date: "Fri, 05 Sep 2025 16:08:32 GMT",
+    //     update_time: 1757059712098,
+    //     vector_similarity_weight: 0.3,
+    //     permission_own: "me",
+    //   },
+    // ];
     // const requestOptions: RequestInit = {
     //   method: "GET",
     //   redirect: "follow",
@@ -186,7 +186,7 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           //     },
           //   ],
           // });
-          fetch(`/rag/system/kb/list_sys_doc?${params.toString()}`, {
+          fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
             method: "GET",
             // headers: { Authorization: `Bearer ${ragflowAPI}` },
             redirect: "follow",
