@@ -192,7 +192,7 @@ const Home: FC = () => {
       setCreateSessionLoading(false);
       navigate(`/conversations/${sessionId}`);
       setTimeout(() => {
-        sendMessage(msg, thinking, userid)
+        sendMessage(msg, thinking, localStorage.getItem("id")!)
           .then(() => {
             loadSessions();
           })

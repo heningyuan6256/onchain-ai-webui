@@ -74,7 +74,7 @@ export default function ProgressText({
       return <CancelledIcon />;
     }
     if (progress < 1) {
-      return <Spinner className='w-[24px]' />;
+      return <Spinner className='w-[18px]' />;
     }
     return <FinishedIcon />;
   };

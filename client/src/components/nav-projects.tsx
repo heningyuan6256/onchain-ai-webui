@@ -103,7 +103,7 @@ const DocData: FC = (props: any) => {
           myHeaders.append("Content-Type", "application/json");
           const params = new URLSearchParams({
             // api_key: api_key, // 假设你有这个变量
-            user_id: userid,
+            user_id: localStorage.getItem("id")!,
           });
 
           fetch(`/rag/system/ragflow/datasets/${props.selectLibrary?.id}/documents?${params.toString()}`, {
@@ -265,7 +265,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
         formdata.append("file", file); // 上传文件
         formdata.append("mode", "simple");
         formdata.append("rag", "true");
-        formdata.append("other_id", userid);
+        formdata.append("other_id", localStorage.getItem("id")!);
         formdata.append("dataset_id", selectLibrary.id);
 
         const requestOptions: RequestInit = {
@@ -275,7 +275,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
         };
 
         const params = new URLSearchParams({
-          other_id: userid, // 假设你有这个变量
+          other_id: localStorage.getItem("id")!, // 假设你有这个变量
           dataset_id: selectLibrary.id
         });
         const formData = new FormData();
@@ -395,9 +395,9 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                       onClick={async () => {
                         const formData = new FormData();
                         formData.append("name", inputValue);
-                        formData.append("other_id", userid);
+                        formData.append("other_id", localStorage.getItem("id")!);
                         const params = new URLSearchParams({
-                          other_id: userid, // 假设你有这个变量
+                          other_id: localStorage.getItem("id")!, // 假设你有这个变量
                           name: inputValue
                         });
                         await fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
@@ -500,7 +500,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                         formdata.append("mode", "simple");
                         formdata.append("rag", "true");
                         // formdata.append("api_key", api_key);
-                        formdata.append("other_id", userid);
+                        formdata.append("other_id", localStorage.getItem("id")!);
                         formdata.append("dataset_id", selectLibrary.id);
 
                         const requestOptions: any = {
