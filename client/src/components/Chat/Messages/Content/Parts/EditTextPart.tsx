@@ -153,7 +153,7 @@ const EditTextPart = ({
 
   return (
     <Container message={message}>
-      <div className="bg-token-main-surface-primary relative flex w-full flex-grow flex-col overflow-hidden rounded-2xl border border-border-medium text-text-primary [&:has(textarea:focus)]:border-border-heavy [&:has(textarea:focus)]:shadow-[0_2px_6px_rgba(0,0,0,.05)]">
+      <div className="bg-token-main-surface-primary relative flex w-full flex-grow flex-col overflow-hidden !rounded-[10px] rounded-2xl border border-border-medium text-text-primary [&:has(textarea:focus)]:border-border-heavy [&:has(textarea:focus)]:shadow-[0_2px_6px_rgba(0,0,0,.05)]">
         <TextareaAutosize
           {...registerProps}
           ref={(e) => {
@@ -176,20 +176,23 @@ const EditTextPart = ({
       </div>
       <div className="mt-2 flex w-full justify-center text-center">
         <button
-          className="btn btn-primary relative mr-2"
+          className="btn btn-primary relative mr-2 !rounded-[10px]"
           disabled={isSubmitting}
           onClick={handleSubmit(resubmitMessage)}
         >
           {localize('com_ui_save_submit')}
         </button>
         <button
-          className="btn btn-secondary relative mr-2"
+          className="btn btn-secondary relative mr-2 !rounded-[10px]"
           disabled={isSubmitting}
           onClick={handleSubmit(updateMessage)}
         >
           {localize('com_ui_save')}
         </button>
-        <button className="btn btn-neutral relative" onClick={() => enterEdit(true)}>
+        <button
+          className="btn btn-neutral relative !rounded-[10px]"
+          onClick={() => enterEdit(true)}
+        >
           {localize('com_ui_cancel')}
         </button>
       </div>

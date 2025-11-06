@@ -31,7 +31,7 @@ function MessagesViewContent({
   useEffect(() => {
     const getqueue = async () => {
       const requestOptions: RequestInit = {
-        method: 'post',
+        method: 'get',
         redirect: 'follow',
       };
 
