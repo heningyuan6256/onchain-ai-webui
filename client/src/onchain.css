@@ -1,5 +1,5 @@
 #root {
-  background: url("assets/背景花纹.png") top center / 100% auto no-repeat;
+  background: url("/assets/背景花纹.png") top center / 100% auto no-repeat;
 }
 
 .bg-nav-bar {
