@@ -51,6 +51,7 @@ import { toast } from "sonner";
 import { generateSnowId } from "@/utils";
 import { concat } from "lodash";
 import ChatLoading from "./ChatLoading";
+import { useLatest } from "ahooks";
 
 export const api_key = location.search?.split("=")[1] || "ragflow-EwNGQxYmM4NjY5OTExZjBiNTVmNzIzNz";
 
@@ -91,6 +92,8 @@ const CardData: FC<{ title: string; icon: string; desc: string }> = (props) => {
 
 const DocData: FC = (props: any) => {
   const { refreshUploadData } = useUploadData();
+  console.log(props.name,'props.name');
+  
   return (
     <div
       key={props.id}
@@ -157,10 +160,7 @@ const DocData: FC = (props: any) => {
               </div>
               <Icon
                 className="h-[50px] right-4 bottom-4 absolute"
-                src={`/img/svgs/${props.name
-                  .split("%")[0]
-                  .toLowerCase()
-                  .substring(props.name.split("%")[0].lastIndexOf(".") + 1)}.svg`}
+                src={`/img/svgs/default.svg`}
               ></Icon>{" "}
             </div>
           ) : (
@@ -194,10 +194,7 @@ const DocData: FC = (props: any) => {
           </div>
           <Icon
             className="h-[50px] right-4 bottom-4 absolute"
-            src={`/img/svgs/${props.name
-              .split("%")[0]
-              .toLowerCase()
-              .substring(props.name.split("%")[0].lastIndexOf(".") + 1)}.svg`}
+            src={`/img/svgs/default.svg`}
           ></Icon>{" "}
         </div>
       )}
@@ -221,9 +218,12 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
 
   const [selectLibrary, setSelectLibrary] = useState<any>({});
 
-  const displayFiles = useMemo(() => {
-    return (libraryData || []).find((item) => item.id == selectLibrary.id)?.docs || [];
-  }, [libraryData, selectLibrary]);
+  const latestSelectLibrary = useLatest(selectLibrary)
+
+  const [displayFiles, setDisplayFiles] = useState([])
+  // const displayFiles = useMemo(() => {
+  //   return (libraryData || []).find((item) => item.id == selectLibrary.id)?.docs || [];
+  // }, [libraryData, selectLibrary]);
 
 
   useEffect(() => {
@@ -232,6 +232,39 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
       setLoadingData({});
     }
   }, [loadingData?.id, displayFiles]);
+
+  useEffect(() => {
+    if (!selectLibrary.id) return;
+
+    const fetchData = () => {
+      const params = new URLSearchParams({
+        user_id: localStorage.getItem("id")!,
+        dataset_id: selectLibrary.id,
+      });
+
+      fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
+        method: "GET",
+        redirect: "follow",
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          const datas = result.rows;
+          setDisplayFiles(datas);
+        })
+        .catch((err) => console.error("Fetch error:", err));
+    };
+
+    // 立即执行一次
+    fetchData();
+
+    // 每 4 秒刷新一次
+    const interval = setInterval(fetchData, 4000);
+
+    // 清理定时器
+    return () => clearInterval(interval);
+  }, [selectLibrary.id]);
+
+
 
   useEffect(() => {
     setRunningLoading(false);
@@ -559,11 +592,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                 ></Input>
               </div>
               <div className="px-4 py-4 flex flex-wrap overflow-y-auto">
-                {(runningLoading ||
-                  (loadingData && loadingData.id && !displayFiles.map((item: any) => item.id).includes(loadingData?.id))
-                  ? [loadingData, ...displayFiles]
-                  : displayFiles
-                )
+                {displayFiles
                   .filter((item: any) => (item?.name || "").toLowerCase().indexOf(searchVal.toLowerCase()) != -1)
                   .map((item: any, index: number) => {
                     // if (item.running) {
