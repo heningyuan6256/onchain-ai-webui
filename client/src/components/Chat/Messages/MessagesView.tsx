@@ -23,35 +23,7 @@ function MessagesViewContent({
   const { screenshotTargetRef } = useScreenshot();
   const scrollButtonPreference = useRecoilValue(store.showScrollButton);
   const [currentEditId, setCurrentEditId] = useState<number | string | null>(-1);
-  const quequetotal = useReactive({
-    inline: 0,
-    inque: 0,
-  });
   const wrapRef = useRef(null);
-  useEffect(() => {
-    const getqueue = async () => {
-      const requestOptions: RequestInit = {
-        method: 'post',
-        redirect: 'follow',
-      };
-
-      fetch(`/model/system/model/list_model_queue?model_ids=qwen3-32b`, requestOptions).then(
-        (res) => {
-          res.json().then(({ data }) => {
-            const safeParse = (str) => Number(str?.split('} ')?.pop()?.trim());
-            quequetotal.inline = safeParse(data[0]) + safeParse(data[1]);
-            quequetotal.inque = safeParse(data[1]);
-            console.log('排队结果', quequetotal);
-          });
-        },
-      );
-    };
-    getqueue();
-    const id = setInterval(() => {
-      getqueue();
-    }, 10000);
-    return () => clearInterval(id);
-  }, []);
 
   const {
     conversation,
@@ -67,23 +39,7 @@ function MessagesViewContent({
   return (
     <>
       <div ref={wrapRef} className="relative flex flex-1 overflow-hidden overflow-y-auto">
-        <div className="relative h-full flex-1 w-32">
-          {/* <Tooltip title="排队人数" color="#fff" getPopupContainer={() => wrapRef.current}> */}
-          <div className="absolute right-8 top-0 z-10 mt-3 flex items-center gap-1 text-xs text-[#E34542]">
-            <span className="h-2 w-2 rounded-full bg-[#E34542]" />
-            排队
-            <span className="text-xs font-normal w-6">{quequetotal.inque}</span>
-          </div>
-          {/* </Tooltip> */}
-
-          {/* <Tooltip title="在线人数" color="#fff" getPopupContainer={() => wrapRef.current}> */}
-            <div className="absolute right-8 top-4 z-10 mt-3 flex items-center gap-1 text-xs text-[#3AAE39]">
-              <span className="h-2 w-2 rounded-full bg-[#3AAE39]" />
-              在线
-              <span className="text-xs font-normal w-6">{quequetotal.inline}</span>
-            </div>
-          {/* </Tooltip> */}
-
+        <div className="relative h-full flex-1">
           <div
             className="scrollbar-gutter-stable h-full overflow-y-auto"
             onScroll={debouncedHandleScroll}

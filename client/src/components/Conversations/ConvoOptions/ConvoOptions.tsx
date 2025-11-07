@@ -24,7 +24,7 @@ function ConvoOptions({
   isPopoverActive,
   setIsPopoverActive,
   isActiveConvo,
-  desc
+  desc,
 }: {
   conversationId: string | null;
   title: string | null;
@@ -33,7 +33,7 @@ function ConvoOptions({
   isPopoverActive: boolean;
   setIsPopoverActive: React.Dispatch<React.SetStateAction<boolean>>;
   isActiveConvo: boolean;
-  desc: any
+  desc: any;
 }) {
   const localize = useLocalize();
   const { index } = useChatContext();
@@ -155,6 +155,26 @@ function ConvoOptions({
         ) : (
           <Copy className="icon-sm mr-2 text-text-primary" />
         ),
+        render: (props) => (
+          <button
+            {...props}
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.75rem',
+              color: '#212121',
+              fontWeight: 'normal',
+              fontStyle: 'normal',
+              padding: '5px 8px',
+            }}
+            className={cn(
+              props.className,
+              'flex items-center gap-2 px-3 py-2 text-sm text-text-primary',
+            )}
+          >
+            {isDuplicateLoading ? <Spinner className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+            <span>{localize('com_ui_duplicate')}</span>
+          </button>
+        ),
       },
       {
         label: localize('com_ui_archive'),
@@ -165,6 +185,31 @@ function ConvoOptions({
         ) : (
           <Archive className="icon-sm mr-2 text-text-primary" />
         ),
+
+        render: (props) => (
+          <button
+            {...props}
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.75rem',
+              color: '#212121',
+              fontWeight: 'normal',
+              fontStyle: 'normal',
+              padding: '5px 8px',
+            }}
+            className={cn(
+              props.className,
+              'flex items-center gap-2 px-3 py-2 text-sm text-text-primary',
+            )}
+          >
+            {isArchiveLoading ? (
+              <Spinner className="h-3 w-3" />
+            ) : (
+              <Archive className="h-3 w-3 text-text-primary" />
+            )}
+            <span>{localize('com_ui_archive')}</span>
+          </button>
+        ),
       },
       {
         label: localize('com_ui_delete'),
@@ -172,7 +217,26 @@ function ConvoOptions({
         icon: <Trash className="icon-sm mr-2 text-text-primary" />,
         hideOnClick: false,
         ref: deleteButtonRef,
-        render: (props) => <button {...props} />,
+        render: (props) => (
+          <button
+            {...props}
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.75rem',
+              color: '#212121',
+              fontWeight: 'normal',
+              fontStyle: 'normal',
+              padding: '5px 8px',
+            }}
+            className={cn(
+              props.className,
+              'flex items-center gap-2 px-3 py-2 text-sm text-text-primary',
+            )}
+          >
+            <Trash className="h-3 w-3" />
+            <span>{localize('com_ui_delete')}</span>
+          </button>
+        ),
       },
     ],
     [
@@ -219,12 +283,15 @@ function ConvoOptions({
               }
             }}
           >
-            <Ellipsis className={`icon-md text-text-secondary ${desc ? "":"text-white"}`} aria-hidden={true} />
+            <Ellipsis
+              className={`icon-md text-text-secondary ${desc ? '' : 'text-white'}`}
+              aria-hidden={true}
+            />
           </Menu.MenuButton>
         }
         items={dropdownItems}
         menuId={menuId}
-        className="z-30"
+        className="z-30 !rounded-[10px]"
       />
       {showShareDialog && (
         <ShareButton

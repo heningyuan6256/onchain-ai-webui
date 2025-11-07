@@ -22,8 +22,8 @@ import {
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 import Icon from '~/components/icon';
-import LikeSvg from "@/assets/image/front-like.svg";
-import DisLikeSvg from "@/assets/image/front-dislike.svg";
+import LikeSvg from '@/assets/image/front-like.svg';
+import DisLikeSvg from '@/assets/image/front-dislike.svg';
 
 interface FeedbackProps {
   handleFeedback: ({ feedback }: { feedback: TFeedback | undefined }) => void;
@@ -60,7 +60,7 @@ function FeedbackOptionButton({
   return (
     <button
       className={cn(
-        'flex w-full items-center gap-3 rounded-xl p-2 text-text-secondary transition-colors duration-200 hover:bg-surface-hover hover:text-text-primary',
+        'flex w-full items-center gap-1 !rounded-[10px] p-2 text-text-secondary transition-colors duration-200 hover:bg-surface-hover hover:text-text-primary',
         active && 'bg-surface-hover font-semibold text-text-primary',
       )}
       onClick={onClick}
@@ -68,8 +68,18 @@ function FeedbackOptionButton({
       aria-label={label}
       aria-pressed={active}
     >
-      <Icon size="16" bold={active} />
-      <span>{label}</span>
+      <Icon size="12" bold={active} />
+      <span
+        style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '0.75rem',
+          color: '#212121',
+          fontWeight: 'normal',
+          fontStyle: 'normal',
+        }}
+      >
+        {label}
+      </span>
     </button>
   );
 }
@@ -167,7 +177,11 @@ function FeedbackButtons({
         gutter={8}
         portal
         unmountOnHide
+<<<<<<< HEAD
         className="popover-animate flex w-auto flex-col gap-1.5 overflow-hidden border border-[#E0E0E0] bg-surface-secondary p-1 shadow-lg text-xs"
+=======
+        className="popover-animate flex w-auto flex-col gap-1.5 overflow-hidden !rounded-[10px] border border-border-medium bg-surface-secondary p-1.5 shadow-lg"
+>>>>>>> 7612cf899e0dc162aada12ee5602dd8e7e91c9fd
       >
         <div className="flex flex-col items-stretch justify-center">
           {positiveTags.map((tag) => (
@@ -202,7 +216,11 @@ function FeedbackButtons({
         gutter={8}
         portal
         unmountOnHide
+<<<<<<< HEAD
         className="popover-animate flex w-auto flex-col gap-1.5 text-xs overflow-hidden border border-[#E0E0E0] bg-surface-secondary p-1 shadow-lg"
+=======
+        className="popover-animate flex w-auto flex-col gap-1.5 overflow-hidden !rounded-[10px] border border-border-medium bg-surface-secondary p-1.5 shadow-lg"
+>>>>>>> 7612cf899e0dc162aada12ee5602dd8e7e91c9fd
       >
         <div className="flex flex-col items-stretch justify-center">
           {negativeTags.map((tag) => (
@@ -292,7 +310,7 @@ export default function Feedback({
         className={buttonClasses(true, isLast)}
         onClick={() => {
           // if (isThumbsUp) {
-            handleButtonFeedback(undefined);
+          handleButtonFeedback(undefined);
           // } else {
           //   // setOpenDialog(true);
           // }
@@ -318,29 +336,6 @@ export default function Feedback({
           onOther={handleOtherOpen}
         />
       )}
-      <OGDialog open={openDialog} onOpenChange={setOpenDialog}>
-        <OGDialogContent className="w-11/12 max-w-lg">
-          <OGDialogTitle className="text-token-text-primary text-lg font-semibold leading-6">
-            {localize('com_ui_feedback_more_information')}
-          </OGDialogTitle>
-          <textarea
-            className="w-full rounded-xl border border-border-light bg-transparent p-2 text-text-primary"
-            value={feedback?.text || ''}
-            onChange={handleTextChange}
-            rows={4}
-            placeholder={localize('com_ui_feedback_placeholder')}
-            maxLength={500}
-          />
-          <div className="mt-4 flex items-end justify-end gap-2">
-            <Button variant="destructive" onClick={handleDialogClear}>
-              {localize('com_ui_delete')}
-            </Button>
-            <Button variant="submit" onClick={handleDialogSave} disabled={!feedback?.text?.trim()}>
-              {localize('com_ui_save')}
-            </Button>
-          </div>
-        </OGDialogContent>
-      </OGDialog>
     </>
   );
 }
