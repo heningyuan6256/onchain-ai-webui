@@ -38,8 +38,9 @@ import ModelSelector from '../Menus/Endpoints/ModelSelector';
 import { useGetStartupConfig } from '~/data-provider';
 import { Toggle } from '~/components/ui/toggle';
 import Icon from '~/components/icon';
-import AISVG from "@/assets/image/front-ai.svg";
-import AIWhiteSVG from "@/assets/image/front-ai-white.svg";
+import AISVG from '@/assets/image/front-ai.svg';
+import AIWhiteSVG from '@/assets/image/front-ai-white.svg';
+import { useReactive } from 'ahooks';
 
 const ChatForm = memo(({ index = 0 }: { index?: number }) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
@@ -115,7 +116,34 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     () => requiresKey || invalidAssistant,
     [requiresKey, invalidAssistant],
   );
+  const quequetotal = useReactive({
+    inline: 0,
+    inque: 0,
+  });
+  useEffect(() => {
+    const getqueue = async () => {
+      const requestOptions: RequestInit = {
+        method: 'get',
+        redirect: 'follow',
+      };
 
+      fetch(`/model/system/model/list_model_queue?model_ids=qwen3-32b`, requestOptions).then(
+        (res) => {
+          res.json().then(({ data }) => {
+            const safeParse = (str) => Number(str?.split('} ')?.pop()?.trim());
+            quequetotal.inline = safeParse(data[0]) + safeParse(data[1]);
+            quequetotal.inque = safeParse(data[1]);
+            console.log('排队结果', quequetotal);
+          });
+        },
+      );
+    };
+    getqueue();
+    const id = setInterval(() => {
+      getqueue();
+    }, 10000);
+    return () => clearInterval(id);
+  }, []);
   const handleContainerClick = useCallback(() => {
     /** Check if the device is a touchscreen */
     if (window.matchMedia?.('(pointer: coarse)').matches) {
@@ -211,7 +239,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     [isCollapsed, isMoreThanThreeRows],
   );
 
-  const [thinking, setThinking] = useState(false)
+  const [thinking, setThinking] = useState(false);
 
   return (
     <form
@@ -268,7 +296,14 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
             />
             <FileFormChat conversation={conversation} />
             {endpoint && (
-              <div className={cn('flex', "p-2.5", "rounded-[10px]", isRTL ? 'flex-row-reverse' : 'flex-row')}>
+              <div
+                className={cn(
+                  'flex',
+                  'p-2.5',
+                  'rounded-[10px]',
+                  isRTL ? 'flex-row-reverse' : 'flex-row',
+                )}
+              >
                 <TextareaAutosize
                   {...registerProps}
                   ref={(e) => {
@@ -299,7 +334,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                     baseClasses,
                     removeFocusRings,
                     'transition-[max-height] duration-200 disabled:cursor-not-allowed',
-                    "chat_form_input"
+                    'chat_form_input',
                   )}
                 />
                 {/* <div className="flex flex-col items-start justify-start pt-1.5">
@@ -313,7 +348,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
             )}
             <div
               className={cn(
-                'items-between flex gap-2.5 pb-2 h-[34px]',
+                'items-between flex h-[34px] gap-2.5 pb-2',
                 isRTL ? 'flex-row-reverse' : 'flex-row',
               )}
             >
@@ -326,11 +361,11 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                 onPressedChange={(value) => {
                   setThinking(value);
                 }}
-                className="rounded-[12px] h-[24px] text-xs font-[400] w-[82px] cursor-pointer"
+                className="h-[24px] w-[82px] cursor-pointer rounded-[12px] text-xs font-[400]"
               >
                 <div className="w-3.5">
-                  <Icon className={!thinking ? "w-3.5 h-3.5" : "w-0 h-0"} src={AISVG}></Icon>
-                  <Icon className={!thinking ? "w-0 h-0" : "w-3.5 h-3.5"} src={AIWhiteSVG}></Icon>
+                  <Icon className={!thinking ? 'h-3.5 w-3.5' : 'h-0 w-0'} src={AISVG}></Icon>
+                  <Icon className={!thinking ? 'h-0 w-0' : 'h-3.5 w-3.5'} src={AIWhiteSVG}></Icon>
                 </div>
                 深入研究
               </Toggle>
@@ -370,6 +405,26 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
               </div>
             </div>
             {TextToSpeech && automaticPlayback && <StreamAudio index={index} />}
+          </div>
+        </div>
+        <div style={{ display: 'flex' }}>
+          <div className="z-10 mr-3 mt-3 flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: '#36ECD3' }} />
+            <span className="text-xs" style={{ color: '#afafaf' }}>
+              {'在线'}
+            </span>
+            <span className="text-xs" style={{ color: '#afafaf' }}>
+              {quequetotal.inline}
+            </span>
+          </div>
+          <div className="z-10 mr-3 mt-3 flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: '#afafaf' }} />
+            <span className="text-xs" style={{ color: '#afafaf' }}>
+              {'排队'}
+            </span>
+            <span className="text-xs" style={{ color: '#afafaf' }}>
+              {quequetotal.inque}
+            </span>
           </div>
         </div>
       </div>
