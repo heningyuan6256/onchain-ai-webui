@@ -332,11 +332,7 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
 
   return (
     <DropdownPopup
-<<<<<<< HEAD
       itemClassName="flex w-full cursor-pointer items-center justify-between hover:bg-surface-hover gap-5"
-=======
-      itemClassName="flex w-full !rounded-[10px] cursor-pointer  items-center justify-between hover:bg-surface-hover gap-5"
->>>>>>> c553b93f23aa555d3a9f35670253185842b432d0
       menuId="tools-dropdown-menu"
       isOpen={isPopoverActive}
       setIsOpen={setIsPopoverActive}
