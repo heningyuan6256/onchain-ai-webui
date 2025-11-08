@@ -29,10 +29,12 @@ import Settings from '~/pages/setting';
 import AppList from '~/pages/applist';
 import AppChat from '~/pages/appChat';
 import Ocr from '~/pages/ocrapp';
+import { Toaster } from 'sonner';
 const AuthLayout = () => (
   <AuthContextProvider>
     <Outlet />
     <ApiErrorWatcher />
+     <Toaster position="top-right"></Toaster>
   </AuthContextProvider>
 );
 

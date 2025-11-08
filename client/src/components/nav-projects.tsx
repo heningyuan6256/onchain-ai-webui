@@ -52,6 +52,17 @@ import { generateSnowId } from "@/utils";
 import { concat } from "lodash";
 import ChatLoading from "./ChatLoading";
 import { useLatest } from "ahooks";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/Alert"
 
 export const api_key = location.search?.split("=")[1] || "ragflow-EwNGQxYmM4NjY5OTExZjBiNTVmNzIzNz";
 
@@ -92,56 +103,56 @@ const CardData: FC<{ title: string; icon: string; desc: string }> = (props) => {
 
 const DocData: FC = (props: any) => {
   const { refreshUploadData } = useUploadData();
-  console.log(props.name,'props.name');
-  
+  console.log(props.name, 'props.name');
+
   return (
     <div
       key={props.id}
       className="doc_card h-[248px] w-[176px] rounded-[10px] border-[#E0E0E0] border mr-4 mb-4 relative hover:border-[#0563B2] transition-all cursor-pointer"
     >
-      <span
-        className="w-[12px] h-[12px] absolute right-[-5px] top-[-5px] z-50 cursor-pointer doc_card_close"
-        onClick={() => {
-          const myHeaders = new Headers();
-          myHeaders.append("Content-Type", "application/json");
-          const params = new URLSearchParams({
-            // api_key: api_key, // 假设你有这个变量
-            user_id: localStorage.getItem("id")!,
-          });
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <span
+            className="w-[12px] h-[12px] absolute right-[-5px] top-[-5px] z-50 cursor-pointer doc_card_close"
 
-          fetch(`/rag/system/ragflow/datasets/${props.selectLibrary?.id}/documents?${params.toString()}`, {
-            method: "DElETE",
-            headers: myHeaders,
-            // redirect: "follow",
-            body: JSON.stringify([props.id]),
-          }).then((res) => {
-            res.json().then((struct) => {
-              toast.success("删除知识库成功");
-              refreshUploadData();
-              console.log(struct, "struct");
-            });
-          });
+          >
+            <Icon src={INCORRECTSVG}></Icon>
+          </span>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>确定要删除知识文档吗?</AlertDialogTitle>
+            <AlertDialogDescription>
+              此操作会永久删除知识文档，不可以回退
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              const myHeaders = new Headers();
+              myHeaders.append("Content-Type", "application/json");
+              const params = new URLSearchParams({
+                // api_key: api_key, // 假设你有这个变量
+                user_id: localStorage.getItem("id")!,
+              });
 
-          // const raw = JSON.stringify({
-          //   dataset_id: "5f947662056e11f0be430242ac170004",
-          //   ids: ["29eaae4831f911f0acc90242ac170006"],
-          // });
+              fetch(`/rag/system/ragflow/datasets/${props.selectLibrary?.id}/documents?${params.toString()}`, {
+                method: "DElETE",
+                headers: myHeaders,
+                // redirect: "follow",
+                body: JSON.stringify([props.id]),
+              }).then((res) => {
+                res.json().then((struct) => {
+                  toast.success("删除知识库成功");
+                  refreshUploadData();
+                  console.log(struct, "struct");
+                });
+              });
+            }}>确认</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
-          // const requestOptions = {
-          //   method: "DELETE",
-          //   headers: myHeaders,
-          //   body: raw,
-          //   redirect: "follow",
-          // };
-
-          // fetch("/rag/api/ragflow/datasets/5f947662056e11f0be430242ac170004/documents", requestOptions)
-          //   .then((response) => response.text())
-          //   .then((result) => console.log(result))
-          //   .catch((error) => console.error(error));
-        }}
-      >
-        <Icon src={INCORRECTSVG}></Icon>
-      </span>
       {props.run != "DONE" && (
         <Fragment>
           {props.progress == -1 ? (
@@ -166,7 +177,7 @@ const DocData: FC = (props: any) => {
           ) : (
             <Fragment>
               <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 rounded-[8px]">
-                <div className="text-xs z-40 text-[#969696]">分析中 ...</div>
+                <div className="text-xs z-40 text-[#969696]">分析中 {(props.progress * 100).toFixed(2) + '%'} ...</div>
               </div>
               {/* <div className="text-[13px] text-[#333333] px-4.5 py-4.5 font-medium flex items-center">
                 <div className="mr-1.5">
@@ -233,13 +244,21 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
     }
   }, [loadingData?.id, displayFiles]);
 
+
+  const [loading, setLoading] = useState(false); // 添加loading状态
+
   useEffect(() => {
     if (!selectLibrary.id) return;
 
     const fetchData = () => {
+      // 如果当前正在加载，则不发起新的请求
+      if (loading) return;
+
+      setLoading(true); // 开始加载
+
       const params = new URLSearchParams({
         user_id: localStorage.getItem("id")!,
-        dataset_id: selectLibrary.id,
+        dataset_id: selectLibrary.id!,
       });
 
       fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
@@ -251,19 +270,25 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
           const datas = result.rows;
           setDisplayFiles(datas);
         })
-        .catch((err) => console.error("Fetch error:", err));
+        .catch((err) => console.error("Fetch error:", err))
+        .finally(() => {
+          setLoading(false); // 数据加载完成后停止loading
+        });
     };
 
     // 立即执行一次
     fetchData();
 
-    // 每 4 秒刷新一次
-    const interval = setInterval(fetchData, 4000);
+    // 每 4 秒刷新一次，只有在没有加载的情况下才会刷新
+    const interval = setInterval(() => {
+      if (!loading) {
+        fetchData();
+      }
+    }, 4000);
 
     // 清理定时器
     return () => clearInterval(interval);
-  }, [selectLibrary.id]);
-
+  }, [selectLibrary.id, loading]); // 监听loading状态
 
 
   useEffect(() => {
@@ -433,14 +458,21 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                           other_id: localStorage.getItem("id")!, // 假设你有这个变量
                           name: inputValue
                         });
-                        await fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
+                        const toastId = toast.loading("正在新建")
+                        const data = await fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
                           method: "post",
                           body: formData,
-                        });
-                        toast.success(`新建成功`);
-                        refreshUploadData();
-                        setInputValue("");
-                        setNewVisible(false);
+                        })
+                        if (data.status == 200) {
+                          toast.dismiss(toastId)
+                          toast.success(`新建成功`);
+                          refreshUploadData();
+                          setInputValue("");
+                          setNewVisible(false);
+                        } else {
+                          toast.dismiss(toastId)
+                          toast.error("服务器发生错误！")
+                        }
                       }}
                       className="rounded-[20px] w-[64px] h-[30px] cursor-pointer text-xs font-normal"
                     >
@@ -469,7 +501,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                 <Icon src={LIBRARYSVG} className="mr-2 text-xs"></Icon>{" "}
                 <div className="flex-1 text-[#333333] text-xs">{item.name}</div>
                 <div className="flex items-center">
-                  <span className="mr-0.5 text-xs text-[#333333]">{(item.docs || []).length}</span>{" "}
+                  <span className="mr-0.5 text-xs text-[#333333]">{item.document_count}</span>{" "}
                   <span>
                     <Icon src={FileSvg}></Icon>
                   </span>
@@ -493,7 +525,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                   <Textarea
                     value={uploadText}
                     placeholder="一些准备上传到知识库的文本内容"
-                    className="placeholder:text-[rgba(0,0,0,0.3)] placeholder:text-xs max-h-[121px] min-h-[121px] border-[#0563B2] shadow-none resize-none textarea_bg text-xs"
+                    className="placeholder:text-[rgba(0,0,0,0.3)] placeholder:text-xs max-h-[121px] min-h-[121px] hover:border-[#0563B2] border-[#e0e0e0] shadow-none resize-none textarea_bg text-xs"
                     onChange={(e) => {
                       setUploadText(e.target.value);
                       // setInputMessaage(e.target.value);

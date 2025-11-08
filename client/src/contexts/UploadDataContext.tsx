@@ -61,7 +61,7 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const params = new URLSearchParams({
       // api_key: api_key, // 假设你有这个变量
       other_id: localStorage.getItem("id")!,
-      pageNum:"1",
+      pageNum: "1",
       pageSize: "100"
     });
     const { rows: ListDataSets } = await fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
@@ -79,16 +79,17 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             dataset_id: item.id,
           });
 
-          fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
-            method: "GET",
-            // headers: { Authorization: `Bearer ${ragflowAPI}` },
-            redirect: "follow",
-          })
-            .then((response) => response.json())
-            .then((result) => {
-              const datas = result.rows;
-              resolve({ ...item, docs: datas });
-            });
+          // fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
+          //   method: "GET",
+          //   // headers: { Authorization: `Bearer ${ragflowAPI}` },
+          //   redirect: "follow",
+          // })
+          //   .then((response) => response.json())
+          //   .then((result) => {
+          //     const datas = result.rows;
+          //     resolve({ ...item, docs: [] });
+          //   });
+          resolve({ ...item, docs: [] });
         })
       );
     });
@@ -115,7 +116,7 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     // 轮询
     // const interval = setInterval(() => {
-      fetchUploadData();
+    fetchUploadData();
     // }, 10000); // 每5秒刷新
 
     return () => {
