@@ -120,16 +120,16 @@ const DocData: FC = (props: any) => {
             <Icon src={INCORRECTSVG}></Icon>
           </span>
         </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
+        <AlertDialogContent className="onchain_dialog">
+          <AlertDialogHeader className="onchain_dialog_title">
             <AlertDialogTitle>确定要删除知识文档吗?</AlertDialogTitle>
             <AlertDialogDescription>
               此操作会永久删除知识文档，不可以回退
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>取消</AlertDialogCancel>
-            <AlertDialogAction onClick={() => {
+          <AlertDialogFooter className="px-4 py-2">
+            <AlertDialogCancel className="onchain_btn">取消</AlertDialogCancel>
+            <AlertDialogAction className="onchain_btn" onClick={() => {
               const myHeaders = new Headers();
               myHeaders.append("Content-Type", "application/json");
               const params = new URLSearchParams({
@@ -143,7 +143,7 @@ const DocData: FC = (props: any) => {
                 // redirect: "follow",
                 body: JSON.stringify([props.id]),
               }).then((res) => {
-                res.json().then(async(struct) => {
+                res.json().then(async (struct) => {
                   await props.fetchKnowldegeData()
                   toast.success("删除知识库成功");
                   console.log(struct, "struct");
@@ -250,7 +250,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
 
   const loadingLatest = useLatest(loading)
 
-  const fetchKnowldegeData = async (forceUpdate?:boolean) => {
+  const fetchKnowldegeData = async (forceUpdate?: boolean) => {
     // 如果当前正在加载，则不发起新的请求
     if (!forceUpdate && loadingLatest.current) return;
 
@@ -497,7 +497,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                   setSelectLibrary(item);
                 }}
                 key={index}
-                className={`flex hover:bg-[#E4E4E5] px-1 cursor-pointer transition-all items-center py-1 mx-4 my-1.5 ${item.id == selectLibrary?.id ? "bg-[#E4E4E5]" : ""
+                className={`library_item relative flex hover:bg-[#E4E4E5] px-1 cursor-pointer transition-all items-center py-1 mx-4 my-1.5 ${item.id == selectLibrary?.id ? "bg-[#E4E4E5]" : ""
                   }`}
               >
                 <Icon src={LIBRARYSVG} className="mr-2 text-xs"></Icon>{" "}
@@ -508,6 +508,53 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                     <Icon src={FileSvg}></Icon>
                   </span>
                 </div>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <span
+                      className="library_delete w-[12px] h-[12px] absolute right-[-5px] top-[-5px] z-50 cursor-pointer doc_card_close"
+
+                    >
+                      <Icon src={INCORRECTSVG}></Icon>
+                    </span>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="onchain_dialog">
+                    <AlertDialogHeader className="onchain_dialog_title">
+                      <AlertDialogTitle>确定要删除知识库吗?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        此操作会永久删除知识库，不可以回退
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="px-4 py-2">
+                      <AlertDialogCancel className="onchain_btn">取消</AlertDialogCancel>
+                      <AlertDialogAction className="onchain_btn" onClick={() => {
+                        const myHeaders = new Headers();
+                        myHeaders.append("Content-Type", "application/json");
+                        const params = new URLSearchParams({
+                          // api_key: api_key, // 假设你有这个变量
+                          user_id: localStorage.getItem("id")!,
+                        });
+
+                        fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
+                          method: "DElETE",
+                          headers: myHeaders,
+                          // redirect: "follow",
+                          body: JSON.stringify([item.id]),
+                        }).then((res) => {
+                          if (res.status == 200) {
+                            toast.success("删除成功")
+                            refreshUploadData()
+                            if (selectLibrary == item.id) {
+                              setSelectLibrary({})
+                            }
+                          }
+                        }).catch(error => {
+                          toast.error(error)
+                        });
+                      }}>确认</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             );
           })}
