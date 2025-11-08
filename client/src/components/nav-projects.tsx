@@ -63,6 +63,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/Alert"
+import { SpinnerWrapper } from "./Spiner";
 
 export const api_key = location.search?.split("=")[1] || "ragflow-EwNGQxYmM4NjY5OTExZjBiNTVmNzIzNz";
 
@@ -144,7 +145,7 @@ const DocData: FC = (props: any) => {
               }).then((res) => {
                 res.json().then((struct) => {
                   toast.success("删除知识库成功");
-                  refreshUploadData();
+                  props.fetchKnowldegeData()
                   console.log(struct, "struct");
                 });
               });
@@ -247,49 +248,49 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
 
   const [loading, setLoading] = useState(false); // 添加loading状态
 
+  const loadingLatest = useLatest(loading)
+
+  const fetchKnowldegeData = () => {
+    // 如果当前正在加载，则不发起新的请求
+    if (loadingLatest.current) return;
+
+    setLoading(true); // 开始加载
+
+    const params = new URLSearchParams({
+      user_id: localStorage.getItem("id")!,
+      dataset_id: selectLibrary.id!,
+    });
+
+    fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
+      method: "GET",
+      redirect: "follow",
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        const datas = result.rows;
+        setDisplayFiles(datas);
+      })
+      .catch((err) => console.error("Fetch error:", err))
+      .finally(() => {
+        setLoading(false); // 数据加载完成后停止loading
+      });
+  };
+
   useEffect(() => {
     if (!selectLibrary.id) return;
-
-    const fetchData = () => {
-      // 如果当前正在加载，则不发起新的请求
-      if (loading) return;
-
-      setLoading(true); // 开始加载
-
-      const params = new URLSearchParams({
-        user_id: localStorage.getItem("id")!,
-        dataset_id: selectLibrary.id!,
-      });
-
-      fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
-        method: "GET",
-        redirect: "follow",
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          const datas = result.rows;
-          setDisplayFiles(datas);
-        })
-        .catch((err) => console.error("Fetch error:", err))
-        .finally(() => {
-          setLoading(false); // 数据加载完成后停止loading
-        });
-    };
-
     // 立即执行一次
-    fetchData();
+    fetchKnowldegeData();
 
     // 每 4 秒刷新一次，只有在没有加载的情况下才会刷新
     const interval = setInterval(() => {
-      if (!loading) {
-        fetchData();
+      if (!loadingLatest.current) {
+        fetchKnowldegeData();
       }
-    }, 4000);
+    }, 15000);
 
     // 清理定时器
     return () => clearInterval(interval);
-  }, [selectLibrary.id, loading]); // 监听loading状态
-
+  }, [selectLibrary.id]); // 监听loading状态
 
   useEffect(() => {
     setRunningLoading(false);
@@ -362,7 +363,8 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
               setUploadBlankTextLoading(false);
               toast.success(`上传文本内容成功`);
               setUploadText("");
-              refreshUploadData();
+              // refreshUploadData();
+              fetchKnowldegeData()
             });
           })
           .catch((error) => console.error(error));
@@ -594,7 +596,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                             // });
                             // setRunningLoading(false);
                             console.log(result);
-                            refreshUploadData();
+                            fetchKnowldegeData()
                           })
                           .catch((error) => {
                             // setRunningLoading(false);
@@ -623,30 +625,33 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                 // prefix={<Icon src={DOCUMENTSVG}></Icon>}
                 ></Input>
               </div>
-              <div className="px-4 py-4 flex flex-wrap overflow-y-auto">
-                {displayFiles
-                  .filter((item: any) => (item?.name || "").toLowerCase().indexOf(searchVal.toLowerCase()) != -1)
-                  .map((item: any, index: number) => {
-                    // if (item.running) {
-                    return (
-                      <Fragment key={item.id || item.name}>
-                        <DocData {...item} selectLibrary={selectLibrary}></DocData>
-                      </Fragment>
-                    );
-                    // }
-                    // return (
-                    //   <motion.div
-                    //     key={item.id || item.name} // 用唯一标识
-                    //     initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    //     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    //     exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                    //     transition={{ duration: 0.25, delay: index * 0.05 }}
-                    //   >
-                    //     <DocData {...item} selectLibrary={selectLibrary}></DocData>
-                    //   </motion.div>
-                    // );
-                  })}
-              </div>
+              <SpinnerWrapper isLoading={loading} children={
+                <div className="px-4 py-4 flex flex-wrap overflow-y-auto">
+                  {displayFiles
+                    .filter((item: any) => (item?.name || "").toLowerCase().indexOf(searchVal.toLowerCase()) != -1)
+                    .map((item: any, index: number) => {
+                      // if (item.running) {
+                      return (
+                        <Fragment key={item.id || item.name}>
+                          <DocData {...item} selectLibrary={selectLibrary} fetchKnowldegeData={fetchKnowldegeData}></DocData>
+                        </Fragment>
+                      );
+                      // }
+                      // return (
+                      //   <motion.div
+                      //     key={item.id || item.name} // 用唯一标识
+                      //     initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      //     animate={{ opacity: 1, y: 0, scale: 1 }}
+                      //     exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                      //     transition={{ duration: 0.25, delay: index * 0.05 }}
+                      //   >
+                      //     <DocData {...item} selectLibrary={selectLibrary}></DocData>
+                      //   </motion.div>
+                      // );
+                    })}
+                </div>
+              }></SpinnerWrapper>
+
             </div>
           ) : (
             <div className="flex-1 overflow-hidden flex justify-center items-start mt-[130px]">
@@ -667,7 +672,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
           )}
         </div>
       </div>
-    </DialogContent>
+    </DialogContent >
   );
 };
 

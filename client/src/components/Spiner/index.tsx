@@ -18,18 +18,21 @@ interface SpinnerWrapperProps {
 }
 
 export function SpinnerWrapper({ isLoading, children }: SpinnerWrapperProps) {
+
   return (
-    <div className="relative">
+    <div className="relative h-full w-full overflow-hidden">
       {isLoading && (
         <div
-          className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          className="absolute top-[0px] left-[0px] inset-0 bg-white bg-opacity-20 flex justify-center items-center z-50 h-full w-full"
           role="dialog"
           aria-live="assertive"
         >
-          <Spinner className="text-white" />
+          <Spinner className="text-[#0563B2]" />
         </div>
       )}
-      <div className={isLoading ? "opacity-20" : ""}>{children}</div>
+      <div className="h-full w-full overflow-auto">
+        <div>{children}</div>
+      </div>
     </div>
   );
 }
