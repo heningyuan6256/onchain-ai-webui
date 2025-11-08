@@ -143,9 +143,9 @@ const DocData: FC = (props: any) => {
                 // redirect: "follow",
                 body: JSON.stringify([props.id]),
               }).then((res) => {
-                res.json().then((struct) => {
+                res.json().then(async(struct) => {
+                  await props.fetchKnowldegeData()
                   toast.success("删除知识库成功");
-                  props.fetchKnowldegeData()
                   console.log(struct, "struct");
                 });
               });
@@ -250,9 +250,9 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
 
   const loadingLatest = useLatest(loading)
 
-  const fetchKnowldegeData = () => {
+  const fetchKnowldegeData = async (forceUpdate?:boolean) => {
     // 如果当前正在加载，则不发起新的请求
-    if (loadingLatest.current) return;
+    if (!forceUpdate && loadingLatest.current) return;
 
     setLoading(true); // 开始加载
 
@@ -261,7 +261,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
       dataset_id: selectLibrary.id!,
     });
 
-    fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
+    await fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
       method: "GET",
       redirect: "follow",
     })
@@ -364,7 +364,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
               toast.success(`上传文本内容成功`);
               setUploadText("");
               // refreshUploadData();
-              fetchKnowldegeData()
+              fetchKnowldegeData(true)
             });
           })
           .catch((error) => console.error(error));
@@ -575,7 +575,8 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                           body: formdata,
                           redirect: "follow",
                         };
-                        setRunningLoading(true);
+                        setLoading(true)
+                        setRunningLoading(true)
                         fetch(`/rag/system/ragflow/datasets/documents/upload?dataset_id=${selectLibrary.id}`, requestOptions)
                           .then((response) => response.json())
                           .then(async (result) => {
@@ -588,18 +589,15 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                                 'Content-Type': 'application/json',
                               }
                             })
-                            // setLoadingData({
-                            //   id: result.rows[0].id,
-                            //   name: result.rows[0].name || "",
-                            //   run: "running",
-                            //   isCustom: true,
-                            // });
-                            // setRunningLoading(false);
+                            setLoading(false)
                             console.log(result);
-                            fetchKnowldegeData()
+                            await fetchKnowldegeData(true)
+                            setRunningLoading(false)
                           })
                           .catch((error) => {
-                            // setRunningLoading(false);
+                            toast.error("服务器错误")
+                            setLoading(false)
+                            setRunningLoading(false)
                           });
                         console.log(result, "result");
                       },
@@ -609,7 +607,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                   <div className="flex justify-center mt-[35px] mb-[13px]">
                     <img className="h-5 w-5" src={DOCUMENTSVG} />
                   </div>
-                  <div className="text-[#333333] text-[13px] mb-[8px] font-medium text-center">从文件上传</div>
+                  <div className="text-[#333333] text-[13px] mb-[8px] font-medium text-center">{runningLoading ? "正在上传" : '从文件上传'} </div>
                 </div>
               </div>
               <div className="border-b border-b-[#E0E0E0] flex px-3.5">
