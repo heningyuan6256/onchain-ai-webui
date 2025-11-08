@@ -63,8 +63,8 @@ export const CustomMenu = React.forwardRef<HTMLDivElement, CustomMenuProps>(func
         gutter={parent ? -4 : 4}
         className={cn(
           `${parent ? 'animate-popover-left ml-3' : 'animate-popover'} outline-none! z-50 flex max-h-[min(450px,var(--popover-available-height))] w-full`,
-          'w-[var(--menu-width,auto)] min-w-[300px] flex-col overflow-auto rounded-xl border border-border-light',
-          'bg-surface-secondary px-3 py-2 text-sm text-text-primary shadow-lg',
+          'w-[var(--menu-width,auto)] min-w-[200px] flex-col overflow-auto rounded-xl border border-border-light',
+          'bg-white px-[4px] py-[6px] text-sm text-text-primary shadow-lg',
           'max-w-[calc(100vw-4rem)] sm:max-h-[calc(65vh)] sm:max-w-[400px]',
           searchable && 'p-0',
         )}

@@ -133,8 +133,8 @@ const Chat: FC = () => {
                     name: chatTitle,
                     tags:
                       ActiveSession?.tags && ActiveSession?.tags.find((item) => item === "fav")
-                        ? [userid]
-                        : ["fav", userid],
+                        ? [localStorage.getItem("id")!]
+                        : ["fav", localStorage.getItem("id")!],
                   },
                 });
                 // await chatService.toggleFavorite(chatId, !currentChatData.is_favorite);

@@ -215,7 +215,7 @@ function ChatView({ index = 0 }: { index?: number }) {
                               <div className="text-xs text-[#333333]">构建知识库</div>
                             </div>
                             <div>
-                              <img className="h-4 w-4 rotate-270" src={ARROWBLACKSVG} />
+                              <img className="h-4 w-4" style={{ transform: 'rotate(270deg)' }} src={ARROWBLACKSVG} />
                             </div>
                           </div>
                         </DialogTrigger>

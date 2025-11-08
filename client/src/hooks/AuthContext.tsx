@@ -159,7 +159,7 @@ const AuthContextProvider = ({
         const data = atob(user)
         const [email, name, id] = data.split("^")
         try {
-          await registerUser.mutateAsync({ "name": name.length < 5 ? `${name}onchain`: name, "username": name.length < 5 ? `${name}onchain`: name, "email": email, "password": "Boat1234qwer!", "confirm_password": "Boat1234qwer!" })
+          await registerUser.mutateAsync({ "username": id, "name": name.length < 5 ? `${name}onchain`: name, "email": email, "password": "Boat1234qwer!", "confirm_password": "Boat1234qwer!" })
         } catch (error) {
           console.error(error)
         }

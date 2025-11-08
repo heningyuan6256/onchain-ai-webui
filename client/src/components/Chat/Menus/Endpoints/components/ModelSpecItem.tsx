@@ -4,6 +4,8 @@ import { CustomMenuItem as MenuItem } from '../CustomMenu';
 import { useModelSelectorContext } from '../ModelSelectorContext';
 import SpecIcon from './SpecIcon';
 import { cn } from '~/utils';
+import Icon from '~/components/icon';
+import OpenAISVG from '@/assets/image/openai.svg';
 
 interface ModelSpecItemProps {
   spec: TModelSpec;
@@ -29,7 +31,8 @@ export function ModelSpecItem({ spec, isSelected }: ModelSpecItemProps) {
       >
         {showIconInMenu && (
           <div className="flex-shrink-0">
-            <SpecIcon currentSpec={spec} endpointsConfig={endpointsConfig} />
+            <Icon src={OpenAISVG} className='size-3'></Icon>
+            {/* <SpecIcon currentSpec={spec} endpointsConfig={endpointsConfig} /> */}
           </div>
         )}
         <div className="flex min-w-0 flex-col gap-1">

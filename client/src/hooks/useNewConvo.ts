@@ -95,7 +95,7 @@ const useNewConvo = (index = 0) => {
           (activePreset?.presetId != null &&
             activePreset.presetId &&
             activePreset.presetId === defaultPreset?.presetId);
-
+        // =======================================================================================================
         if (buildDefaultConversation) {
           let defaultEndpoint = getDefaultEndpoint({
             convoSetup: activePreset ?? conversation,
@@ -156,6 +156,7 @@ const useNewConvo = (index = 0) => {
             models,
           });
         }
+        // =======================================================================================================
 
         if (disableParams === true) {
           conversation.disableParams = true;
@@ -270,13 +271,11 @@ const useNewConvo = (index = 0) => {
       ) {
         preset = getModelSpecPreset(defaultModelSpec);
       }
-
       applyModelSpecEffects({
         startupConfig,
         specName: preset?.spec,
         convoId: conversation.conversationId,
       });
-
       if (conversation.conversationId === Constants.NEW_CONVO && !modelsData) {
         const filesToDelete = Array.from(files.values())
           .filter(

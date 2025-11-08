@@ -32,7 +32,7 @@ async function performVisionOCR({ filePath}) {
     formData.append('crop_mode', 'true');
     formData.append('test_compress', 'false');
     formData.append("prompt_type",'ocr')
-    formData.append("grounding","true")
+    formData.append("grounding","false")
 
     const response = await axios.post(process.env.DEEPSEEK_OCR_URL, formData, {
       headers: formData.getHeaders(),

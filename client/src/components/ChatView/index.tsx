@@ -14,7 +14,6 @@ import { useUploadData } from "@/contexts/UploadDataContext";
 import { useLocation } from "react-router-dom";
 import { debounce } from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
-import { api_key, api_request_url, userid } from "../nav-projects";
 import { useSession } from "@/tars/common/hooks/useSession";
 import { groupedMessagesAtom, messagesAtom } from "@/tars/common/state/atoms/message";
 import { useAtomValue } from "jotai";
@@ -524,7 +523,7 @@ const ChatView: FC<ChatViewProps> = forwardRef((props, ref) => {
 
   const tarStreamResponse = async (query: string) => {
     // setIsStreaming(true);
-    sendTarMessage(query, thinking, userid);
+    sendTarMessage(query, thinking, localStorage.getItem("id")!);
 
     // Create a new AbortController for this request
     // abortControllerRef.current = new AbortController();

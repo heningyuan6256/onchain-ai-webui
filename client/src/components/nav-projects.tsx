@@ -54,7 +54,7 @@ import ChatLoading from "./ChatLoading";
 
 export const api_key = location.search?.split("=")[1] || "ragflow-EwNGQxYmM4NjY5OTExZjBiNTVmNzIzNz";
 
-export const userid = "101";
+export const userid = "123456789";
 
 export const waitUserSelectExcelFile = (params: {
   onSelect?: (result: File) => void;
@@ -103,18 +103,14 @@ const DocData: FC = (props: any) => {
           myHeaders.append("Content-Type", "application/json");
           const params = new URLSearchParams({
             // api_key: api_key, // 假设你有这个变量
-            user_id: userid,
+            user_id: localStorage.getItem("id")!,
           });
 
-          fetch(`/rag/api/ragflow/user/datasets/${props.selectLibrary?.id}/documents?${params.toString()}`, {
+          fetch(`/rag/system/ragflow/datasets/${props.selectLibrary?.id}/documents?${params.toString()}`, {
             method: "DElETE",
             headers: myHeaders,
             // redirect: "follow",
-            body: JSON.stringify({
-              api_key: api_key,
-              ids: [props.id],
-              dataset_id: props.selectLibrary?.id,
-            }),
+            body: JSON.stringify([props.id]),
           }).then((res) => {
             res.json().then((struct) => {
               toast.success("删除知识库成功");
@@ -172,12 +168,12 @@ const DocData: FC = (props: any) => {
               <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 rounded-[8px]">
                 <div className="text-xs z-40 text-[#969696]">分析中 ...</div>
               </div>
-              <div className="text-[13px] text-[#333333] px-4.5 py-4.5 font-medium flex items-center">
+              {/* <div className="text-[13px] text-[#333333] px-4.5 py-4.5 font-medium flex items-center">
                 <div className="mr-1.5">
                   <Icon className="animate-spin" src={LOADINGSVG}></Icon>
                 </div>{" "}
                 <div>{props.progress == -1 ? "解析失败" : "等待分析"}</div>
-              </div>
+              </div> */}
             </Fragment>
           )}
         </Fragment>
@@ -269,8 +265,8 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
         formdata.append("file", file); // 上传文件
         formdata.append("mode", "simple");
         formdata.append("rag", "true");
-        formdata.append("user_id", userid);
-        formdata.append("dataset_name", selectLibrary.name);
+        formdata.append("other_id", localStorage.getItem("id")!);
+        formdata.append("dataset_id", selectLibrary.id);
 
         const requestOptions: RequestInit = {
           method: "POST",
@@ -279,16 +275,26 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
         };
 
         const params = new URLSearchParams({
-          user_id: "101", // 假设你有这个变量
+          other_id: localStorage.getItem("id")!, // 假设你有这个变量
+          dataset_id: selectLibrary.id
         });
         const formData = new FormData();
         formData.append("content", uploadText);
 
-        fetch(`/rag/api/user/jobs?${params.toString()}`, requestOptions)
+        fetch(`/rag/system/ragflow/datasets/documents/upload?${params.toString()}`, requestOptions)
           .then((response) => response.json())
-          .then((result) => {
+          .then(async (result) => {
+            await fetch(`/rag/system/ragflow/datasets/${selectLibrary.id}/parse?dataset_id=${selectLibrary.id}`, {
+              method: "POST",
+              body: JSON.stringify([result.rows[0].id]),
+              redirect: "follow",
+              headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+              }
+            })
             fetch(
-              `/rag/api/ragflow/user/datasets/${selectLibrary.id}/documents/${result.document_id
+              `/rag/system/ragflow/datasets/${selectLibrary.id}/documents/${result.document_id
               }/chunks?${params.toString()}`,
               {
                 method: "post",
@@ -389,11 +395,12 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                       onClick={async () => {
                         const formData = new FormData();
                         formData.append("name", inputValue);
-                        formData.append("user_id", userid);
+                        formData.append("other_id", localStorage.getItem("id")!);
                         const params = new URLSearchParams({
-                          user_id: userid, // 假设你有这个变量
+                          other_id: localStorage.getItem("id")!, // 假设你有这个变量
+                          name: inputValue
                         });
-                        await fetch(`/rag/api/ragflow/user/datasets?${params.toString()}`, {
+                        await fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
                           method: "post",
                           body: formData,
                         });
@@ -493,8 +500,8 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                         formdata.append("mode", "simple");
                         formdata.append("rag", "true");
                         // formdata.append("api_key", api_key);
-                        formdata.append("user_id", userid);
-                        formdata.append("dataset_name", selectLibrary.name);
+                        formdata.append("other_id", localStorage.getItem("id")!);
+                        formdata.append("dataset_id", selectLibrary.id);
 
                         const requestOptions: any = {
                           method: "POST",
@@ -502,16 +509,24 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                           redirect: "follow",
                         };
                         setRunningLoading(true);
-                        fetch("/rag/api/user/jobs", requestOptions)
+                        fetch(`/rag/system/ragflow/datasets/documents/upload?dataset_id=${selectLibrary.id}`, requestOptions)
                           .then((response) => response.json())
-                          .then((result) => {
-                            console.log(result, "resultresult");
-                            setLoadingData({
-                              id: result.document_id,
-                              name: result?.name || "",
-                              run: "running",
-                              isCustom: true,
-                            });
+                          .then(async (result) => {
+                            await fetch(`/rag/system/ragflow/datasets/${selectLibrary.id}/parse?dataset_id=${selectLibrary.id}`, {
+                              method: "POST",
+                              body: JSON.stringify([result.rows[0].id]),
+                              redirect: "follow",
+                              headers: {
+                                'accept': 'application/json',
+                                'Content-Type': 'application/json',
+                              }
+                            })
+                            // setLoadingData({
+                            //   id: result.rows[0].id,
+                            //   name: result.rows[0].name || "",
+                            //   run: "running",
+                            //   isCustom: true,
+                            // });
                             // setRunningLoading(false);
                             console.log(result);
                             refreshUploadData();
@@ -611,8 +626,8 @@ export function NavProjects({
   // const { isMobile, open } = useSidebar();
   // const { navVisible, setNavVisible } = useOutletContext<any>();
   const savedNavVisible = localStorage.getItem('navVisible');
-  
-  
+
+
   if (savedNavVisible == "false") {
     return (
       <SidebarGroup>

@@ -34,7 +34,7 @@ export const loadSessionsAction = atom(null, async (get, set) => {
       loadedSessions
         .map((item: any) => ({ ...(item?.metadata || {}), ...item }))
         .filter((item: any) => {
-          return (item?.tags || []).find((v: any) => v == userid);
+          return (item?.tags || []).find((v: any) => v == localStorage.getItem("id")!);
         })
     );
   } catch (error) {
@@ -318,7 +318,7 @@ export const sendMessageAction = atom(
           }
         }
 
-        await apiService.updateSessionMetadata(activeSessionId, { name: summary, tags: [userid] });
+        await apiService.updateSessionMetadata(activeSessionId, { name: summary, tags: [localStorage.getItem("id")!] });
 
         set(sessionsAtom, (prev) =>
           prev.map((session) =>
