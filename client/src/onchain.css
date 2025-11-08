@@ -175,3 +175,11 @@ input, textarea {
 .library_delete{
   visibility: hidden;
 }
+
+.markdown table {
+  display: block;      
+}
+
+textarea{
+  font-size: 12px;
+}
