@@ -56,11 +56,11 @@ export default function ImageUpload({ onImageSelect, preview }) {
               <div className="relative">
                 <div
                   className="absolute inset-0 rounded-2xl bg-gradient-to-r opacity-50 blur-xl"
-                  style={{ backgroundColor: '#868788ff' }}
+                  // style={{ backgroundColor: '#868788ff' }}
                 />
                 <div
                   className="relative rounded-2xl bg-gradient-to-br p-4"
-                  style={{ backgroundColor: '#868788ff' }}
+                  // style={{ backgroundColor: '#868788ff' }}
                 >
                   <Upload className="h-8 w-8" />
                 </div>
@@ -68,9 +68,7 @@ export default function ImageUpload({ onImageSelect, preview }) {
             </motion.div>
 
             <div>
-              <p className="text-xg font-medium">
-                {isDragActive ? '系统繁忙' : '拖拽放入你的图像'}
-              </p>
+              <p className="text-m">{isDragActive ? '系统繁忙' : '拖拽放入你的图像'}</p>
               <p className="mt-1 text-sm text-gray-400">或点击上传图像最大10MB</p>
             </div>
           </div>
