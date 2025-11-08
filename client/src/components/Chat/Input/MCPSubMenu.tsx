@@ -54,8 +54,18 @@ const MCPSubMenu = React.forwardRef<HTMLDivElement, MCPSubMenuProps>(
               />
             }
           >
-            <div className="flex items-center gap-2">
-              <MCPIcon className="icon-md" />
+            <div
+              className="flex items-center gap-2"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.75rem',
+                color: '#212121',
+                fontWeight: 'normal',
+                fontStyle: 'normal',
+                borderRadius: '10px',
+              }}
+            >
+              <MCPIcon className="icon-sm" />
               <span>{placeholder || placeholderText}</span>
               <ChevronRight className="ml-auto h-3 w-3" />
             </div>
@@ -81,7 +91,7 @@ const MCPSubMenu = React.forwardRef<HTMLDivElement, MCPSubMenuProps>(
             portal={true}
             unmountOnHide={true}
             className={cn(
-              'animate-popover-left z-50 ml-3 flex min-w-[200px] flex-col rounded-xl',
+              'animate-popover-left z-50 ml-3 flex min-w-[200px] flex-col !rounded-[10px]',
               'border border-border-light bg-surface-secondary p-1 shadow-lg',
             )}
           >
@@ -112,7 +122,17 @@ const MCPSubMenu = React.forwardRef<HTMLDivElement, MCPSubMenuProps>(
                 >
                   <div className="flex flex-grow items-center gap-2">
                     <Ariakit.MenuItemCheck checked={isSelected} />
-                    <span>{serverName}</span>
+                    <span
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '0.75rem',
+                        color: '#212121',
+                        fontWeight: 'normal',
+                        fontStyle: 'normal',
+                      }}
+                    >
+                      {serverName}
+                    </span>
                   </div>
                   {statusIcon && <div className="ml-2 flex items-center">{statusIcon}</div>}
                 </Ariakit.MenuItem>

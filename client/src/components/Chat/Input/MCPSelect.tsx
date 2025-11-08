@@ -43,9 +43,17 @@ function MCPSelectContent() {
       const mainContentWrapper = (
         <button
           type="button"
-          className={`flex flex-grow items-center rounded bg-transparent p-0 text-left transition-colors focus:outline-none ${
+          className={`flex flex-grow items-center !rounded-[10px] bg-transparent p-0 text-left transition-colors focus:outline-none ${
             isServerInitializing ? 'opacity-50' : ''
           }`}
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.75rem',
+            color: '#212121',
+            fontWeight: 'normal',
+            fontStyle: 'normal',
+            borderRadius: '10px',
+          }}
           tabIndex={0}
           disabled={isServerInitializing}
         >
@@ -84,8 +92,8 @@ function MCPSelectContent() {
         renderSelectedValues={renderSelectedValues}
         renderItemContent={renderItemContent}
         placeholder={placeholderText}
-        popoverClassName="min-w-fit"
-        className="badge-icon min-w-fit h-[24px] mcp_select"
+        popoverClassName="min-w-fit !rounded-[10px]"
+        className="badge-icon mcp_select h-[24px] min-w-fit"
         selectIcon={<MCPIcon className="icon-md text-text-primary" />}
         selectItemsClassName="border border-blue-600/50 bg-blue-500/10 hover:bg-blue-700/10"
         selectClassName="group relative inline-flex items-center justify-center md:justify-start gap-1.5 rounded-full border border-border-medium text-sm font-medium transition-all md:w-full size-9 p-2 md:p-3 bg-transparent shadow-sm hover:bg-surface-hover hover:shadow-md active:shadow-inner"

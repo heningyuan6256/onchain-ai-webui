@@ -17,7 +17,7 @@ import { useGetStartupConfig } from '~/data-provider';
 import { useBadgeRowContext } from '~/Providers';
 import { cn } from '~/utils';
 import Icon from '~/components/icon';
-import AdjustSvg from "@/assets/image/front-adjust.svg";
+import AdjustSvg from '@/assets/image/front-adjust.svg';
 
 interface ToolsDropdownProps {
   disabled?: boolean;
@@ -136,9 +136,22 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
       onClick: handleFileSearchToggle,
       hideOnClick: false,
       render: (props) => (
-        <div {...props}>
-          <div className="flex items-center gap-2">
-            <VectorIcon className="icon-md" />
+        <div
+          {...props}
+          style={{ padding: '4px 5px' }}
+          className={`${props?.className || ''} !rounded-[10px]`}
+        >
+          <div
+            className="flex items-center gap-2"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.75rem',
+              color: '#212121',
+              fontWeight: 'normal',
+              fontStyle: 'normal',
+            }}
+          >
+            <VectorIcon className="icon-sm" />
             <span>{localize('com_assistants_file_search')}</span>
           </div>
           <button
@@ -222,9 +235,23 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
       onClick: handleCodeInterpreterToggle,
       hideOnClick: false,
       render: (props) => (
-        <div {...props}>
-          <div className="flex items-center gap-2">
-            <TerminalSquareIcon className="icon-md" />
+        <div
+          {...props}
+          style={{ padding: '4px 5px' }}
+          className={`${props?.className || ''} !rounded-[10px]`}
+        >
+          <div
+            className="flex items-center gap-2"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.75rem',
+              color: '#212121',
+              fontWeight: 'normal',
+              fontStyle: 'normal',
+              borderRadius: '10px',
+            }}
+          >
+            <TerminalSquareIcon className="icon-sm" />
             <span>{localize('com_assistants_code_interpreter')}</span>
           </div>
           <div className="flex items-center gap-1">
@@ -292,7 +319,14 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
   if (configuredServers && configuredServers.length > 0) {
     dropdownItems.push({
       hideOnClick: false,
-      render: (props) => <MCPSubMenu {...props} placeholder={mcpPlaceholder} />,
+      render: (props) => (
+        <MCPSubMenu
+          {...props}
+          style={{ padding: '4px 5px' }}
+          className={`${props?.className || ''} !rounded-[10px]`}
+          placeholder={mcpPlaceholder}
+        />
+      ),
     });
   }
 
@@ -313,7 +347,7 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
         >
           <div className="flex w-full items-center justify-center gap-2">
             {/* <Settings2 className="icon-md" /> */}
-            <Icon className='h-3.5 w-3.5' src={AdjustSvg}></Icon>
+            <Icon className="h-3.5 w-3.5" src={AdjustSvg}></Icon>
           </div>
         </Ariakit.MenuButton>
       }
@@ -325,12 +359,13 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
 
   return (
     <DropdownPopup
-      itemClassName="flex w-full cursor-pointer rounded-lg items-center justify-between hover:bg-surface-hover gap-5"
+      itemClassName="flex w-full !rounded-[10px] cursor-pointer  items-center justify-between hover:bg-surface-hover gap-5"
       menuId="tools-dropdown-menu"
       isOpen={isPopoverActive}
       setIsOpen={setIsPopoverActive}
       modal={true}
       unmountOnHide={true}
+      className="!rounded-[10px]"
       trigger={menuTrigger}
       items={dropdownItems}
       iconClassName="mr-0"
