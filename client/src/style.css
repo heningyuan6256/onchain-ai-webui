@@ -2581,7 +2581,7 @@ html {
   flex-direction: column;
   overflow: auto;
   overscroll-behavior: contain;
-  border-radius: 1rem;
+  border-radius: 0px;
   border-width: 1px;
   border-style: solid;
   border-color: var(--border-light);

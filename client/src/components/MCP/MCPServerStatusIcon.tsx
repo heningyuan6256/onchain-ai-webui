@@ -135,10 +135,10 @@ function DisconnectedOAuthStatusIcon({ serverName, onConfigClick }: StatusIconPr
     <button
       type="button"
       onClick={onConfigClick}
-      className="flex h-6 w-6 items-center justify-center rounded p-1 hover:bg-surface-secondary"
+      className="flex h-6 w-6 items-center justify-center rounded p-1"
       aria-label={localize('com_nav_mcp_configure_server', { 0: serverName })}
     >
-      <KeyRound className="h-4 w-4 text-amber-500" />
+      <KeyRound className="h-3 w-3 text-amber-500" />
     </button>
   );
 }
@@ -148,7 +148,7 @@ function DisconnectedStatusIcon({ serverName, onConfigClick }: StatusIconProps) 
     <button
       type="button"
       onClick={onConfigClick}
-      className="flex h-6 w-6 items-center justify-center rounded p-1 hover:bg-surface-secondary"
+      className="flex h-6 w-6 items-center justify-center rounded p-1"
       aria-label={localize('com_nav_mcp_configure_server', { 0: serverName })}
     >
       <PlugZap className="h-4 w-4 text-orange-500" />
@@ -161,7 +161,7 @@ function ErrorStatusIcon({ serverName, onConfigClick }: StatusIconProps) {
     <button
       type="button"
       onClick={onConfigClick}
-      className="flex h-6 w-6 items-center justify-center rounded p-1 hover:bg-surface-secondary"
+      className="flex h-6 w-6 items-center justify-center rounded p-1"
       aria-label={localize('com_nav_mcp_configure_server', { 0: serverName })}
     >
       <AlertTriangle className="h-4 w-4 text-red-500" />
@@ -182,7 +182,7 @@ function AuthenticatedStatusIcon({
     <button
       type="button"
       onClick={onConfigClick}
-      className="flex h-6 w-6 items-center justify-center rounded p-1 hover:bg-surface-secondary"
+      className="flex h-6 w-6 items-center justify-center rounded p-1"
       aria-label={localize('com_nav_mcp_configure_server', { 0: serverName })}
     >
       <SettingsIcon className={`h-4 w-4 ${isAuthenticated ? 'text-green-500' : 'text-gray-400'}`} />

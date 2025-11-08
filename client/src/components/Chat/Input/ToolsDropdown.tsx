@@ -132,35 +132,35 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
   const dropdownItems: MenuItemProps[] = [];
 
   if (fileSearchEnabled && canUseFileSearch) {
-    dropdownItems.push({
-      onClick: handleFileSearchToggle,
-      hideOnClick: false,
-      render: (props) => (
-        <div {...props}>
-          <div className="flex items-center gap-2">
-            <VectorIcon className="icon-md" />
-            <span>{localize('com_assistants_file_search')}</span>
-          </div>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFileSearchPinned(!isFileSearchPinned);
-            }}
-            className={cn(
-              'rounded p-1 transition-all duration-200',
-              'hover:bg-surface-secondary hover:shadow-sm',
-              !isFileSearchPinned && 'text-text-secondary hover:text-text-primary',
-            )}
-            aria-label={isFileSearchPinned ? 'Unpin' : 'Pin'}
-          >
-            <div className="h-4 w-4">
-              <PinIcon unpin={isFileSearchPinned} />
-            </div>
-          </button>
-        </div>
-      ),
-    });
+    // dropdownItems.push({
+    //   onClick: handleFileSearchToggle,
+    //   hideOnClick: false,
+    //   render: (props) => (
+    //     <div {...props}>
+    //       <div className="flex items-center gap-2">
+    //         <VectorIcon className="icon-md" />
+    //         <span>{localize('com_assistants_file_search')}</span>
+    //       </div>
+    //       <button
+    //         type="button"
+    //         onClick={(e) => {
+    //           e.stopPropagation();
+    //           setIsFileSearchPinned(!isFileSearchPinned);
+    //         }}
+    //         className={cn(
+    //           'rounded p-1 transition-all duration-200',
+    //           'hover:bg-surface-secondary hover:shadow-sm',
+    //           !isFileSearchPinned && 'text-text-secondary hover:text-text-primary',
+    //         )}
+    //         aria-label={isFileSearchPinned ? 'Unpin' : 'Pin'}
+    //       >
+    //         <div className="h-4 w-4">
+    //           <PinIcon unpin={isFileSearchPinned} />
+    //         </div>
+    //       </button>
+    //     </div>
+    //   ),
+    // });
   }
 
   // if (canUseWebSearch && webSearchEnabled) {
@@ -218,57 +218,57 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
   // }
 
   if (canRunCode && codeEnabled) {
-    dropdownItems.push({
-      onClick: handleCodeInterpreterToggle,
-      hideOnClick: false,
-      render: (props) => (
-        <div {...props}>
-          <div className="flex items-center gap-2">
-            <TerminalSquareIcon className="icon-md" />
-            <span>{localize('com_assistants_code_interpreter')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {/* {showCodeSettings && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsCodeDialogOpen(true);
-                }}
-                ref={codeMenuTriggerRef}
-                className={cn(
-                  'rounded p-1 transition-all duration-200',
-                  'hover:bg-surface-secondary hover:shadow-sm',
-                  'text-text-secondary hover:text-text-primary',
-                )}
-                aria-label="Configure code interpreter"
-              >
-                <div className="h-4 w-4">
-                  <Settings className="h-4 w-4" />
-                </div>
-              </button>
-            )} */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsCodePinned(!isCodePinned);
-              }}
-              className={cn(
-                'rounded p-1 transition-all duration-200',
-                'hover:bg-surface-secondary hover:shadow-sm',
-                !isCodePinned && 'text-text-primary hover:text-text-primary',
-              )}
-              aria-label={isCodePinned ? 'Unpin' : 'Pin'}
-            >
-              <div className="h-4 w-4">
-                <PinIcon unpin={isCodePinned} />
-              </div>
-            </button>
-          </div>
-        </div>
-      ),
-    });
+    // dropdownItems.push({
+    //   onClick: handleCodeInterpreterToggle,
+    //   hideOnClick: false,
+    //   render: (props) => (
+    //     <div {...props}>
+    //       <div className="flex items-center gap-2">
+    //         <TerminalSquareIcon className="icon-md" />
+    //         <span>{localize('com_assistants_code_interpreter')}</span>
+    //       </div>
+    //       <div className="flex items-center gap-1">
+    //         {/* {showCodeSettings && (
+    //           <button
+    //             type="button"
+    //             onClick={(e) => {
+    //               e.stopPropagation();
+    //               setIsCodeDialogOpen(true);
+    //             }}
+    //             ref={codeMenuTriggerRef}
+    //             className={cn(
+    //               'rounded p-1 transition-all duration-200',
+    //               'hover:bg-surface-secondary hover:shadow-sm',
+    //               'text-text-secondary hover:text-text-primary',
+    //             )}
+    //             aria-label="Configure code interpreter"
+    //           >
+    //             <div className="h-4 w-4">
+    //               <Settings className="h-4 w-4" />
+    //             </div>
+    //           </button>
+    //         )} */}
+    //         <button
+    //           type="button"
+    //           onClick={(e) => {
+    //             e.stopPropagation();
+    //             setIsCodePinned(!isCodePinned);
+    //           }}
+    //           className={cn(
+    //             'rounded p-1 transition-all duration-200',
+    //             'hover:bg-surface-secondary hover:shadow-sm',
+    //             !isCodePinned && 'text-text-primary hover:text-text-primary',
+    //           )}
+    //           aria-label={isCodePinned ? 'Unpin' : 'Pin'}
+    //         >
+    //           <div className="h-4 w-4">
+    //             <PinIcon unpin={isCodePinned} />
+    //           </div>
+    //         </button>
+    //       </div>
+    //     </div>
+    //   ),
+    // });
   }
 
   // if (artifactsEnabled) {
@@ -325,7 +325,7 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
 
   return (
     <DropdownPopup
-      itemClassName="flex w-full cursor-pointer rounded-lg items-center justify-between hover:bg-surface-hover gap-5"
+      itemClassName="flex w-full cursor-pointer items-center justify-between hover:bg-surface-hover gap-5"
       menuId="tools-dropdown-menu"
       isOpen={isPopoverActive}
       setIsOpen={setIsPopoverActive}

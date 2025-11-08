@@ -19,9 +19,9 @@ export default function MCPTools({
 
   return (
     <div className="mb-4">
-      <label className="text-token-text-primary mb-2 block font-medium">
+      {/* <label className="text-token-text-primary mb-2 block font-medium">
         {localize('com_ui_mcp_servers')}
-      </label>
+      </label> */}
       <div>
         <div className="mb-1">
           {/* Render servers with selected tools */}
