@@ -138,7 +138,7 @@ function DisconnectedOAuthStatusIcon({ serverName, onConfigClick }: StatusIconPr
       className="flex h-6 w-6 items-center justify-center rounded p-1"
       aria-label={localize('com_nav_mcp_configure_server', { 0: serverName })}
     >
-      <KeyRound className="h-3 w-3 text-amber-500" />
+      <KeyRound className="h-3 w-3 text-[#0563B2]" />
     </button>
   );
 }

@@ -356,7 +356,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                 <AttachFileChat conversation={conversation} disableInputs={disableInputs} />
               </div>
 
-              <Toggle
+              {/* <Toggle
                 pressed={thinking}
                 onPressedChange={(value) => {
                   setThinking(value);
@@ -368,7 +368,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                   <Icon className={!thinking ? 'h-0 w-0' : 'h-3.5 w-3.5'} src={AIWhiteSVG}></Icon>
                 </div>
                 深入研究
-              </Toggle>
+              </Toggle> */}
               <div><ModelSelector startupConfig={startupConfig} /></div>
 
               <BadgeRow

@@ -13,6 +13,8 @@ import { getSelectedIcon, getDisplayValue } from './utils';
 import { CustomMenu as Menu } from './CustomMenu';
 import DialogManager from './DialogManager';
 import { useLocalize } from '~/hooks';
+import OpenAISVG from '@/assets/image/openai.svg';
+import Icon from '~/components/icon';
 
 function ModelSelectorContent() {
   const localize = useLocalize();
@@ -69,7 +71,7 @@ function ModelSelectorContent() {
           {selectedIcon}
         </div>
       )} */}
-      <span className="flex-grow truncate text-left">{selectedDisplayValue}</span>
+      <span className="flex-grow truncate text-left flex items-center"><span><Icon className="w-3 h-3 mr-2" src={OpenAISVG}></Icon> </span> {selectedDisplayValue}</span>
     </button>
   );
 
