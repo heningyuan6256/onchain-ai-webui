@@ -17,7 +17,7 @@ import { useGetStartupConfig } from '~/data-provider';
 import { useBadgeRowContext } from '~/Providers';
 import { cn } from '~/utils';
 import Icon from '~/components/icon';
-import AdjustSvg from "@/assets/image/front-adjust.svg";
+import AdjustSvg from '@/assets/image/front-adjust.svg';
 
 interface ToolsDropdownProps {
   disabled?: boolean;
@@ -292,7 +292,14 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
   if (configuredServers && configuredServers.length > 0) {
     dropdownItems.push({
       hideOnClick: false,
-      render: (props) => <MCPSubMenu {...props} placeholder={mcpPlaceholder} />,
+      render: (props) => (
+        <MCPSubMenu
+          {...props}
+          style={{ padding: '4px 5px' }}
+          className={`${props?.className || ''} !rounded-[10px]`}
+          placeholder={mcpPlaceholder}
+        />
+      ),
     });
   }
 
@@ -313,7 +320,7 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
         >
           <div className="flex w-full items-center justify-center gap-2">
             {/* <Settings2 className="icon-md" /> */}
-            <Icon className='h-3.5 w-3.5' src={AdjustSvg}></Icon>
+            <Icon className="h-3.5 w-3.5" src={AdjustSvg}></Icon>
           </div>
         </Ariakit.MenuButton>
       }
@@ -325,12 +332,17 @@ const ToolsDropdown = ({ disabled }: ToolsDropdownProps) => {
 
   return (
     <DropdownPopup
+<<<<<<< HEAD
       itemClassName="flex w-full cursor-pointer items-center justify-between hover:bg-surface-hover gap-5"
+=======
+      itemClassName="flex w-full !rounded-[10px] cursor-pointer  items-center justify-between hover:bg-surface-hover gap-5"
+>>>>>>> c553b93f23aa555d3a9f35670253185842b432d0
       menuId="tools-dropdown-menu"
       isOpen={isPopoverActive}
       setIsOpen={setIsPopoverActive}
       modal={true}
       unmountOnHide={true}
+      className="!rounded-[10px]"
       trigger={menuTrigger}
       items={dropdownItems}
       iconClassName="mr-0"

@@ -1,44 +1,9 @@
 import { motion } from 'framer-motion';
-import { FileText, Eye, Search, Wand2 } from 'lucide-react';
-
-const modes = [
-  {
-    id: 'ocr',
-    name: '通用OCR',
-    icon: FileText,
-    color: 'from-blue-500 to-cyan-500',
-    desc: 'Extract raw text',
-    needsInput: false,
-  },
-  {
-    id: 'describe',
-    name: '图像描述',
-    icon: Eye,
-    color: 'from-violet-500 to-purple-500',
-    desc: 'Image description',
-    needsInput: false,
-  },
-  {
-    id: 'find',
-    name: '查找定位',
-    icon: Search,
-    color: 'from-yellow-500 to-orange-500',
-    desc: 'Locate specific terms',
-    needsInput: 'findTerm',
-  },
-  {
-    id: 'freeform',
-    name: '自定义提示',
-    icon: Wand2,
-    color: 'from-fuchsia-500 to-pink-500',
-    desc: 'Custom prompt',
-    needsInput: 'prompt',
-  },
-];
 
 export default function ModeSelector({
   mode,
   onModeChange,
+  modes,
   prompt,
   onPromptChange,
   findTerm,
@@ -49,7 +14,7 @@ export default function ModeSelector({
 
   return (
     <div
-      className="space-y-3 p-4"
+      className="space-y-3 p-6"
       style={{
         backgroundColor: '#ffff',
         color: 'black',
@@ -57,7 +22,7 @@ export default function ModeSelector({
         borderRadius: '10px',
       }}
     >
-      <h3 className="text-sm font-semibold">{modes.find((m) => m.id === mode).name}</h3>
+      <h3 className="font-semibold">{modes.find((m) => m.id === mode)?.name}</h3>
 
       {/* <div className="grid grid-cols-4 gap-2">
         {modes.map((m) => {
@@ -105,7 +70,7 @@ export default function ModeSelector({
             value={findTerm}
             onChange={(e) => onFindTermChange(e.target.value)}
             placeholder="输入要查找的术语（例如，总计、发票号）"
-            className="w-full rounded-xl border border-black/10 bg-white/5 px-3 py-2 text-sm transition-colors focus:border-blue-500 focus:outline-none"
+            className="w-full !rounded-[10px] border border-black/10 bg-white/5 px-3 py-2 text-sm transition-colors focus:border-blue-500 focus:outline-none"
           />
         </motion.div>
       )}

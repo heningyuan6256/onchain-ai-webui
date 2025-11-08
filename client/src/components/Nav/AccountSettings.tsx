@@ -25,7 +25,7 @@ function AccountSettings() {
       <Select.Select
         aria-label={localize('com_nav_account_settings')}
         data-testid="nav-user"
-        className="mt-text-sm flex h-auto w-full items-center gap-2 rounded-xl px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-surface-hover"
+        className="mt-text-sm flex h-auto w-full items-center gap-2 !rounded-[10px] px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-surface-hover"
       >
         <div className="-ml-0.9 -mt-0.8 h-8 w-8 flex-shrink-0">
           <div className="relative flex">
@@ -40,20 +40,42 @@ function AccountSettings() {
         </div>
       </Select.Select>
       <Select.SelectPopover
-        className="popover-ui w-[235px]"
+        className="popover-ui w-[235px] !rounded-[10px]"
         style={{
           transformOrigin: 'bottom',
           marginRight: '0px',
           translate: '0px',
         }}
       >
-        <div className="text-token-text-secondary ml-3 mr-2 py-2 text-sm" role="note">
+        <div
+          className="ml-3 mr-2 py-2"
+          role="note "
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.75rem',
+            color: '#212121',
+            fontWeight: 'normal',
+            fontStyle: 'normal',
+            borderRadius: '10px',
+          }}
+        >
           {user?.email ?? localize('com_nav_user')}
         </div>
         <DropdownMenuSeparator />
         {startupConfig?.balance?.enabled === true && balanceQuery.data != null && (
           <>
-            <div className="text-token-text-secondary ml-3 mr-2 py-2 text-sm" role="note">
+            <div
+              className="ml-3 mr-2 py-2"
+              role="note"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.75rem',
+                color: '#212121',
+                fontWeight: 'normal',
+                fontStyle: 'normal',
+                borderRadius: '10px',
+              }}
+            >
               {localize('com_nav_balance')}:{' '}
               {new Intl.NumberFormat().format(Math.round(balanceQuery.data.tokenCredits))}
             </div>
@@ -91,9 +113,17 @@ function AccountSettings() {
           aria-selected={true}
           onClick={() => logout()}
           value="logout"
-          className="select-item text-sm"
+          className="select-item !rounded-[10px]"
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.75rem',
+            color: '#212121',
+            fontWeight: 'normal',
+            fontStyle: 'normal',
+            borderRadius: '10px',
+          }}
         >
-          <LogOut className="icon-md" />
+          <LogOut className="icon-sm" />
           {localize('com_nav_log_out')}
         </Select.SelectItem>
       </Select.SelectPopover>

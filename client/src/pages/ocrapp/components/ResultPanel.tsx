@@ -445,7 +445,7 @@ export default function ResultPanel({ result, loading, imagePreview, onCopy, onD
               <Sparkles className="text-400 absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-medium">准备就绪</p>
+              <p className="text-lg">准备就绪</p>
               <p className="mt-1 text-sm">上传一张图片，点击分析！</p>
             </div>
           </motion.div>
