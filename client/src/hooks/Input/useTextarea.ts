@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
-import { useEffect, useRef, useCallback } from 'react';
-import { useRecoilValue, useRecoilState } from 'recoil';
-import type { TEndpointOption } from 'librechat-data-provider';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { Constants, EModelEndpoint, EToolResources, isAssistantsEndpoint, type TEndpointOption } from 'librechat-data-provider';
 import type { KeyboardEvent } from 'react';
 import {
   forceResize,
@@ -18,7 +18,7 @@ import { useInteractionHealthCheck } from '~/data-provider';
 import { useChatContext } from '~/Providers/ChatContext';
 import { globalAudioId } from '~/common';
 import { useLocalize } from '~/hooks';
-import store from '~/store';
+import store, { ephemeralAgentByConvoId } from '~/store';
 
 type KeyEvent = KeyboardEvent<HTMLTextAreaElement>;
 
@@ -36,14 +36,21 @@ export default function useTextarea({
   const localize = useLocalize();
   const getSender = useGetSender();
   const isComposing = useRef(false);
+  
+  const { index, conversation, isSubmitting, filesLoading, latestMessage, setFilesLoading } =
+    useChatContext();
+  const isAssistants = useMemo(
+    () => isAssistantsEndpoint(conversation?.endpoint),
+    [conversation?.endpoint],
+  );
   const agentsMap = useAgentsMapContext();
-  const { handleFiles } = useFileHandling();
+  const { handleFiles } = useFileHandling({
+    overrideEndpoint: isAssistants ? undefined : EModelEndpoint.agents,
+  });
   const assistantMap = useAssistantsMapContext();
   const checkHealth = useInteractionHealthCheck();
   const enterToSend = useRecoilValue(store.enterToSend);
 
-  const { index, conversation, isSubmitting, filesLoading, latestMessage, setFilesLoading } =
-    useChatContext();
   const [activePrompt, setActivePrompt] = useRecoilState(store.activePromptByIndex(index));
 
   const { endpoint = '' } = conversation || {};
@@ -140,6 +147,9 @@ export default function useTextarea({
     isNotAppendable,
   ]);
 
+  const [ephemeralAgent, setEphemeralAgent] = useRecoilState(
+    ephemeralAgentByConvoId(conversation?.conversationId ?? Constants.NEW_CONVO))
+
   const handleKeyDown = useCallback(
     (e: KeyEvent) => {
       if (textAreaRef.current && checkIfScrollable(textAreaRef.current)) {
@@ -219,6 +229,11 @@ export default function useTextarea({
         return;
       }
 
+
+      setEphemeralAgent((prev) => ({
+        ...prev,
+        [EToolResources.context]: true,
+      }));
       if (clipboardData.files.length > 0) {
         setFilesLoading(true);
         const timestampedFiles: File[] = [];
@@ -228,7 +243,7 @@ export default function useTextarea({
           });
           timestampedFiles.push(newFile);
         }
-        handleFiles(timestampedFiles);
+        handleFiles(timestampedFiles, 'context');
       }
     },
     [handleFiles, setFilesLoading, textAreaRef],

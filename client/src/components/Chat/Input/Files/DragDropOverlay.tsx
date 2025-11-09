@@ -36,7 +36,7 @@ const DragDropOverlay = memo(({ isActive }: DragDropOverlayProps) => {
         }}
       >
         {/** Content area with subtle background */}
-        <div className="bg-surface-primary/95 flex flex-col items-center rounded-lg p-8 shadow-xl">
+        {/* <div className="bg-surface-primary/95 flex flex-col items-center rounded-lg p-8 shadow-xl">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 132 108"
@@ -91,7 +91,7 @@ const DragDropOverlay = memo(({ isActive }: DragDropOverlayProps) => {
           </svg>
           <h3 className="mt-4 text-lg font-semibold">{localize('com_ui_upload_files')}</h3>
           <h4 className="text-sm text-text-secondary">{localize('com_ui_drag_drop')}</h4>
-        </div>
+        </div> */}
       </div>
     </>
   );
