@@ -136,7 +136,8 @@ export const excelMimeTypes =
   /^application\/(vnd\.ms-excel|msexcel|x-msexcel|x-ms-excel|x-excel|x-dos_ms_excel|xls|x-xls|vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet)$/;
 
 export const textMimeTypes =
-  /^(text\/(x-c|x-csharp|tab-separated-values|x-c\+\+|x-h|x-java|html|markdown|x-php|x-python|x-script\.python|x-ruby|x-tex|plain|css|vtt|javascript|csv|xml))$/;
+  /^(text\/(x-c|x-c\+\+|x-h|x-csharp|x-java|x-kotlin|x-swift|x-go|x-rustsrc|x-python|x-ruby|x-php|x-lua|x-perl|x-rsrc|x-scala|jsx|tsx|html|markdown|x-rst|x-tex|plain|x-ini|csv|tab-separated-values|x-sql|x-diff|x-dockerfile|x-makefile|x-cmake|x-gradle|x-groovy|x-asm|x-vb|x-objectivec|x-objectivec\+\+|css|x-scss|x-less|x-vue|x-svelte|javascript))$/;
+
 
 export const applicationMimeTypes =
   /^(application\/(epub\+zip|csv|json|pdf|x-tar|typescript|vnd\.openxmlformats-officedocument\.(wordprocessingml\.document|presentationml\.presentation|spreadsheetml\.sheet)|xml|zip))$/;
@@ -178,26 +179,122 @@ export const codeInterpreterMimeTypes = [
   imageMimeTypes,
 ];
 
+// export const codeTypeMapping: { [key: string]: string } = {
+//   c: 'text/x-c',
+//   cs: 'text/x-csharp',
+//   cpp: 'text/x-c++',
+//   h: 'text/x-h',
+//   md: 'text/markdown',
+//   php: 'text/x-php',
+//   py: 'text/x-python',
+//   rb: 'text/x-ruby',
+//   tex: 'text/x-tex',
+//   js: 'text/javascript',
+//   sh: 'application/x-sh',
+//   ts: 'application/typescript',
+//   tar: 'application/x-tar',
+//   zip: 'application/zip',
+//   yml: 'application/x-yaml',
+//   yaml: 'application/x-yaml',
+//   log: 'text/plain',
+//   tsv: 'text/tab-separated-values',
+// };
+
 export const codeTypeMapping: { [key: string]: string } = {
+  // 编程语言
   c: 'text/x-c',
-  cs: 'text/x-csharp',
   cpp: 'text/x-c++',
-  h: 'text/x-h',
-  md: 'text/markdown',
-  php: 'text/x-php',
+  h: 'text/x-c',
+  hpp: 'text/x-c++',
+  cs: 'text/x-csharp',
+  java: 'text/x-java',
+  kt: 'text/x-kotlin',
+  swift: 'text/x-swift',
+  go: 'text/x-go',
+  rs: 'text/x-rustsrc',
   py: 'text/x-python',
   rb: 'text/x-ruby',
-  tex: 'text/x-tex',
+  php: 'text/x-php',
+  lua: 'text/x-lua',
+  pl: 'text/x-perl',
+  r: 'text/x-rsrc',
+  scala: 'text/x-scala',
+  dart: 'application/dart',
+
+  // Web 前端
   js: 'text/javascript',
-  sh: 'application/x-sh',
+  jsx: 'text/jsx',
   ts: 'application/typescript',
-  tar: 'application/x-tar',
-  zip: 'application/zip',
-  yml: 'application/x-yaml',
-  yaml: 'application/x-yaml',
+  tsx: 'text/tsx',
+  html: 'text/html',
+  htm: 'text/html',
+  css: 'text/css',
+  scss: 'text/x-scss',
+  less: 'text/x-less',
+  vue: 'text/x-vue',
+  svelte: 'text/x-svelte',
+  xml: 'application/xml',
+  json: 'application/json',
+
+  // Shell / 系统脚本
+  sh: 'application/x-sh',
+  bash: 'application/x-sh',
+  zsh: 'application/x-sh',
+  bat: 'application/x-msdos-program',
+  ps1: 'application/x-powershell',
+
+  // 标记 / 文档类
+  md: 'text/markdown',
+  markdown: 'text/markdown',
+  rst: 'text/x-rst',
+  tex: 'text/x-tex',
+  txt: 'text/plain',
   log: 'text/plain',
+
+  // 配置文件
+  ini: 'text/x-ini',
+  conf: 'text/plain',
+  cfg: 'text/plain',
+  env: 'text/plain',
+  yaml: 'application/x-yaml',
+  yml: 'application/x-yaml',
+  toml: 'application/toml',
+  properties: 'text/plain',
+
+  // 数据格式
+  csv: 'text/csv',
   tsv: 'text/tab-separated-values',
+  sql: 'text/x-sql',
+  graphql: 'application/graphql',
+  gql: 'application/graphql',
+  ndjson: 'application/x-ndjson',
+
+  // 压缩与打包
+  zip: 'application/zip',
+  tar: 'application/x-tar',
+  gz: 'application/gzip',
+  rar: 'application/x-rar-compressed',
+  "7z": 'application/x-7z-compressed',
+
+  // 其他常见文本格式
+  diff: 'text/x-diff',
+  patch: 'text/x-diff',
+  dockerfile: 'text/x-dockerfile',
+  makefile: 'text/x-makefile',
+  cmake: 'text/x-cmake',
+  gradle: 'text/x-gradle',
+  groovy: 'text/x-groovy',
+  asm: 'text/x-asm',
+  vb: 'text/x-vb',
+  m: 'text/x-objectivec',
+  mm: 'text/x-objectivec++',
+  jsxbin: 'text/javascript',
+
+  // License / 说明文件
+  license: 'text/plain',
+  readme: 'text/plain',
 };
+
 
 export const retrievalMimeTypes = [
   /^(text\/(x-c|x-c\+\+|x-h|html|x-java|markdown|x-php|x-python|x-script\.python|x-ruby|x-tex|plain|vtt|xml))$/,
