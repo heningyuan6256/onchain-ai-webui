@@ -11,7 +11,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 const backendPort = (process.env.BACKEND_PORT && Number(process.env.BACKEND_PORT)) || 3080;
 // const backendURL = process.env.HOST ? `http://${process.env.HOST}:${backendPort}` : `http://localhost:${backendPort}`;
 // const backendURL = 'http://heningyuan.synology.me:23470';
-const backendURL = "http://localhost:3080"
+const backendURL = 'http://localhost:3080';
 
 export default defineConfig(({ command }) => ({
   base: '',
@@ -55,7 +55,7 @@ export default defineConfig(({ command }) => ({
         },
       },
       '/model': {
-        target: 'http://192.168.0.178:4050',
+        target: 'http://192.168.0.61:6009',
         changeOrigin: true,
         rewrite(path) {
           return path.replace(/^\/model/, '');
