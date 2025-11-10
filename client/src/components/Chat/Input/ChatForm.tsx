@@ -41,6 +41,10 @@ import Icon from '~/components/icon';
 import AISVG from '@/assets/image/front-ai.svg';
 import AIWhiteSVG from '@/assets/image/front-ai-white.svg';
 import { useReactive } from 'ahooks';
+import {
+  ModelSelectorChatProvider,
+  useModelSelectorChatContext,
+} from '../Menus/Endpoints/ModelSelectorChatContext';
 
 const ChatForm = memo(({ index = 0 }: { index?: number }) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
@@ -91,6 +95,8 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
   } = useAddedChatContext();
   const assistantMap = useAssistantsMapContext();
   const showStopAdded = useRecoilValue(store.showStopButtonByIndex(addedIndex));
+  const { model } = useModelSelectorChatContext();
+  console.log('--------------------', model);
 
   const endpoint = useMemo(
     () => conversation?.endpointType ?? conversation?.endpoint,
@@ -127,7 +133,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
         redirect: 'follow',
       };
 
-      fetch(`/model/system/model/list_model_queue?model_ids=qwen3-32b`, requestOptions).then(
+      fetch(`/model/system/model/list_model_queue?model_ids=${model}`, requestOptions).then(
         (res) => {
           res.json().then(({ data }) => {
             const safeParse = (str) => Number(str?.split('} ')?.pop()?.trim());
@@ -143,7 +149,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
       getqueue();
     }, 10000);
     return () => clearInterval(id);
-  }, []);
+  }, [model]);
   const handleContainerClick = useCallback(() => {
     /** Check if the device is a touchscreen */
     if (window.matchMedia?.('(pointer: coarse)').matches) {
@@ -369,7 +375,9 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
                 </div>
                 深入研究
               </Toggle> */}
-              <div><ModelSelector startupConfig={startupConfig} /></div>
+              <div>
+                <ModelSelector startupConfig={startupConfig} />
+              </div>
 
               <BadgeRow
                 showEphemeralBadges={!isAgentsEndpoint(endpoint) && !isAssistantsEndpoint(endpoint)}
