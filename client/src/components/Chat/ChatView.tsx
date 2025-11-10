@@ -6,7 +6,13 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { Constants, buildTree } from 'librechat-data-provider';
 import type { TMessage } from 'librechat-data-provider';
 import type { ChatFormValues } from '~/common';
-import { ChatContext, AddedChatContext, useFileMapContext, ChatFormProvider, useChatContext } from '~/Providers';
+import {
+  ChatContext,
+  AddedChatContext,
+  useFileMapContext,
+  ChatFormProvider,
+  useChatContext,
+} from '~/Providers';
 import { useChatHelpers, useAddedResponse, useSSE } from '~/hooks';
 import ConversationStarters from './Input/ConversationStarters';
 import { useGetMessagesByConvoId } from '~/data-provider';
@@ -18,21 +24,20 @@ import Header from './Header';
 import Footer from './Footer';
 import { cn } from '~/utils';
 import store from '~/store';
-import { motion, AnimatePresence } from "framer-motion";
-import UPLOADLIGHTGREYSVG from "@/assets/image/front-uploadLightGrey.svg";
-import KNOWLEDGEUNITSVG from "@/assets/image/front-knowledgeunitlightgrey.svg";
+import { motion, AnimatePresence } from 'framer-motion';
+import UPLOADLIGHTGREYSVG from '@/assets/image/front-uploadLightGrey.svg';
+import KNOWLEDGEUNITSVG from '@/assets/image/front-knowledgeunitlightgrey.svg';
 
-import LIBRARYLIGHTSVG from "@/assets/image/front-libraryGrey.svg";
-import { useUploadData } from "@/contexts/UploadDataContext";
+import LIBRARYLIGHTSVG from '@/assets/image/front-libraryGrey.svg';
+import { useUploadData } from '@/contexts/UploadDataContext';
 import { CountUp } from 'countup.js';
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import ADDSVG from "@/assets/image/front-add.svg";
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import ADDSVG from '@/assets/image/front-add.svg';
 
-import ARROWBLACKSVG from "@/assets/image/front-arrowBlack.svg";
-import Icon from "@/components/icon";
+import ARROWBLACKSVG from '@/assets/image/front-arrowBlack.svg';
+import Icon from '@/components/icon';
 import { LibraryModel } from '../nav-projects';
-
-
+import { ModelSelectorChatProvider } from './Menus/Endpoints/ModelSelectorChatContext';
 
 function LoadingSpinner() {
   return (
@@ -56,7 +61,7 @@ const CardData: FC<{ title: string; icon: string; count: number; index: number }
     // }
   }, [props.count]);
   return (
-    <div className="flex-1 card_data cursor-pointer">
+    <div className="card_data flex-1 cursor-pointer">
       <motion.div
         key={props.index} // 用唯一标识
         initial={{ opacity: 0, x: 20 }}
@@ -66,12 +71,12 @@ const CardData: FC<{ title: string; icon: string; count: number; index: number }
           delay: (props.index + 1) * 0.2, // 顺序进入
         }}
       >
-        <div className="text-[#333333] text-xs mb-2">{props.title}</div>
+        <div className="mb-2 text-xs text-[#333333]">{props.title}</div>
         <div className="flex justify-between">
           <div>
             <img src={props.icon} className="h-[64px]" />
           </div>
-          <div className="items-end flex text-[#333333] text-4xl" ref={dataRef}>
+          <div className="flex items-end text-4xl text-[#333333]" ref={dataRef}>
             {/* {props.count} */}
           </div>
         </div>
@@ -79,7 +84,6 @@ const CardData: FC<{ title: string; icon: string; count: number; index: number }
     </div>
   );
 };
-
 
 function ChatView({ index = 0 }: { index?: number }) {
   const { conversationId } = useParams();
@@ -93,7 +97,7 @@ function ChatView({ index = 0 }: { index?: number }) {
 
   const model = searchParams.get('model'); // 获取 name 参数
 
-  console.log(model, endpoint, "endpoint");
+  console.log(model, endpoint, 'endpoint');
 
   const fileMap = useFileMapContext();
 
@@ -107,8 +111,6 @@ function ChatView({ index = 0 }: { index?: number }) {
     ),
     enabled: !!fileMap,
   });
-
-
 
   const chatHelpers = useChatHelpers(index, conversationId);
   const addedChatHelpers = useAddedResponse({ rootIndex: index });
@@ -138,17 +140,17 @@ function ChatView({ index = 0 }: { index?: number }) {
 
   const libraryContentData = [
     {
-      title: "工业知识库",
+      title: '工业知识库',
       count: 1,
       icon: LIBRARYLIGHTSVG,
     },
     {
-      title: "已上传文件",
+      title: '已上传文件',
       count: 3,
       icon: UPLOADLIGHTGREYSVG,
     },
     {
-      title: "知识单元",
+      title: '知识单元',
       count: 28,
       icon: KNOWLEDGEUNITSVG,
     },
@@ -165,7 +167,7 @@ function ChatView({ index = 0 }: { index?: number }) {
     conversation.conversationId !== 'new' &&
     conversation.conversationId !== 'search';
 
-    console.log(isLandingPage,"isLandingPage")
+  console.log(isLandingPage, 'isLandingPage');
   return (
     <ChatFormProvider {...methods}>
       <ChatContext.Provider value={chatHelpers}>
@@ -183,39 +185,40 @@ function ChatView({ index = 0 }: { index?: number }) {
                   )}
                 >
                   {content}
-                  <div
-                    className={cn(
-                      'w-full',
-                      isLandingPage && 'max-w-3xl xl:max-w-xl',
-                    )}
-                  >
-                    <ChatForm index={index} />
+                  <div className={cn('w-full', isLandingPage && 'max-w-3xl xl:max-w-xl')}>
+                    <ModelSelectorChatProvider>
+                      <ChatForm index={index} />
+                    </ModelSelectorChatProvider>
+
                     <div
                       className={cn(
-                        "chat_box transition-all duration-30 ease-in-out overflow-hidden mx-auto",
+                        'chat_box duration-30 mx-auto overflow-hidden transition-all ease-in-out',
                         !isdd
-                          ? 
-                          "opacity-100 translate-y-0 h-[180px]"
-                          : "opacity-0 -translate-y-4 pointer-events-none h-[0px]"
+                          ? 'h-[180px] translate-y-0 opacity-100'
+                          : 'pointer-events-none h-[0px] -translate-y-4 opacity-0',
                       )}
                     >
-                      <div className="flex gap-2.5 mb-2">
+                      <div className="mb-2 flex gap-2.5">
                         {libraryContentData.map((item, index) => {
-                          if (item.title === "已上传文件") item.count = filesLength;
-                          else if (item.title === "知识单元") item.count = chunksLength;
-                          else if (item.title === "工业知识库") item.count = libraryData.length;
+                          if (item.title === '已上传文件') item.count = filesLength;
+                          else if (item.title === '知识单元') item.count = chunksLength;
+                          else if (item.title === '工业知识库') item.count = libraryData.length;
                           return <CardData key={index} {...item} index={index}></CardData>;
                         })}
                       </div>
                       <Dialog>
                         <DialogTrigger>
-                          <div className="flex justify-between items-center enter_library h-8 px-4 cursor-pointer w-[548px] border border-[#E0E0E0] hover:border-[#0563B2] transition-all hover:border">
+                          <div className="enter_library flex h-8 w-[548px] cursor-pointer items-center justify-between border border-[#E0E0E0] px-4 transition-all hover:border hover:border-[#0563B2]">
                             <div className="flex">
-                              <Icon className="w-4 h-4 rotate-180 mr-1.5" src={ADDSVG}></Icon>
+                              <Icon className="mr-1.5 h-4 w-4 rotate-180" src={ADDSVG}></Icon>
                               <div className="text-xs text-[#333333]">构建知识库</div>
                             </div>
                             <div>
-                              <img className="h-4 w-4" style={{ transform: 'rotate(270deg)' }} src={ARROWBLACKSVG} />
+                              <img
+                                className="h-4 w-4"
+                                style={{ transform: 'rotate(270deg)' }}
+                                src={ARROWBLACKSVG}
+                              />
                             </div>
                           </div>
                         </DialogTrigger>

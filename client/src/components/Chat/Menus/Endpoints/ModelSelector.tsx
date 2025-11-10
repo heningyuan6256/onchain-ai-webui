@@ -63,7 +63,7 @@ function ModelSelectorContent() {
 
   const trigger = (
     <button
-      className="flex w-full max-w-[70vw] items-center justify-center gap-2 rounded-[12px] bg-surface-secondary flex item-center justify-center text-xs hover:bg-surface-tertiary h-[24px]"
+      className="item-center flex h-[24px] w-full max-w-[70vw] items-center justify-center gap-2 rounded-[12px] bg-surface-secondary text-xs hover:bg-surface-tertiary"
       aria-label={localize('com_ui_select_model')}
     >
       {/* {selectedIcon && React.isValidElement(selectedIcon) && (
@@ -71,7 +71,12 @@ function ModelSelectorContent() {
           {selectedIcon}
         </div>
       )} */}
-      <span className="flex-grow truncate text-left flex items-center"><span><Icon className="w-3 h-3 mr-2" src={OpenAISVG}></Icon> </span> {selectedDisplayValue}</span>
+      <span className="flex flex-grow items-center truncate text-left">
+        <span>
+          <Icon className="mr-2 h-3 w-3" src={OpenAISVG}></Icon>
+        </span>
+        {selectedDisplayValue}
+      </span>
     </button>
   );
 
@@ -86,7 +91,6 @@ function ModelSelectorContent() {
             modelSpec: values.modelSpec || '',
           });
         }}
-
         // onSearch={(value) => setSearchValue(value)}
         // combobox={<input placeholder={localize('com_endpoint_search_models')} />}
         input={<></>}
@@ -107,17 +111,16 @@ function ModelSelectorContent() {
         {/* {renderCustomGroups(modelSpecs || [], mappedEndpoints ?? [])} */}
         {/* </>
         )} */}
-        {
-          (mappedEndpoints?.[0]?.models || []).map(item => {
-            return <EndpointModelItem
+        {(mappedEndpoints?.[0]?.models || []).map((item) => {
+          return (
+            <EndpointModelItem
               key={item.name}
               modelId={item.name}
               endpoint={mappedEndpoints[0]}
               isSelected={selectedValues.model === item.name}
             />
-          })
-        }
-
+          );
+        })}
       </Menu>
       <DialogManager
         keyDialogOpen={keyDialogOpen}
