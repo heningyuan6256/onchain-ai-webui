@@ -154,7 +154,7 @@ const DocData: FC = (props: any) => {
         </AlertDialogContent>
       </AlertDialog>
 
-      {props.run != "DONE" && (
+      {!props.progress_msg.includes("Indexing done") && (
         <Fragment>
           {props.progress == -1 ? (
             <div>
@@ -190,7 +190,7 @@ const DocData: FC = (props: any) => {
           )}
         </Fragment>
       )}
-      {props.run == "DONE" && (
+      {props.progress_msg.includes("Indexing done") && (
         <div>
           <div className="text-[13px] text-[#333333] text-ellipsis whitespace-nowrap px-4 pt-4 pb-2 relative z-0 flex w-full overflow-hidden">
             <Icon className="mr-1.5" src={FileSvg}></Icon>{" "}
