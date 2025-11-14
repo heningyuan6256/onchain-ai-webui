@@ -10,7 +10,7 @@ import AdvancedSettings from './components/AdvancedSettings';
 // import axios from 'axios';
 import { FileText, Eye, Search, Wand2 } from 'lucide-react';
 
-const API_BASE = 'http://heningyuan.synology.me:23470/api';
+const API_BASE = '/deepocr/api';
 const modes = [
   {
     id: 'plain_ocr',
