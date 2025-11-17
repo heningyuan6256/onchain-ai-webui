@@ -11,7 +11,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 const backendPort = (process.env.BACKEND_PORT && Number(process.env.BACKEND_PORT)) || 3080;
 // const backendURL = process.env.HOST ? `http://${process.env.HOST}:${backendPort}` : `http://localhost:${backendPort}`;
 // const backendURL = 'http://heningyuan.synology.me:23470';
-const backendURL = 'http://localhost:3080';
+const backendURL = 'http://59.175.92.126:17777';
 
 export default defineConfig(({ command }) => ({
   base: '',
@@ -23,12 +23,18 @@ export default defineConfig(({ command }) => ({
     strictPort: false,
     proxy: {
       '/api': {
-        target: backendURL,
+        target:  `${backendURL}/api`,
         changeOrigin: true,
+        rewrite(path) {
+          return path.replace(/^\/api/, '');
+        },
       },
       '/oauth': {
-        target: backendURL,
+        target:`${backendURL}/oauth`,
         changeOrigin: true,
+         rewrite(path) {
+          return path.replace(/^\/oauth/, '');
+        },
       },
       '/rag': {
         target: 'http://59.175.92.126:17777/rag',

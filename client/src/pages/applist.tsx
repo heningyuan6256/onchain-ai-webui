@@ -162,7 +162,8 @@ export default function AppMarket() {
                     const searchParams = new URLSearchParams(location.search);
                     const user = searchParams.get('user');
                     navigate(
-                      `/application/${app.app_url}?user=${user}&appId=${encodeURIComponent(app.app_id)}`,
+                      // `/c/new?endpoint=n8n&model=${app.app_name}&user=${user}&appId=${encodeURIComponent(app.app_id)}`
+                      `/application/${app.app_url}?user=${user}&appId=${encodeURIComponent(app.app_id)}&endpoint=n8n&model=${app.app_name}`,
                     );
                   }}
                 >

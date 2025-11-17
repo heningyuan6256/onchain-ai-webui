@@ -99,17 +99,14 @@ function ModelSelectorContent() {
         {/* {searchResults ? (
           renderSearchResults(searchResults, localize, searchValue)
         ) : (
-          <> */}
-        {/* Render ungrouped modelSpecs (no group field) */}
-        {/* {renderModelSpecs(
+          <>
+        {renderModelSpecs(
           (mappedEndpoints[0].models || []).map(item => ({ ...item, ...mappedEndpoints[0], preset: {}, label: item.name })),
           selectedValues.modelSpec || '',
-        )} */}
-        {/* Render endpoints (will include grouped specs matching endpoint names) */}
-        {/* {renderEndpoints((mappedEndpoints || []) ?? [])} */}
-        {/* Render custom groups (specs with group field not matching any endpoint) */}
-        {/* {renderCustomGroups(modelSpecs || [], mappedEndpoints ?? [])} */}
-        {/* </>
+        )}
+        {renderEndpoints((mappedEndpoints || []) ?? [])}
+        {renderCustomGroups(modelSpecs || [], mappedEndpoints ?? [])}
+        </>
         )} */}
         {(mappedEndpoints?.[0]?.models || []).map((item) => {
           return (
@@ -121,6 +118,16 @@ function ModelSelectorContent() {
             />
           );
         })}
+        {/* {(mappedEndpoints?.[1]?.models || []).map((item) => {
+          return (
+            <EndpointModelItem
+              key={item.name}
+              modelId={item.name}
+              endpoint={mappedEndpoints[1]}
+              isSelected={selectedValues.model === item.name}
+            />
+          );
+        })} */}
       </Menu>
       <DialogManager
         keyDialogOpen={keyDialogOpen}
