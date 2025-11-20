@@ -41,6 +41,7 @@ import { useSession } from '@/tars/common/hooks/useSession';
 
 import { motion } from 'framer-motion';
 import { Segmented } from 'antd';
+import request from '~/request/request';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -117,11 +118,9 @@ export default function AppMarket() {
       method: 'get',
       redirect: 'follow',
     };
-    fetch(`/apps/system/app/list?pageNum=1&pageSize=500`, requestOptions).then((res) => {
-      res.json().then((data) => {
-        setAppList(data?.rows || []);
-        setLoading(false);
-      });
+    request(`/apps/system/app/list?pageNum=1&pageSize=500`, requestOptions).then((data) => {
+      setAppList(data?.rows || []);
+      setLoading(false);
     });
   }, []);
 

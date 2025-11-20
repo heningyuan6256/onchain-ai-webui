@@ -11,7 +11,7 @@ import { useLocalize } from '~/hooks';
 import Settings from './Settings';
 import store from '~/store';
 import Icon from '../icon';
-
+import request from '~/request/request';
 function AccountSettings() {
   const localize = useLocalize();
   const { user, isAuthenticated, logout } = useAuthContext();
@@ -130,14 +130,14 @@ function AccountSettings() {
         </Select.SelectItem>
         <Select.SelectItem
           aria-selected={true}
-          onClick={() => {
+          onClick={async () => {
             window.open(
               `http://192.168.0.198:9700/login?au=${btoa(
                 `${localStorage.getItem('token')}^${localStorage.getItem('refresh_token')}`,
               )}`,
             );
           }}
-          value="logout"
+          value="backend"
           className="select-item !rounded-[10px]"
           style={{
             fontFamily: 'Inter, sans-serif',
