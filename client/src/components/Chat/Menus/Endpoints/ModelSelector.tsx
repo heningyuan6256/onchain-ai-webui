@@ -111,16 +111,16 @@ function ModelSelectorContent() {
         {/* {renderCustomGroups(modelSpecs || [], mappedEndpoints ?? [])} */}
         {/* </>
         )} */}
-        {(mappedEndpoints?.[0]?.models || []).map((item) => {
-          return (
+        {mappedEndpoints?.flatMap((endpoint, idx) =>
+          (endpoint?.models || []).map((item) => (
             <EndpointModelItem
-              key={item.name}
+              key={`${idx}-${item.name}`}
               modelId={item.name}
-              endpoint={mappedEndpoints[0]}
+              endpoint={endpoint}
               isSelected={selectedValues.model === item.name}
             />
-          );
-        })}
+          )),
+        )}
       </Menu>
       <DialogManager
         keyDialogOpen={keyDialogOpen}
