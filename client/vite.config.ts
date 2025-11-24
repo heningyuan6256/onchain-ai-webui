@@ -6,12 +6,13 @@ import { defineConfig } from 'vite';
 import { compression } from 'vite-plugin-compression2';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
-
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 // https://vitejs.dev/config/
 const backendPort = (process.env.BACKEND_PORT && Number(process.env.BACKEND_PORT)) || 3080;
 // const backendURL = process.env.HOST ? `http://${process.env.HOST}:${backendPort}` : `http://localhost:${backendPort}`;
 // const backendURL = 'http://heningyuan.synology.me:23470';
 const backendURL = 'http://localhost:3080';
+// const backendURL = 'http://192.168.0.61:3080';
 
 export default defineConfig(({ command }) => ({
   base: '',
@@ -35,6 +36,13 @@ export default defineConfig(({ command }) => ({
         changeOrigin: true,
         rewrite(path) {
           return path.replace(/^\/rag/, '');
+        },
+      },
+      '/backend': {
+        target: 'http://192.168.0.61:3120',
+        changeOrigin: true,
+        rewrite(path) {
+          return path.replace(/^\/backend/, '');
         },
       },
       '/chat': {
@@ -69,6 +77,9 @@ export default defineConfig(({ command }) => ({
   plugins: [
     react(),
     nodePolyfills(),
+    codeInspectorPlugin({
+      bundler: 'vite',
+    }),
     VitePWA({
       injectRegister: 'auto', // 'auto' | 'manual' | 'disabled'
       registerType: 'autoUpdate', // 'prompt' | 'autoUpdate'
