@@ -81,6 +81,7 @@
     "filenamify": "^6.0.0",
     "framer-motion": "^11.5.4",
     "heic-to": "^1.1.14",
+    "history": "^5.3.0",
     "html-to-image": "^1.11.11",
     "i18next": "^24.2.2",
     "i18next-browser-languagedetector": "^8.0.3",
@@ -134,6 +135,7 @@
     "tailwindcss-animate": "^1.0.5",
     "tailwindcss-radix": "^2.8.0",
     "typed.js": "^2.1.0",
+    "umi-request": "^1.4.0",
     "zod": "^3.22.4",
     "zustand": "^5.0.8"
   },
