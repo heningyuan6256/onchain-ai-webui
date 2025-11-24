@@ -129,7 +129,7 @@ const DocData: FC = (props: any) => {
             <AlertDialogCancel className="onchain_btn">取消</AlertDialogCancel>
             <AlertDialogAction
               className="onchain_btn"
-              onClick={() => {
+              onClick={async () => {
                 const myHeaders = new Headers();
                 myHeaders.append('Content-Type', 'application/json');
                 const params = new URLSearchParams({
@@ -137,7 +137,7 @@ const DocData: FC = (props: any) => {
                   user_id: localStorage.getItem('id')!,
                 });
 
-                request(
+                const struct = await request(
                   `/rag/system/ragflow/datasets/${props.selectLibrary?.id}/documents?${params.toString()}`,
                   {
                     method: 'DElETE',
@@ -145,11 +145,11 @@ const DocData: FC = (props: any) => {
                     // redirect: "follow",
                     body: JSON.stringify([props.id]),
                   },
-                ).then(async (struct) => {
-                  await props.fetchKnowldegeData();
-                  toast.success('删除知识库成功');
-                  console.log(struct, 'struct');
-                });
+                );
+
+                await props.fetchKnowldegeData();
+                toast.success('删除知识库成功');
+                console.log(struct, 'struct');
               }}
             >
               确认
@@ -479,7 +479,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                             body: formData,
                           },
                         );
-                        if (data.status == 200) {
+                        if (data.code == 200) {
                           toast.dismiss(toastId);
                           toast.success(`新建成功`);
                           refreshUploadData();
@@ -540,7 +540,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                       <AlertDialogCancel className="onchain_btn">取消</AlertDialogCancel>
                       <AlertDialogAction
                         className="onchain_btn"
-                        onClick={() => {
+                        onClick={async () => {
                           const myHeaders = new Headers();
                           myHeaders.append('Content-Type', 'application/json');
                           const params = new URLSearchParams({
@@ -548,14 +548,14 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                             user_id: localStorage.getItem('id')!,
                           });
 
-                          request(`/rag/system/ragflow/datasets?${params.toString()}`, {
+                          await request(`/rag/system/ragflow/datasets?${params.toString()}`, {
                             method: 'DElETE',
                             headers: myHeaders,
                             // redirect: "follow",
                             body: JSON.stringify([item.id]),
                           })
                             .then((res) => {
-                              if (res.status == 200) {
+                              if (res.code == 200) {
                                 toast.success('删除成功');
                                 refreshUploadData();
                                 if (selectLibrary == item.id) {

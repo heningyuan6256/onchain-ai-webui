@@ -27,7 +27,6 @@ export enum ErrorShowType {
 
 const request = extend({
   timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
   errorHandler: (error) => {
     const msg = error.message || 'Network error';
     if (error.name !== 'ResponseError') {
@@ -50,6 +49,8 @@ request.interceptors.request.use((url, options) => {
   if (options.ignoreToken) return { url, options };
 
   headers['Authorization'] = localStorage.getItem('token') || '';
+  console.log('看看请求前数据', { url, options });
+
   return { url, options };
 });
 
