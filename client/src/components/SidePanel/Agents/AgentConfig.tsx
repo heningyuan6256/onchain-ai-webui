@@ -34,12 +34,14 @@ import AgentRagSelector from './AgentRagSelector/AgentRagSelector';
 import AgentMcpSelector from './AgentMcpSelector';
 import { toast } from 'sonner';
 import request from '~/request/request';
-
-const labelClass = 'mb-2 text-token-text-primary block font-medium';
+import './custom.css';
+const labelClass =
+  "mb-2 text-token-text-primary block font-medium  text-[13px] text-[#333333] font-['PingFangSC','PingFang SC',sans-serif]";
 const inputClass = cn(
   defaultTextProps,
   'flex w-full px-3 py-2 border-border-light bg-surface-secondary focus-visible:ring-2 focus-visible:ring-ring-primary',
   removeFocusOutlines,
+  'h-[32px]',
 );
 
 export default function AgentConfig({ createMutation, groups }) {
@@ -124,7 +126,7 @@ export default function AgentConfig({ createMutation, groups }) {
             createMutation={createMutation}
             avatar={agent?.['avatar'] ?? null}
           />
-          <label className={labelClass} htmlFor="name">
+          <label className={'my-label'} htmlFor="name">
             {localize('com_ui_name')}
             <span className="text-red-500">*</span>
           </label>
@@ -135,6 +137,7 @@ export default function AgentConfig({ createMutation, groups }) {
             render={({ field }) => (
               <>
                 <input
+                  style={{ borderRadius: 5, backgroundColor: 'white' }}
                   {...field}
                   value={field.value ?? ''}
                   maxLength={256}
@@ -167,7 +170,7 @@ export default function AgentConfig({ createMutation, groups }) {
         </div>
         {/* Description */}
         <div className="mb-4">
-          <label className={labelClass} htmlFor="description">
+          <label className={'my-label'} htmlFor="description">
             {localize('com_ui_description')}
           </label>
           <Controller
@@ -175,6 +178,7 @@ export default function AgentConfig({ createMutation, groups }) {
             control={control}
             render={({ field }) => (
               <input
+                style={{ borderRadius: 5, backgroundColor: 'white' }}
                 {...field}
                 value={field.value ?? ''}
                 maxLength={512}
@@ -189,19 +193,19 @@ export default function AgentConfig({ createMutation, groups }) {
         </div>
         {/* Category */}
         <div className="mb-4">
-          <label className={labelClass} htmlFor="category-selector">
+          <label className={'my-label'} htmlFor="category-selector">
             {localize('com_ui_category')} <span className="text-red-500">*</span>
           </label>
           <AgentCategorySelector className="w-full" />
         </div>
         <div className="mb-4">
-          <label className={labelClass} htmlFor="category-selector">
+          <label className={'my-label'} htmlFor="category-selector">
             知识库
           </label>
           <AgentRagSelector className="w-full" />
         </div>
         <div className="mb-4">
-          <label className={labelClass} htmlFor="category-selector">
+          <label className={'my-label'} htmlFor="category-selector">
             Mcp工具
           </label>
           <AgentMcpSelector groups={groups || []} className="w-full" />
@@ -210,13 +214,14 @@ export default function AgentConfig({ createMutation, groups }) {
         <Instructions />
         {/* Model and Provider */}
         <div className="mb-4">
-          <label className={labelClass} htmlFor="provider">
+          <label className={'my-label'} htmlFor="provider">
             {localize('com_ui_model')} <span className="text-red-500">*</span>
           </label>
           <button
             type="button"
+            style={{ borderRadius: 5 }}
             onClick={() => setActivePanel(Panel.model)}
-            className="btn btn-neutral border-token-border-light relative h-10 w-full rounded-lg font-medium"
+            className="btn btn-neutral border-token-border-light relative h-10 w-full !bg-white font-medium"
             aria-haspopup="true"
             aria-expanded="false"
           >

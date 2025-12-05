@@ -7,6 +7,7 @@ import { cn, defaultTextProps, optionText } from '~/utils';
 import { ESide, defaultDebouncedDelay } from '~/common';
 import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
+import './custom.css';
 
 function DynamicSlider({
   label = '',
@@ -158,10 +159,7 @@ function DynamicSlider({
       <HoverCard openDelay={300}>
         <HoverCardTrigger className="grid w-full items-center gap-2">
           <div className="flex w-full items-center justify-between">
-            <Label
-              htmlFor={`${settingKey}-dynamic-setting`}
-              className="break-words text-left text-sm font-medium"
-            >
+            <Label htmlFor={`${settingKey}-dynamic-setting`} className="my-label">
               {labelCode ? (localize(label as TranslationKeys) ?? label) : label || settingKey}{' '}
               {showDefault && (
                 <small className="opacity-40">
@@ -222,7 +220,7 @@ function DynamicSlider({
             className="flex h-4 w-full"
           />
         </HoverCardTrigger>
-        {description && (
+        {/* {description && (
           <OptionHover
             description={
               descriptionCode
@@ -231,7 +229,7 @@ function DynamicSlider({
             }
             side={ESide.Left}
           />
-        )}
+        )} */}
       </HoverCard>
     </div>
   );

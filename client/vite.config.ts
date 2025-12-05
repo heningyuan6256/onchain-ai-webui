@@ -77,7 +77,7 @@ export default defineConfig(({ command }) => ({
         },
       },
       '/v1/agent': {
-        target: 'http://192.168.0.178:8000',
+        target: 'http://192.168.0.198:8000',
         changeOrigin: true,
         rewrite(path) {
           return path.replace(/^\/v1\/agent/, '');

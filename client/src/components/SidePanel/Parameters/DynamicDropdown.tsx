@@ -7,6 +7,7 @@ import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
 import { ESide } from '~/common';
 import { cn } from '~/utils';
+import './custom.css';
 
 function DynamicDropdown({
   label = '',
@@ -74,10 +75,7 @@ function DynamicDropdown({
         <HoverCardTrigger className="grid w-full items-center gap-2">
           {showLabel === true && (
             <div className="flex w-full justify-between">
-              <Label
-                htmlFor={`${settingKey}-dynamic-dropdown`}
-                className="text-left text-sm font-medium"
-              >
+              <Label htmlFor={`${settingKey}-dynamic-dropdown`} className="my-label">
                 {labelCode ? (localize(label as TranslationKeys) ?? label) : label || settingKey}
                 {showDefault && (
                   <small className="opacity-40">
@@ -103,16 +101,16 @@ function DynamicDropdown({
             }
           />
         </HoverCardTrigger>
-        {description && (
+        {/* {description && (
           <OptionHover
             description={
               descriptionCode
-                ? (localize(description as TranslationKeys) ?? description)
+                ? (localize(description as OptionHover) ?? description)
                 : description
             }
             side={ESide.Left}
           />
-        )}
+        )} */}
       </HoverCard>
     </div>
   );

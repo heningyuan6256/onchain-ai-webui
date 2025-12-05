@@ -313,7 +313,7 @@ export default function AgentPanel() {
             agent_img: '',
             tag1: category,
             model_conf: {
-              ...model_parameters,
+              model_parameters: model_parameters,
               model_name: modelobject?.model_name,
               base_url: modelobject?.url,
               api_key: modelobject?.apikey,
@@ -396,7 +396,7 @@ export default function AgentPanel() {
           agent_img: '',
           tag1: category,
           model_conf: {
-            ...model_parameters,
+            model_parameters: model_parameters,
             model_name: modelobject?.model_name,
             base_url: modelobject?.url,
             api_key: modelobject?.apikey,

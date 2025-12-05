@@ -105,11 +105,12 @@ function ControlCombobox({
         id={selectId}
         disabled={disabled}
         className={cn(
-          'flex items-center justify-center gap-2 rounded-full bg-surface-secondary',
+          'flex !h-[32px] items-center justify-center gap-2 !rounded-[5px] bg-surface-secondary bg-white',
           'text-text-primary hover:bg-surface-tertiary',
           'border border-border-light',
-          isCollapsed ? 'h-10 w-10' : 'h-10 w-full rounded-xl px-3 py-2 text-sm',
+          isCollapsed ? 'h-10 w-10' : 'l h-10 w-full px-3 py-2 text-sm',
           className,
+          "!font-['PingFangSC','PingFang SC',sans-serif] !text-[12px] !font-medium !text-[#333333]",
         )}
       >
         {SelectIcon != null && iconSide === 'left' && (
@@ -134,7 +135,7 @@ function ControlCombobox({
         gutter={4}
         portal
         className={cn(
-          'animate-popover z-50 overflow-hidden rounded-xl border border-border-light bg-surface-secondary shadow-lg',
+          'animate-popover z-50 overflow-hidden !rounded-[5px] border border-border-light bg-surface-secondary bg-white shadow-lg',
         )}
         style={{ width: isCollapsed ? '300px' : (buttonWidth ?? '300px') }}
       >

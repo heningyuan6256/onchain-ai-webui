@@ -51,7 +51,6 @@ export default function ModelPanel({
         description: 'com_endpoint_context_info',
         descriptionCode: true,
         optionType: 'model',
-        columnSpan: 2,
       },
       {
         key: 'max_tokens',
@@ -64,7 +63,17 @@ export default function ModelPanel({
         placeholder: 'com_nav_theme_system',
         placeholderCode: true,
         optionType: 'model',
-        columnSpan: 2,
+      },
+      {
+        key: 'fileTokenLimit',
+        label: 'com_ui_file_token_limit',
+        labelCode: true,
+        description: 'com_ui_file_token_limit_desc',
+        descriptionCode: true,
+        placeholder: 'com_nav_theme_system',
+        placeholderCode: true,
+        type: 'number',
+        component: 'input',
       },
       {
         key: 'temperature',
@@ -83,6 +92,7 @@ export default function ModelPanel({
           step: 0.01,
         },
       },
+
       {
         key: 'top_p',
         label: 'com_endpoint_top_p',
@@ -133,21 +143,6 @@ export default function ModelPanel({
         component: 'slider',
         optionType: 'model',
         columnSpan: 4,
-      },
-      {
-        key: 'stop',
-        label: 'com_endpoint_stop',
-        labelCode: true,
-        description: 'com_endpoint_openai_stop',
-        descriptionCode: true,
-        placeholder: 'com_endpoint_stop_placeholder',
-        placeholderCode: true,
-        type: 'array',
-        default: [],
-        component: 'tags',
-        optionType: 'conversation',
-        minTags: 0,
-        maxTags: 4,
       },
       {
         key: 'resendFiles',
@@ -277,21 +272,8 @@ export default function ModelPanel({
         showDefault: false,
         columnSpan: 2,
       },
-      {
-        key: 'fileTokenLimit',
-        label: 'com_ui_file_token_limit',
-        labelCode: true,
-        description: 'com_ui_file_token_limit_desc',
-        descriptionCode: true,
-        placeholder: 'com_nav_theme_system',
-        placeholderCode: true,
-        type: 'number',
-        component: 'input',
-        columnSpan: 2,
-      },
     ];
   }, []);
-  console.log('params堆是什么样', parameters);
 
   const setOption = (optionKey: keyof t.AgentModelParameters) => (value: t.AgentParameterValue) => {
     setValue(`model_parameters.${optionKey}`, value);
@@ -321,65 +303,14 @@ export default function ModelPanel({
 
         <div className="mb-2 mt-2 text-xl font-medium">{localize('com_ui_model_parameters')}</div>
       </div>
-      <div className="p-2">
-        {/* Endpoint aka Provider for Agents */}
-        {/* <div className="mb-4">
-          <label
-            id="provider-label"
-            className="text-token-text-primary model-panel-label mb-2 block font-medium"
-            htmlFor="provider"
-          >
-            {localize('com_ui_provider')} <span className="text-red-500">*</span>
-          </label>
-          <Controller
-            name="provider"
-            control={control}
-            rules={{ required: true, minLength: 1 }}
-            render={({ field, fieldState: { error } }) => {
-              const value =
-                typeof field.value === 'string'
-                  ? field.value
-                  : ((field.value as StringOption)?.value ?? '');
-              const display =
-                typeof field.value === 'string'
-                  ? field.value
-                  : ((field.value as StringOption)?.label ?? '');
-
-              return (
-                <>
-                  <ControlCombobox
-                    selectedValue={value}
-                    displayValue={alternateName[display] ?? display}
-                    selectPlaceholder={localize('com_ui_select_provider')}
-                    searchPlaceholder={localize('com_ui_select_search_provider')}
-                    setValue={field.onChange}
-                    items={providers.map((provider) => ({
-                      label: typeof provider === 'string' ? provider : provider.label,
-                      value: typeof provider === 'string' ? provider : provider.value,
-                    }))}
-                    className={cn(error ? 'border-2 border-red-500' : '')}
-                    ariaLabel={localize('com_ui_provider')}
-                    isCollapsed={false}
-                    showCarat={true}
-                  />
-                  {error && (
-                    <span className="model-panel-error text-sm text-red-500 transition duration-300 ease-in-out">
-                      {localize('com_ui_field_required')}
-                    </span>
-                  )}
-                </>
-              );
-            }}
-          />
-          1
-        </div> */}
+      <div className="p-2 pb-0">
         {/* Model */}
-        <div className="model-panel-section mb-4">
+        <div className="model-panel-section">
           <label
             id="model-label"
             className={cn(
-              'text-token-text-primary model-panel-label mb-2 block font-medium',
-              // !provider && 'text-gray-500 dark:text-gray-400',
+              'text-token-text-primary model-panel-label mb-2 block !text-[13px] font-medium',
+              "font-['PingFangSC_PingFang_SC_sans-serif']",
             )}
             htmlFor="model"
           >

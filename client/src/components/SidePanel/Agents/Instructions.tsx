@@ -58,10 +58,15 @@ export default function Instructions() {
             trigger={
               <Menu.MenuButton
                 id="variables-menu-button"
+                style={{ borderRadius: 5, color: '#d2d2d2' }}
                 aria-label="Add variable to instructions"
-                className="flex h-7 items-center gap-1 rounded-md border border-border-medium bg-surface-secondary px-2 py-0 text-sm text-text-primary transition-colors duration-200 hover:bg-surface-tertiary"
+                className="flex h-7 items-center gap-1 border border-border-medium !bg-black bg-surface-secondary px-2 py-0 text-sm text-text-primary transition-colors duration-200 hover:bg-surface-tertiary"
               >
-                <PlusCircle className="mr-1 h-3 w-3 text-text-secondary" aria-hidden={true} />
+                <PlusCircle
+                  style={{ borderRadius: 5, color: '#d2d2d2' }}
+                  className="mr-1 h-3 w-3 text-text-secondary"
+                  aria-hidden={true}
+                />
                 {localize('com_ui_variables')}
               </Menu.MenuButton>
             }
@@ -70,7 +75,7 @@ export default function Instructions() {
               onClick: () => handleAddVariable(option.label, option.value),
             }))}
             menuId={menuId}
-            className="z-30"
+            className="z-30 !rounded-[5px]"
           />
         </div>
       </div>
@@ -80,9 +85,10 @@ export default function Instructions() {
         render={({ field, fieldState: { error } }) => (
           <>
             <textarea
+              style={{ borderRadius: 5 }}
               {...field}
               value={field.value ?? ''}
-              className={cn(inputClass, 'min-h-[100px] resize-y')}
+              className={cn(inputClass, 'min-h-[100px] resize-y bg-white')}
               id="instructions"
               placeholder={localize('com_agents_instructions_placeholder')}
               rows={3}

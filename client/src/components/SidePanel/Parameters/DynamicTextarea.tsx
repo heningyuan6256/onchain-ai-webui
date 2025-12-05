@@ -6,6 +6,7 @@ import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
 import { ESide } from '~/common';
 import { cn } from '~/utils';
+import './custom.css';
 
 function DynamicTextarea({
   label = '',
@@ -54,10 +55,7 @@ function DynamicTextarea({
       <HoverCard openDelay={300}>
         <HoverCardTrigger className="grid w-full items-center gap-2">
           <div className="flex w-full justify-between">
-            <Label
-              htmlFor={`${settingKey}-dynamic-textarea`}
-              className="text-left text-sm font-medium"
-            >
+            <Label htmlFor={`${settingKey}-dynamic-textarea`} className="my-label">
               {labelCode ? (localize(label as TranslationKeys) ?? label) : label || settingKey}{' '}
               {showDefault && (
                 <small className="opacity-40">
@@ -87,7 +85,7 @@ function DynamicTextarea({
             )}
           />
         </HoverCardTrigger>
-        {description && (
+        {/* {description && (
           <OptionHover
             description={
               descriptionCode
@@ -96,7 +94,7 @@ function DynamicTextarea({
             }
             side={ESide.Left}
           />
-        )}
+        )} */}
       </HoverCard>
     </div>
   );

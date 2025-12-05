@@ -6,7 +6,7 @@ import { TranslationKeys, useLocalize, useDebouncedInput, useParameterEffects } 
 import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
 import { ESide } from '~/common';
-
+import './custom.css';
 function DynamicCheckbox({
   label = '',
   settingKey,
@@ -58,10 +58,7 @@ function DynamicCheckbox({
       <HoverCard openDelay={300}>
         <HoverCardTrigger className="grid w-full items-center">
           <div className="flex justify-start gap-4">
-            <Label
-              htmlFor={`${settingKey}-dynamic-checkbox`}
-              className="text-left text-sm font-medium"
-            >
+            <Label htmlFor={`${settingKey}-dynamic-checkbox`} className="my-label">
               {labelCode ? (localize(label as TranslationKeys) ?? label) : label || settingKey}{' '}
               {showDefault && (
                 <small className="opacity-40">
@@ -80,7 +77,7 @@ function DynamicCheckbox({
             />
           </div>
         </HoverCardTrigger>
-        {description && (
+        {/* {description && (
           <OptionHover
             description={
               descriptionCode
@@ -89,7 +86,7 @@ function DynamicCheckbox({
             }
             side={ESide.Left}
           />
-        )}
+        )} */}
       </HoverCard>
     </div>
   );
