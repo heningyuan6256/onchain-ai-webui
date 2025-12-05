@@ -27,12 +27,12 @@ export default function ChatRoute() {
 
   return (
     <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-      <div style={{ width: '50%', padding: '18px 24px' }}>
+      <div style={{ width: '35%', padding: '18px 24px' }}>
         <div style={{ flex: 1, overflow: 'auto', height: '100%' }}>
           <AgentPanelSwitch></AgentPanelSwitch>
         </div>
       </div>
-      <div style={{ width: '50%' }}>
+      <div style={{ width: '65%' }}>
         <AgentChat />
       </div>
     </div>
