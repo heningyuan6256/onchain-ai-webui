@@ -12,8 +12,38 @@ import { getThemeFromEnv } from './utils/getThemeFromEnv';
 import { initializeFontSize } from '~/store/fontSize';
 import { LiveAnnouncer } from '~/a11y';
 import { router } from './routes';
-
 const App = () => {
+
+  //监听调试url的search参数改变
+  /**
+   * 
+    let lastSearch = window.location.search;
+    const observer = () => {
+      if (window.location.search !== lastSearch) {
+        console.groupCollapsed(
+          `%c search参数变了: ${lastSearch} → ${window.location.search}`,
+          'color: #d97706; font-weight: bold;'
+        );
+        console.trace('Call stack:');
+        console.groupEnd();
+        lastSearch = window.location.search;
+      }
+    };
+    window.addEventListener('popstate', observer);
+    const originalPush = window.history.pushState;
+    const originalReplace = window.history.replaceState;
+    window.history.pushState = function (...args) {
+      originalPush.apply(this, args);
+      observer();
+    };
+    window.history.replaceState = function (...args) {
+      originalReplace.apply(this, args);
+      observer();
+    };
+   */
+
+
+
   const { setError } = useApiErrorBoundary();
 
   const queryClient = new QueryClient({

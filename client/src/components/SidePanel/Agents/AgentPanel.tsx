@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react';
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef, useState, useEffect } from 'react';
 import { Button, useToastContext } from '@librechat/client';
 import { useWatch, useForm, FormProvider } from 'react-hook-form';
 import { useGetModelsQuery } from 'librechat-data-provider/react-query';
@@ -29,8 +29,12 @@ import AgentConfig from './AgentConfig';
 import AgentSelect from './AgentSelect';
 import AgentFooter from './AgentFooter';
 import ModelPanel from './ModelPanel';
+import request from '~/request/request';
+import { toast } from 'sonner';
+import { useSearchParams } from 'react-router-dom';
 
 export default function AgentPanel() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const localize = useLocalize();
   const { user } = useAuthContext();
   const { showToast } = useToastContext();
@@ -45,9 +49,34 @@ export default function AgentPanel() {
 
   const { onSelect: onSelectAgent } = useSelectAgent();
 
-  const modelsQuery = useGetModelsQuery();
-  const basicAgentQuery = useGetAgentByIdQuery(current_agent_id);
+  const [models, setModels] = useState<string[]>([]);
+  const [modelsLoading, setModelsLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        setModelsLoading(true);
+        const res = await request('/model/system/model/list_model?pageNum=1&pageSize=10000', {
+          method: 'GET',
+        });
+        if (res?.code === 200) {
+          setModels(res.rows || []);
+        } else {
+          toast.error(res?.message ?? '获取模型列表失败');
+          setModels([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch models:', error);
+        toast.error('网络错误或服务不可用');
+        setModels([]);
+      } finally {
+        setModelsLoading(false);
+      }
+    };
+
+    fetchModels();
+  }, []);
+  const basicAgentQuery = useGetAgentByIdQuery(current_agent_id);
   const { hasPermission, isLoading: permissionsLoading } = useResourcePermissions(
     ResourceType.AGENT,
     basicAgentQuery.data?._id || '',
@@ -61,14 +90,94 @@ export default function AgentPanel() {
 
   const agentQuery = canEdit && expandedAgentQuery.data ? expandedAgentQuery : basicAgentQuery;
 
-  const models = useMemo(() => modelsQuery.data ?? {}, [modelsQuery.data]);
+  // const models = useMemo(() => modelsQuery.data ?? {}, [modelsQuery.data]);
   const methods = useForm<AgentForm>({
     defaultValues: getDefaultAgentFormValues(),
     mode: 'onChange',
   });
-
   const { control, handleSubmit, reset } = methods;
-  const agent_id = useWatch({ control, name: 'id' });
+  const [oriData, setOriData] = useState<any>(undefined);
+  const urlParams = new URLSearchParams(window.location.search);
+  const [groups, setGroups] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const userId = localStorage.getItem('id');
+
+        const res = await request(
+          `/v1/mcp/system/mcp/list_mcp?pageNum=1&pageSize=10000&other_id=${userId}`,
+          { method: 'get' },
+        );
+
+        if (res?.code === 200 && Array.isArray(res.rows)) {
+          setGroups(res.rows);
+        } else {
+          toast.error(res?.message ?? '请求知识库数据失败');
+          setGroups([]);
+        }
+      } catch (error) {
+        console.error(error);
+        setGroups([]);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // const agent_id = useWatch({ control, name: 'id' });
+  const [agent_id, setAgent_id] = useState(undefined);
+  const provider = useWatch({ control, name: 'provider' });
+  const model = useWatch({ control, name: 'model' });
+  const queryAgent = async (agent_id) => {
+    const res = await request('/v1/agent/system/agent/query_agent', {
+      method: 'get',
+      params: {
+        agent_id: agent_id,
+      },
+    });
+    if (res.code !== 200) {
+      showToast({
+        message: res.message,
+        status: 'error',
+      });
+    }
+    setOriData({
+      name: res.rows.agent_name,
+      id: res.rows.agent_id,
+      description: res.rows.description,
+      instructions: res.rows.prompt,
+      category: res.rows.tag1,
+      provider: res.rows.model_conf?.provider,
+      model_parameters: res.rows.model_conf?.model_parameters,
+      status: res.rows.status,
+      tools_conf: res.rows.tools_conf,
+      rag_conf: res.rows.rag_conf,
+      agent_img: res.rows.agent_img,
+    });
+    const fromdata = {
+      name: res.rows.agent_name,
+      id: res.rows.agent_id,
+      description: res.rows.description,
+      instructions: res.rows.prompt,
+      category: res.rows.tag1,
+      provider: res.rows.model_conf?.provider,
+      model_parameters: res.rows.model_conf?.model_parameters,
+      model: res.rows.model_conf?.model_name,
+      rag_conf: res.rows.rag_conf,
+      tools_conf: res.rows.tools_conf.map((item) => item.name),
+    };
+    reset(fromdata);
+    console.log('回显的数据', fromdata);
+  };
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramsagent_id = urlParams.get('agent_id');
+    if (!paramsagent_id) {
+      return;
+    }
+    setAgent_id(paramsagent_id);
+    queryAgent(paramsagent_id);
+  }, [window.location]);
   const previousVersionRef = useRef<number | undefined>();
 
   const allowedProviders = useMemo(
@@ -146,8 +255,9 @@ export default function AgentPanel() {
   });
 
   const onSubmit = useCallback(
-    (data: AgentForm) => {
+    async (data) => {
       const tools = data.tools ?? [];
+      console.log('看看data', data);
 
       if (data.execute_code === true) {
         tools.push(Tools.execute_code);
@@ -173,36 +283,60 @@ export default function AgentPanel() {
         recursion_limit,
         category,
         support_contact,
+        tools_conf,
+        rag_conf,
       } = data;
 
       const model = _model ?? '';
-      const provider =
-        (typeof _provider === 'string' ? _provider : (_provider as StringOption).value) ?? '';
-
+      const modelobject = models.find((item) => item.model_name === model);
+      const alltools = groups.flatMap((item) => item.tools);
+      const globalObjectTools_conf = alltools.filter((item) => {
+        return tools_conf.find((o) => {
+          return o === item.name;
+        });
+      });
       if (agent_id) {
-        update.mutate({
-          agent_id,
+        const res = await request('/v1/agent/system/agent/edit_agent', {
+          method: 'post',
+          params: {
+            agent_id: agent_id,
+          },
+
           data: {
-            name,
-            artifacts,
-            description,
-            instructions,
-            model,
-            tools,
-            provider,
-            model_parameters,
-            agent_ids,
-            end_after_tools,
-            hide_sequential_outputs,
-            recursion_limit,
-            category,
-            support_contact,
+            ...oriData,
+            agent_name: name,
+            description: description,
+            tools_conf: globalObjectTools_conf,
+            rag_conf: rag_conf,
+            prompt: instructions,
+            status: '1',
+            agent_img: '',
+            tag1: category,
+            model_conf: {
+              ...model_parameters,
+              model_name: modelobject?.model_name,
+              base_url: modelobject?.url,
+              api_key: modelobject?.apikey,
+            },
+            user_id: localStorage.getItem('id')!,
           },
         });
+        if (res.code && res.code === 200) {
+          queryAgent(agent_id);
+          showToast({
+            message: res.message,
+            status: 'success',
+          });
+        } else {
+          showToast({
+            message: res.message,
+            status: 'error',
+          });
+        }
         return;
       }
 
-      if (!provider || !model) {
+      if (!model) {
         return showToast({
           message: localize('com_agents_missing_provider_model'),
           status: 'error',
@@ -215,7 +349,24 @@ export default function AgentPanel() {
         });
       }
 
-      create.mutate({
+      // create.mutate({
+      //   name,
+      //   artifacts,
+      //   description,
+      //   instructions,
+      //   model,
+      //   tools,
+      //   provider,
+      //   model_parameters,
+      //   agent_ids,
+      //   end_after_tools,
+      //   hide_sequential_outputs,
+      //   recursion_limit,
+      //   category,
+      //   support_contact,
+      // });
+      console.log('=============', {
+        //控制创建
         name,
         artifacts,
         description,
@@ -231,6 +382,43 @@ export default function AgentPanel() {
         category,
         support_contact,
       });
+
+      const res = await request('/v1/agent/system/agent/add_agent', {
+        method: 'post',
+        data: {
+          //控制创建
+          agent_name: name,
+          description: description,
+          tools_conf: globalObjectTools_conf,
+          rag_conf: rag_conf,
+          prompt: instructions,
+          status: '1',
+          agent_img: '',
+          tag1: category,
+          model_conf: {
+            ...model_parameters,
+            model_name: modelobject?.model_name,
+            base_url: modelobject?.url,
+            api_key: modelobject?.apikey,
+          },
+
+          user_id: localStorage.getItem('id')!,
+        },
+      });
+      if (res.code === 200) {
+        setAgent_id(res.data.agent_id);
+        queryAgent(res.data.agent_id);
+        setSearchParams({ agent_id: res.data.agent_id }, { replace: true });
+        showToast({
+          message: res.message,
+          status: 'success',
+        });
+      } else {
+        showToast({
+          message: res.message,
+          status: 'error',
+        });
+      }
     },
     [agent_id, create, update, showToast, localize],
   );
@@ -260,58 +448,6 @@ export default function AgentPanel() {
         className="scrollbar-gutter-stable h-auto w-full flex-shrink-0 overflow-x-hidden"
         aria-label="Agent configuration form"
       >
-        <div className="mx-1 mt-2 flex w-full flex-wrap gap-2">
-          <div className="w-full">
-            <AgentSelect
-              createMutation={create}
-              agentQuery={agentQuery}
-              setCurrentAgentId={setCurrentAgentId}
-              // The following is required to force re-render the component when the form's agent ID changes
-              // Also maintains ComboBox Focus for Accessibility
-              selectedAgentId={agentQuery.isInitialLoading ? null : (current_agent_id ?? null)}
-            />
-          </div>
-          {/* Create + Select Button */}
-          {agent_id && (
-            <div className="flex w-full gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full justify-center"
-                onClick={() => {
-                  reset(getDefaultAgentFormValues());
-                  setCurrentAgentId(undefined);
-                }}
-                disabled={agentQuery.isInitialLoading}
-                aria-label={
-                  localize('com_ui_create') +
-                  ' ' +
-                  localize('com_ui_new') +
-                  ' ' +
-                  localize('com_ui_agent')
-                }
-              >
-                <Plus className="mr-1 h-4 w-4" />
-                {localize('com_ui_create') +
-                  ' ' +
-                  localize('com_ui_new') +
-                  ' ' +
-                  localize('com_ui_agent')}
-              </Button>
-              <Button
-                variant="submit"
-                disabled={isEphemeralAgent(agent_id) || agentQuery.isInitialLoading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSelectAgent();
-                }}
-                aria-label={localize('com_ui_select') + ' ' + localize('com_ui_agent')}
-              >
-                {localize('com_ui_select')}
-              </Button>
-            </div>
-          )}
-        </div>
         {agentQuery.isInitialLoading && <AgentPanelSkeleton />}
         {!canEditAgent && !agentQuery.isInitialLoading && (
           <div className="flex h-[30vh] w-full items-center justify-center">
@@ -323,15 +459,15 @@ export default function AgentPanel() {
             </div>
           </div>
         )}
+
         {canEditAgent && !agentQuery.isInitialLoading && activePanel === Panel.model && (
           <ModelPanel models={models} providers={providers} setActivePanel={setActivePanel} />
         )}
+        {/*智能体主表单  */}
         {canEditAgent && !agentQuery.isInitialLoading && activePanel === Panel.builder && (
-          <AgentConfig createMutation={create} />
+          <AgentConfig groups={groups} createMutation={create} />
         )}
-        {canEditAgent && !agentQuery.isInitialLoading && activePanel === Panel.advanced && (
-          <AdvancedPanel />
-        )}
+
         {canEditAgent && !agentQuery.isInitialLoading && (
           <AgentFooter
             createMutation={create}

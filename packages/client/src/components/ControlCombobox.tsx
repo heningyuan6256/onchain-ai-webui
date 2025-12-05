@@ -138,17 +138,7 @@ function ControlCombobox({
         )}
         style={{ width: isCollapsed ? '300px' : (buttonWidth ?? '300px') }}
       >
-        <div className="py-1.5">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-primary" />
-            <Ariakit.Combobox
-              store={combobox}
-              autoSelect
-              placeholder={searchPlaceholder}
-              className="w-full rounded-md bg-surface-secondary py-2 pl-9 pr-3 text-sm text-text-primary focus:outline-none"
-            />
-          </div>
-        </div>
+        {/* 这里吧自带的下拉框的搜索栏删掉了 */}
         <div className="max-h-[300px] overflow-auto">
           <Ariakit.ComboboxList store={combobox}>
             <SelectRenderer store={select} items={matches} itemSize={ROW_HEIGHT} overscan={5}>

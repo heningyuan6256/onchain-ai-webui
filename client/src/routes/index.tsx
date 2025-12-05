@@ -30,11 +30,15 @@ import AppList from '~/pages/applist';
 import AppChat from '~/pages/appChat';
 import Ocr from '~/pages/ocrapp';
 import { Toaster } from 'sonner';
+import AgentConfig from '~/pages/agent/agentConfig';
+import AgentList from '~/pages/agent/agentlist';
+import AgentChat from '~/pages/agent/agentChat';
+
 const AuthLayout = () => (
   <AuthContextProvider>
     <Outlet />
     <ApiErrorWatcher />
-     <Toaster position="top-right"></Toaster>
+    <Toaster position="top-right"></Toaster>
   </AuthContextProvider>
 );
 
@@ -156,6 +160,9 @@ export const router = createBrowserRouter(
             { path: 'application', element: <AppList /> },
             { path: 'application/:id', element: <AppChat /> },
             { path: 'ocr', element: <Ocr /> },
+            { path: 'agentconfig/:conversationId?', element: <AgentConfig /> },
+            { path: 'agentlist', element: <AgentList /> },
+            { path: 'agentchat/:conversationId', element: <AgentChat /> },
             {
               path: 'agents',
               element: (

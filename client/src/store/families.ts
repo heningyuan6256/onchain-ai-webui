@@ -117,11 +117,15 @@ const conversationByIndex = atomFamily<TConversation | null, string | number>({
         if (shouldUpdateParams) {
           const newParams = createChatSearchParams(newValue);
           const searchParams = createSearchParams(newParams);
-          const searchParams1 = new URLSearchParams(location.search);
           const searchParamsString = searchParams?.toString();
-          const user = searchParams1.get('user');
-          const url = `${window.location.pathname}?${searchParams.toString()}&user=${user}`;
-          window.history.pushState({}, '', url);
+          const finalParams = new URLSearchParams(window.location.search);
+          for (const [key, value] of Object.entries(newParams)) {
+            if (value != null) {
+              finalParams.set(key, String(value));
+            }
+          }
+          const url = `${window.location.pathname}?${finalParams.toString()}`;
+          window.history.pushState({}, '', url); //这里偷偷吞参数
         }
       });
     },
@@ -305,10 +309,10 @@ const conversationByKeySelector = selectorFamily({
   key: 'conversationByKeySelector',
   get:
     (index: string | number) =>
-      ({ get }) => {
-        const conversation = get(conversationByIndex(index));
-        return conversation;
-      },
+    ({ get }) => {
+      const conversation = get(conversationByIndex(index));
+      return conversation;
+    },
 });
 
 function useClearSubmissionState() {
@@ -367,24 +371,24 @@ const updateConversationSelector = selectorFamily({
   get: () => () => null as Partial<TConversation> | null,
   set:
     (conversationId: string) =>
-      ({ set, get }, newPartialConversation) => {
-        if (newPartialConversation instanceof DefaultValue) {
-          return;
-        }
+    ({ set, get }, newPartialConversation) => {
+      if (newPartialConversation instanceof DefaultValue) {
+        return;
+      }
 
-        const keys = get(conversationKeysAtom);
-        keys.forEach((key) => {
-          set(conversationByIndex(key), (prevConversation) => {
-            if (prevConversation && prevConversation.conversationId === conversationId) {
-              return {
-                ...prevConversation,
-                ...newPartialConversation,
-              };
-            }
-            return prevConversation;
-          });
+      const keys = get(conversationKeysAtom);
+      keys.forEach((key) => {
+        set(conversationByIndex(key), (prevConversation) => {
+          if (prevConversation && prevConversation.conversationId === conversationId) {
+            return {
+              ...prevConversation,
+              ...newPartialConversation,
+            };
+          }
+          return prevConversation;
         });
-      },
+      });
+    },
 });
 
 export default {

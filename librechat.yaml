@@ -1,0 +1,95 @@
+version: '1.2.8'
+cache: true
+interface:
+  agents: true
+endpoints:
+  custom:
+    - name: 'one-api'
+      apiKey: 'sk-H3BfK9lLDpnu8lBj9540EcDbCdDa43FeB87623458e24C349'
+      baseURL: 'http://192.168.0.61:3050/v1'
+      models:
+        default:
+          - 'qwen3-32b'
+          - 'qwen2.5-3b'
+        fetch: true
+      titleConvo: true
+      titlePrompt: |
+        务必使用中文分析这段对话提供一个标题(九个字以内，不含标点符号或引号)
+        {convo}
+      titleModel: 'qwen2.5-3b'
+    - name: 'openai-agent'
+      apiKey: 'sk-1234567890abcdef1234567890abcdef'
+      baseURL: 'http://192.168.0.178:8000/v1'
+      models:
+        default:
+          - 'gpt-3.5-turbo'
+        fetch: true
+      titleConvo: true
+      titlePrompt: |
+        务必使用中文分析这段对话提供一个标题(九个字以内，不含标点符号或引号)
+        {convo}
+      titleModel: 'gpt-3.5-turbo'
+    - name: 'n8n'
+      baseURL: 'http://192.168.0.61:3334/v1'
+      apiKey: 'onchain'
+      models:
+        default: ['placeholder-model-do-not-remove-me']
+        fetch: true
+      titleConvo: true
+      summary: true
+  agents:
+    capabilities:
+      - 'context' # Enables both agent file context and upload as text
+      - 'ocr' # Optionally enhances both with OCR
+      - 'tools'
+      - 'actions'
+    disableBuilder: false
+mcpServers:
+  OnChain PLM:
+    command: 'npx'
+    args:
+      - 'mcp-remote'
+      - 'http://192.168.0.61:3010/sse'
+      - '--header'
+      - 'Authorization:Bearer Gh3CX1R58yTAd9nHynHihonEdAhjVLEB'
+      - '--allow-http'
+    headers:
+      X-Auth-Token: '{{LIBRECHAT_USER_USERNAME}}'
+    startup: false
+    serverInstructions: true # Use server-provided instructions
+    requiresOAuth: true
+    timeout: 1900000
+    initTimeout: 1800000
+  知识库:
+    type: 'streamable-http'
+    url: 'http://192.168.0.61:3011/mcp'
+    serverInstructions: '用户提问的一切问题都调用这个工具，回答采用中文'
+    requiresOAuth: true
+    timeout: 1900000
+    initTimeout: 1800000
+    startup: false
+    headers:
+      X-Auth-Token: '{{LIBRECHAT_USER_USERNAME}}'
+  postgremcp:
+    type: 'sse'
+    url: 'http://192.168.0.61:3012/sse'
+    serverInstructions: true # Use server-provided instructions
+    requiresOAuth: true
+    timeout: 1900000
+    initTimeout: 1800000
+    startup: false
+  网页搜索:
+    type: 'streamable-http'
+    url: 'http://192.168.0.95:6082/mcp'
+    serverInstructions: true # Use server-provided instructions
+    requiresOAuth: true
+    timeout: 1900000
+    initTimeout: 1800000
+    startup: false
+ocr:
+  strategy: 'deepseek_ocr'
+  apiKey: ''
+  # baseURL: "http://localhost:3000/api/ocr"
+  # .env DEEPSEEK_OCR_URL 不需要下面的baseURL
+  baseURL: ''
+  mistralModel: 'mistral-ocr-latest'

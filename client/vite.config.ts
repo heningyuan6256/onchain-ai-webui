@@ -69,6 +69,20 @@ export default defineConfig(({ command }) => ({
           return path.replace(/^\/model/, '');
         },
       },
+      '/v1/mcp': {
+        target: 'http://192.168.0.61:6007',
+        changeOrigin: true,
+        rewrite(path) {
+          return path.replace(/^\/v1\/mcp/, '');
+        },
+      },
+      '/v1/agent': {
+        target: 'http://192.168.0.178:8000',
+        changeOrigin: true,
+        rewrite(path) {
+          return path.replace(/^\/v1\/agent/, '');
+        },
+      },
     },
   },
   // Set the directory where environment variables are loaded from and restrict prefixes

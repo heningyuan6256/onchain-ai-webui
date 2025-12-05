@@ -1,7 +1,13 @@
 import debounce from 'lodash/debounce';
 import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { Constants, EModelEndpoint, EToolResources, isAssistantsEndpoint, type TEndpointOption } from 'librechat-data-provider';
+import {
+  Constants,
+  EModelEndpoint,
+  EToolResources,
+  isAssistantsEndpoint,
+  type TEndpointOption,
+} from 'librechat-data-provider';
 import type { KeyboardEvent } from 'react';
 import {
   forceResize,
@@ -27,16 +33,18 @@ export default function useTextarea({
   submitButtonRef,
   setIsScrollable,
   disabled = false,
+  customPlaceholder,
 }: {
   textAreaRef: React.RefObject<HTMLTextAreaElement>;
   submitButtonRef: React.RefObject<HTMLButtonElement>;
   setIsScrollable: React.Dispatch<React.SetStateAction<boolean>>;
   disabled?: boolean;
+  customPlaceholder?: string;
 }) {
   const localize = useLocalize();
   const getSender = useGetSender();
   const isComposing = useRef(false);
-  
+
   const { index, conversation, isSubmitting, filesLoading, latestMessage, setFilesLoading } =
     useChatContext();
   const isAssistants = useMemo(
@@ -84,6 +92,9 @@ export default function useTextarea({
     }
 
     const getPlaceholderText = () => {
+      if (customPlaceholder !== undefined) {
+        return customPlaceholder;
+      }
       if (disabled) {
         return localize('com_endpoint_config_placeholder');
       }
@@ -148,7 +159,8 @@ export default function useTextarea({
   ]);
 
   const [ephemeralAgent, setEphemeralAgent] = useRecoilState(
-    ephemeralAgentByConvoId(conversation?.conversationId ?? Constants.NEW_CONVO))
+    ephemeralAgentByConvoId(conversation?.conversationId ?? Constants.NEW_CONVO),
+  );
 
   const handleKeyDown = useCallback(
     (e: KeyEvent) => {
@@ -228,7 +240,6 @@ export default function useTextarea({
       if (!clipboardData) {
         return;
       }
-
 
       setEphemeralAgent((prev) => ({
         ...prev,

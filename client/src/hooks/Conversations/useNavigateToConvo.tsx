@@ -58,12 +58,22 @@ const useNavigateToConvo = (index = 0) => {
       );
       logger.log('conversation', 'Fetched fresh conversation data', data);
       setConversation(data);
-      navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?user=${user}`, { state: { focusChat: true } });
+      if (conversation?.endpoint === 'openai-agent' && conversation?.model === 'gpt-3.5-turbo') {
+        navigate(`/agentchat/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString}}`, {
+          state: { focusChat: true },
+        });
+      } else {
+        navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString}`, {
+          state: { focusChat: true },
+        });
+      }
     } catch (error) {
       console.error('Error fetching conversation data on navigation', error);
       if (conversation) {
         setConversation(conversation as TConversation);
-        navigate(`/c/${conversationId}${location.search}?user=${user}`, { state: { focusChat: true } });
+        navigate(`/c/${conversationId}${location.search}?user=${user}`, {
+          state: { focusChat: true },
+        });
       }
     }
   };

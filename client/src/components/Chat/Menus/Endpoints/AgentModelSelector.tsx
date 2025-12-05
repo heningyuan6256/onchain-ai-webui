@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import type { ModelSelectorProps } from '~/common';
 import { ModelSelectorProvider, useModelSelectorContext } from './ModelSelectorContext';
-import { ModelSelectorChatProvider } from './ModelSelectorChatContext';
+import { ModelSelectorChatProvider, useModelSelectorChatContext } from './ModelSelectorChatContext';
 import {
   renderModelSpecs,
   renderEndpoints,
@@ -38,7 +38,23 @@ function ModelSelectorContent() {
     onOpenChange,
     keyDialogEndpoint,
   } = useModelSelectorContext();
-
+  const { model } = useModelSelectorChatContext();
+  //这里指定固定为智能体专用，然后看看智能体id怎么取的传
+  const { handleSelectModel } = useModelSelectorContext();
+  useEffect(() => {
+    if (model !== 'gpt-3.5-turbo') {
+      handleSelectModel(
+        {
+          hasModels: true,
+          icon: {},
+          label: 'openai-agent',
+          models: [{ isGlobal: false, name: 'gpt-3.5-turbo' }],
+          value: 'openai-agent',
+        },
+        'gpt-3.5-turbo',
+      );
+    }
+  }, [model, mappedEndpoints]);
   const selectedIcon = useMemo(
     () =>
       getSelectedIcon({
@@ -66,11 +82,6 @@ function ModelSelectorContent() {
       className="item-center flex h-[24px] w-full max-w-[70vw] items-center justify-center gap-2 rounded-[12px] bg-surface-secondary text-xs hover:bg-surface-tertiary"
       aria-label={localize('com_ui_select_model')}
     >
-      {/* {selectedIcon && React.isValidElement(selectedIcon) && (
-        <div className="flex flex-shrink-0 items-center justify-center overflow-hidden">
-          {selectedIcon}
-        </div>
-      )} */}
       <span className="flex flex-grow items-center truncate text-left">
         <span>
           <Icon className="mr-2 h-3 w-3" src={OpenAISVG}></Icon>
@@ -112,10 +123,9 @@ function ModelSelectorContent() {
         {/* </>
         )} */}
         {mappedEndpoints?.flatMap((endpoint, idx) => {
-          if (endpoint.value !== 'one-api') {
+          if (endpoint.value !== 'openai-agent') {
             return null;
-          } //解开可以显示所有暴露的模型
-
+          }
           return (endpoint?.models || []).map((item) => (
             <EndpointModelItem
               key={`${idx}-${item.name}`}

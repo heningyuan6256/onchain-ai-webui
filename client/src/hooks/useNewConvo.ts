@@ -202,17 +202,17 @@ const useNewConvo = (index = 0) => {
           if (appTitle) {
             document.title = 'OnChain AI Agent';
           }
-          const path = `/c/${Constants.NEW_CONVO}?user=${user}`;
-          navigate(path, { state: { focusChat: true } });
+          // const path = `/c/${Constants.NEW_CONVO}?user=${user}`;
+          // navigate(path, { state: { focusChat: true } });
           return;
         }
 
-        const path = `/c/${conversation.conversationId}?user=${user}`;
-        navigate(path, {
-          replace: true,
-          // 后续不知道有没有问题，解决刷新少url search
-          state: disableFocus ? {} : { focusChat: true },
-        });
+        // const path = `/c/${conversation.conversationId}?user=${user}`;
+        // navigate(path, {
+        //   replace: true,
+        //   // 后续不知道有没有问题，解决刷新少url search
+        //   state: disableFocus ? {} : { focusChat: true },
+        // });
       },
     [endpointsConfig, defaultPreset, assistantsListMap, modelsQuery.data],
   );
