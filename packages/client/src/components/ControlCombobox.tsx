@@ -95,7 +95,7 @@ function ControlCombobox({
   );
 
   return (
-    <div className={cn('flex w-full items-center justify-center px-1', containerClassName)}>
+    <div className={cn('flex w-full items-center justify-center', containerClassName)}>
       <Ariakit.SelectLabel store={select} className="sr-only">
         {ariaLabel}
       </Ariakit.SelectLabel>
@@ -110,7 +110,7 @@ function ControlCombobox({
           'border border-border-light',
           isCollapsed ? 'h-10 w-10' : 'l h-10 w-full px-3 py-2 text-sm',
           className,
-          "!font-['PingFangSC','PingFang SC',sans-serif] !text-[12px] !font-medium !text-[#333333]",
+          "!font-['PingFangSC','PingFang SC',sans-serif] !text-[12px] !text-[#333333]",
         )}
       >
         {SelectIcon != null && iconSide === 'left' && (

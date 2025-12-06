@@ -91,40 +91,38 @@ const AgentRagSelector: React.FC<{ className?: string }> = ({ className }) => {
       defaultValue={[]}
       render={({ field }) => {
         return (
-          <div style={{ padding: '0px 4px' }}>
-            <Select
-              getPopupContainer={(trigger) => trigger.parentElement!}
-              mode="multiple"
-              showSearch
-              placeholder={'选择知识库'}
-              suffixIcon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-chevron-down h-4 w-4 text-text-secondary"
-                  aria-hidden="true"
-                >
-                  <path d="m6 9 6 6 6-6"></path>
-                </svg>
-              }
-              value={field.value || []}
-              onChange={(value) => field.onChange(value)}
-              className={cn('agent-rag-select', className)}
-              aria-label={ariaLabel}
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-              }
-              options={options}
-            />
-          </div>
+          <Select
+            getPopupContainer={(trigger) => trigger.parentElement!}
+            mode="multiple"
+            showSearch
+            placeholder={'选择知识库'}
+            suffixIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-down h-4 w-4 text-text-secondary"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            }
+            value={field.value || []}
+            onChange={(value) => field.onChange(value)}
+            className={cn('agent-rag-select', className)}
+            aria-label={ariaLabel}
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            options={options}
+          />
         );
       }}
     />
