@@ -1,5 +1,13 @@
 import { Plus } from 'lucide-react';
-import React, { useMemo, useCallback, useRef, useState, useEffect } from 'react';
+import React, {
+  useMemo,
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import { Button, useToastContext } from '@librechat/client';
 import { useWatch, useForm, FormProvider } from 'react-hook-form';
 import { useGetModelsQuery } from 'librechat-data-provider/react-query';
@@ -32,8 +40,23 @@ import ModelPanel from './ModelPanel';
 import request from '~/request/request';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router-dom';
+export type AgentPanelRef = {
+  setValue: (name: string, vals: Partial<FormData>) => void;
+};
+const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
+  const methods = useForm<AgentForm>({
+    defaultValues: getDefaultAgentFormValues(),
+    mode: 'onChange',
+  });
+  const { control, handleSubmit, reset, setValue } = methods;
 
-export default function AgentPanel() {
+  useImperativeHandle(
+    ref,
+    () => ({
+      setValue: (name, vals) => setValue(name, vals),
+    }),
+    [setValue],
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const localize = useLocalize();
   const { user } = useAuthContext();
@@ -91,11 +114,7 @@ export default function AgentPanel() {
   const agentQuery = canEdit && expandedAgentQuery.data ? expandedAgentQuery : basicAgentQuery;
 
   // const models = useMemo(() => modelsQuery.data ?? {}, [modelsQuery.data]);
-  const methods = useForm<AgentForm>({
-    defaultValues: getDefaultAgentFormValues(),
-    mode: 'onChange',
-  });
-  const { control, handleSubmit, reset } = methods;
+
   const [oriData, setOriData] = useState<any>(undefined);
   const urlParams = new URLSearchParams(window.location.search);
   const [groups, setGroups] = useState<any[]>([]);
@@ -445,6 +464,7 @@ export default function AgentPanel() {
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(onSubmit)}
+        style={{ height: 'auto' }}
         className="scrollbar-gutter-stable h-auto w-full flex-shrink-0 overflow-x-hidden"
         aria-label="Agent configuration form"
       >
@@ -480,4 +500,5 @@ export default function AgentPanel() {
       </form>
     </FormProvider>
   );
-}
+});
+export default AgentPanel;

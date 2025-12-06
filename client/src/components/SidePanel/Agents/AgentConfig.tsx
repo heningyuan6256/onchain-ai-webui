@@ -51,6 +51,7 @@ export default function AgentConfig({ createMutation, groups }) {
   const methods = useFormContext<AgentForm>();
   const [showToolDialog, setShowToolDialog] = useState(false);
   const [showMCPToolDialog, setShowMCPToolDialog] = useState(false);
+
   const {
     actions,
     setAction,
@@ -116,7 +117,7 @@ export default function AgentConfig({ createMutation, groups }) {
   const { toolIds, mcpServerNames } = useVisibleTools(tools, regularTools, mcpServersMap);
 
   return (
-    <>
+    <div>
       <div className="h-auto px-4 pt-3 dark:bg-transparent">
         {/* Avatar & Name */}
         <div className="mb-4">
@@ -256,6 +257,6 @@ export default function AgentConfig({ createMutation, groups }) {
           endpoint={EModelEndpoint.agents}
         />
       )}
-    </>
+    </div>
   );
 }

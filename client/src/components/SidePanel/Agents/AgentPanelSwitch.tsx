@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { forwardRef, useEffect } from 'react';
 import { AgentPanelProvider, useAgentPanelContext } from '~/Providers/AgentPanelContext';
 import { Panel, isEphemeralAgent } from '~/common';
 import VersionPanel from './Version/VersionPanel';
@@ -6,16 +6,11 @@ import { useChatContext } from '~/Providers';
 import ActionsPanel from './ActionsPanel';
 import AgentPanel from './AgentPanel';
 import MCPPanel from './MCPPanel';
+import { AgentPanelRef } from './AgentPanel';
 
-export default function AgentPanelSwitch() {
-  return (
-    <AgentPanelProvider>
-      <AgentPanelSwitchWithContext />
-    </AgentPanelProvider>
-  );
-}
+export default forwardRef<AgentPanelRef, {}>((_, ref) => <AgentPanelSwitchWithContext ref={ref} />);
 
-function AgentPanelSwitchWithContext() {
+const AgentPanelSwitchWithContext = forwardRef<AgentPanelRef, {}>((_, ref) => {
   const { conversation } = useChatContext();
   const { activePanel, setCurrentAgentId } = useAgentPanelContext();
 
@@ -35,5 +30,5 @@ function AgentPanelSwitchWithContext() {
   if (activePanel === Panel.mcp) {
     return <MCPPanel />;
   }
-  return <AgentPanel />;
-}
+  return <AgentPanel ref={ref} />;
+});

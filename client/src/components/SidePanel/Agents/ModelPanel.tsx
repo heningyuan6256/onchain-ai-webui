@@ -285,7 +285,7 @@ export default function ModelPanel({
 
   return (
     <div className="mx-1 mb-1 flex h-full min-h-[50vh] w-full flex-col gap-2 text-sm">
-      <div className="model-panel relative flex flex-col items-center px-16 py-4 text-center">
+      {/* <div className="model-panel relative flex flex-col items-center px-16 py-4 text-center">
         <div className="absolute left-0 top-4">
           <button
             type="button"
@@ -302,7 +302,7 @@ export default function ModelPanel({
         </div>
 
         <div className="mb-2 mt-2 text-xl font-medium">{localize('com_ui_model_parameters')}</div>
-      </div>
+      </div> */}
       <div className="p-2 pb-0">
         {/* Model */}
         <div className="model-panel-section">
@@ -375,14 +375,14 @@ export default function ModelPanel({
         </div>
       )}
       {/* Reset Parameters Button */}
-      <button
+      {/* <button
         type="button"
         onClick={handleResetParameters}
         className="btn btn-neutral my-1 flex w-full items-center justify-center gap-2 px-4 py-2 text-sm"
       >
         <RotateCcw className="h-4 w-4" aria-hidden="true" />
         {localize('com_ui_reset_var', { 0: localize('com_ui_model_parameters') })}
-      </button>
+      </button> */}
     </div>
   );
 }
