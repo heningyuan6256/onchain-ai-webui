@@ -41,22 +41,11 @@ import request from '~/request/request';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router-dom';
 export type AgentPanelRef = {
+  submitForm: () => void;
+  newquerymodel: () => any;
   setValue: (name: string, vals: Partial<FormData>) => void;
 };
-const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
-  const methods = useForm<AgentForm>({
-    defaultValues: getDefaultAgentFormValues(),
-    mode: 'onChange',
-  });
-  const { control, handleSubmit, reset, setValue } = methods;
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      setValue: (name, vals) => setValue(name, vals),
-    }),
-    [setValue],
-  );
+const AgentPanel = forwardRef<AgentPanelRef, { updatemodel }>(({ updatemodel }, ref) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const localize = useLocalize();
   const { user } = useAuthContext();
@@ -69,7 +58,11 @@ const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
     setCurrentAgentId,
     agent_id: current_agent_id,
   } = useAgentPanelContext();
-
+  const methods = useForm<AgentForm>({
+    defaultValues: getDefaultAgentFormValues(),
+    mode: 'onChange',
+  });
+  const { control, handleSubmit, reset, setValue } = methods;
   const { onSelect: onSelectAgent } = useSelectAgent();
 
   const [models, setModels] = useState<string[]>([]);
@@ -118,7 +111,9 @@ const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
   const [oriData, setOriData] = useState<any>(undefined);
   const urlParams = new URLSearchParams(window.location.search);
   const [groups, setGroups] = useState<any[]>([]);
-
+  useEffect(() => {
+    updatemodel();
+  }, [oriData]);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -405,7 +400,6 @@ const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
       const res = await request('/v1/agent/system/agent/add_agent', {
         method: 'post',
         data: {
-          //控制创建
           agent_name: name,
           description: description,
           tools_conf: globalObjectTools_conf,
@@ -459,7 +453,19 @@ const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
 
     return canEdit;
   }, [agentQuery.data?.id, user?.role, canEdit]);
+  const newquerymodel = useMemo(() => {
+    return oriData;
+  }, [oriData]);
 
+  useImperativeHandle(
+    ref,
+    () => ({
+      submitForm: handleSubmit(onSubmit),
+      newquerymodel,
+      setValue: (name, vals) => setValue(name, vals),
+    }),
+    [handleSubmit, onSubmit, setValue, newquerymodel],
+  );
   return (
     <FormProvider {...methods}>
       <form
@@ -488,7 +494,7 @@ const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
           <AgentConfig groups={groups} createMutation={create} />
         )}
 
-        {canEditAgent && !agentQuery.isInitialLoading && (
+        {/* {canEditAgent && !agentQuery.isInitialLoading && (
           <AgentFooter
             createMutation={create}
             updateMutation={update}
@@ -496,7 +502,7 @@ const AgentPanel = forwardRef<AgentPanelRef, {}>((props, ref) => {
             setActivePanel={setActivePanel}
             setCurrentAgentId={setCurrentAgentId}
           />
-        )}
+        )} */}
       </form>
     </FormProvider>
   );

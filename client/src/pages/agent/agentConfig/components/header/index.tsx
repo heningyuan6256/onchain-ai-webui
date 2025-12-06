@@ -77,7 +77,7 @@ export default function Header() {
                   height={29}
                   preview={false}
                 />
-                <span style={{ color: '#ababab' }}>智能体广场&nbsp;/&nbsp;</span>
+                <span style={{ color: 'rgba(0, 0, 0, 0.30)' }}>智能体广场&nbsp;/&nbsp;</span>
                 <span style={{ color: '#333333' }}>创建智能体</span>
               </div>
             </div>

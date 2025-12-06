@@ -1,0 +1,24 @@
+.agent-action-btns {
+  display: flex;
+  gap: 8px;
+
+}
+.agent-action-btns .anticon {
+  font-size: 12px; 
+  font-weight: 400;
+  font-size: 12px;
+}
+.agent-action-btns .btn-save:hover {
+  color: black !important;
+  border-color: black !important;
+}
+.agent-action-btns .btn-save:active {
+  border-color: #ececec !important;
+}
+
+.agent-action-btns .ant-btn {
+  font-size: 12px;
+  font-family: PingFang SC, PingFangSC, sans-serif;
+  font-weight: 400;
+}
+

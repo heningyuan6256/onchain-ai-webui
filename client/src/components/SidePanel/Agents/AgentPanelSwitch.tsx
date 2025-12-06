@@ -8,9 +8,13 @@ import AgentPanel from './AgentPanel';
 import MCPPanel from './MCPPanel';
 import { AgentPanelRef } from './AgentPanel';
 
-export default forwardRef<AgentPanelRef, {}>((_, ref) => <AgentPanelSwitchWithContext ref={ref} />);
-
-const AgentPanelSwitchWithContext = forwardRef<AgentPanelRef, {}>((_, ref) => {
+export default forwardRef<AgentPanelRef, { updatemodel?: (data: any) => void }>(
+  ({ updatemodel }, ref) => <AgentPanelSwitchWithContext ref={ref} updatemodel={updatemodel} />,
+);
+const AgentPanelSwitchWithContext = forwardRef<
+  AgentPanelRef,
+  { updatemodel?: (data: any) => void }
+>(({ updatemodel }, ref) => {
   const { conversation } = useChatContext();
   const { activePanel, setCurrentAgentId } = useAgentPanelContext();
 
@@ -30,5 +34,5 @@ const AgentPanelSwitchWithContext = forwardRef<AgentPanelRef, {}>((_, ref) => {
   if (activePanel === Panel.mcp) {
     return <MCPPanel />;
   }
-  return <AgentPanel ref={ref} />;
+  return <AgentPanel ref={ref} updatemodel={updatemodel} />;
 });
