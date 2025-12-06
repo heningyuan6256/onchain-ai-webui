@@ -79,7 +79,7 @@ function AgentConfigContent() {
               marginBottom: 8,
             }}
           >
-            {agentData?.name}
+            {agentData?.name ?? '未保存的智能体'}
           </div>
           <div
             style={{
