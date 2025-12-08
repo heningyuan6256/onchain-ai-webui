@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Spinner } from '@librechat/client';
 import { useParams } from 'react-router-dom';
-import { Constants, EModelEndpoint } from 'librechat-data-provider';
+import { Constants, QueryKeys, EModelEndpoint } from 'librechat-data-provider';
 import { useGetModelsQuery } from 'librechat-data-provider/react-query';
 import type { TPreset } from 'librechat-data-provider';
 import { useGetConvoIdQuery, useGetStartupConfig, useGetEndpointsQuery } from '~/data-provider';
@@ -13,11 +13,12 @@ import useAuthRedirect from '../../../routes/useAuthRedirect';
 import temporaryStore from '~/store/temporary';
 import { useRecoilCallback } from 'recoil';
 import store from '~/store';
-
+import { clearMessagesCache } from '~/utils';
+import { useQueryClient } from '@tanstack/react-query';
 export default function AgentChat() {
   const { data: startupConfig } = useGetStartupConfig();
   const { isAuthenticated, user } = useAuthRedirect();
-
+  const queryClient = useQueryClient();
   const setIsTemporary = useRecoilCallback(
     ({ set }) =>
       (value: boolean) => {
@@ -43,7 +44,7 @@ export default function AgentChat() {
   });
   const endpointsQuery = useGetEndpointsQuery({ enabled: isAuthenticated });
   const assistantListMap = useAssistantListMap();
-
+  const { newConversation: newConvo } = useNewConvo(index);
   const isTemporaryChat = conversation && conversation.expiredAt ? true : false;
   useEffect(() => {
     if (conversationId === Constants.NEW_CONVO && conversation) {
@@ -64,7 +65,13 @@ export default function AgentChat() {
       setIsTemporary(isTemporaryChat);
     }
   }, [conversationId, isTemporaryChat, setIsTemporary, location]);
-
+  useEffect(() => {
+    return () => {
+      clearMessagesCache(queryClient, conversation?.conversationId);
+      queryClient.invalidateQueries([QueryKeys.messages]);
+      newConvo();
+    };
+  }, []);
   useEffect(() => {
     const shouldSetConvo =
       (startupConfig && !hasSetConversation.current && !modelsQuery.data?.initial) ?? false;
