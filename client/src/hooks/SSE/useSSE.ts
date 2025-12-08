@@ -108,7 +108,8 @@ export default function useSSE(
     const agent_id = urlParams.get('agent_id');
     //agentconfig或者agentchat做一个缺数据拦截
     if ((location.pathname.startsWith('/agent') && agent_id === null) || agent_id === undefined) {
-      toast.error('数据错误！');
+      // toast.error('数据错误！');
+      console.error('数据错误！', submission);
       return;
     }
 

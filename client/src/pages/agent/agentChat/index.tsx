@@ -45,7 +45,15 @@ export default function AgentChat() {
   const assistantListMap = useAssistantListMap();
 
   const isTemporaryChat = conversation && conversation.expiredAt ? true : false;
-
+  useEffect(() => {
+    if (conversationId === Constants.NEW_CONVO && conversation) {
+      newConversation({
+        modelsData: {},
+        template: undefined,
+      });
+      hasSetConversation.current = true;
+    }
+  }, [conversationId]);
   useEffect(() => {
     if (location.pathname.startsWith('/agentconfig/')) {
       setIsTemporary(false);

@@ -34,7 +34,7 @@ export default function AgentConfig() {
 
 function AgentConfigContent() {
   const ref = useRef<AgentPanelRef>(null);
-
+  const search = new URLSearchParams(location.search);
   const { conversationId = '' } = useParams();
   const navigate = useNavigate();
   const {
@@ -142,7 +142,9 @@ function AgentConfigContent() {
               ref?.current?.submitForm();
             }}
           >
-            保存
+            {search.get('agent_id') !== undefined && search.get('agent_id') !== null
+              ? '保存'
+              : '创建'}
           </Button>
           <Button
             color="default"

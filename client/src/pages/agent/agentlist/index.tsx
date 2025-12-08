@@ -97,6 +97,15 @@ export default function AppMarket() {
           <h1 className="text-[16px] font-bold text-[#333333]">智能体广场</h1>
           <div className="flex flex-1 items-center justify-center"></div>
           <div className="w-[64px]"></div>
+          <Button
+            onClick={() => {
+              const searchParams = new URLSearchParams(location.search);
+              const user = searchParams.get('user');
+              navigate(`/agentconfig/new?user=${user}`);
+            }}
+          >
+            创建智能体
+          </Button>
         </div>
 
         <div className="flex flex-1 overflow-hidden border-t border-t-[#e4e4e4]">
@@ -131,13 +140,23 @@ export default function AppMarket() {
                           const searchParams = new URLSearchParams(location.search);
                           const user = searchParams.get('user');
                           navigate(
-                            `/agentconfig?user=${user}&agent_id=${encodeURIComponent(app.agent_id)}`,
+                            `/agentconfig/new?user=${user}&agent_id=${encodeURIComponent(app.agent_id)}`,
                           );
                         }}
                       >
                         编辑
                       </Button>
-                      <Button onClick={() => {}}>使用</Button>
+                      <Button
+                        onClick={() => {
+                          const searchParams = new URLSearchParams(location.search);
+                          const user = searchParams.get('user');
+                          navigate(
+                            `/agentchat/new?user=${user}&agent_id=${encodeURIComponent(app.agent_id)}`,
+                          );
+                        }}
+                      >
+                        使用
+                      </Button>
                       {/* <Button
                         onClick={async () => {
                           const res = await request('/v1/agent/system/agent/delete_agent', {
