@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import type { ModelSelectorProps } from '~/common';
 import { ModelSelectorProvider, useModelSelectorContext } from './ModelSelectorContext';
-import { ModelSelectorChatProvider } from './ModelSelectorChatContext';
+import { ModelSelectorChatProvider, useModelSelectorChatContext } from './ModelSelectorChatContext';
 import {
   renderModelSpecs,
   renderEndpoints,
@@ -37,6 +37,7 @@ function ModelSelectorContent() {
     keyDialogOpen,
     onOpenChange,
     keyDialogEndpoint,
+    handleSelectModel,
   } = useModelSelectorContext();
 
   const selectedIcon = useMemo(
@@ -60,6 +61,16 @@ function ModelSelectorContent() {
       }),
     [localize, agentsMap, modelSpecs, selectedValues, mappedEndpoints],
   );
+  console.log('selectedValues准不准', selectedValues, mappedEndpoints);
+  useEffect(() => {
+    if (selectedValues.endpoint !== 'one-api') {
+      const normolEndpoints = mappedEndpoints.find((endpoint) => endpoint.value === 'one-api');
+
+      if (Array.isArray(normolEndpoints?.models) && normolEndpoints.models.length) {
+        handleSelectModel(normolEndpoints, normolEndpoints.models?.pop()?.name);
+      }
+    }
+  }, [selectedValues, mappedEndpoints]);
 
   const trigger = (
     <button
@@ -85,6 +96,8 @@ function ModelSelectorContent() {
       <Menu
         values={selectedValues}
         onValuesChange={(values: Record<string, any>) => {
+          console.log('触发测试');
+
           setSelectedValues({
             endpoint: values.endpoint || '',
             model: values.model || '',
