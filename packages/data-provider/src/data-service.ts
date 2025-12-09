@@ -571,6 +571,12 @@ export const uploadAgentAvatar = (data: m.AgentAvatarVariables): Promise<a.Agent
   );
 };
 
+export const customuploadAgentAvatar = (data: any): Promise<a.Agent> => {
+  return request.get(
+    `/api/files/images/avatar/presign-put?bucket=${data.bucket}&object=${data.object}&contentType=${data.contentType}&`,
+  );
+};
+
 export const getFileDownload = async (userId: string, file_id: string): Promise<AxiosResponse> => {
   return request.getResponse(`${endpoints.files()}/download/${userId}/${file_id}`, {
     responseType: 'blob',

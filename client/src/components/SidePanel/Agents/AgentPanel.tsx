@@ -169,6 +169,8 @@ const AgentPanel = forwardRef<AgentPanelRef, { updatemodel }>(({ updatemodel }, 
       agent_img: res.rows.agent_img,
     });
     const fromdata = {
+      agent_img: res.rows.agent_img,
+
       name: res.rows.agent_name,
       id: res.rows.agent_id,
       description: res.rows.description,
@@ -284,6 +286,7 @@ const AgentPanel = forwardRef<AgentPanelRef, { updatemodel }>(({ updatemodel }, 
       }
 
       const {
+        agent_img,
         name,
         artifacts,
         description,
@@ -318,13 +321,13 @@ const AgentPanel = forwardRef<AgentPanelRef, { updatemodel }>(({ updatemodel }, 
 
           data: {
             ...oriData,
+            agent_img: agent_img,
             agent_name: name,
             description: description,
             tools_conf: globalObjectTools_conf,
             rag_conf: rag_conf,
             prompt: instructions,
             status: '1',
-            agent_img: '',
             tag1: category,
             model_conf: {
               model_parameters: model_parameters,
@@ -400,13 +403,13 @@ const AgentPanel = forwardRef<AgentPanelRef, { updatemodel }>(({ updatemodel }, 
       const res = await request('/v1/agent/system/agent/add_agent', {
         method: 'post',
         data: {
+          agent_img: agent_img,
           agent_name: name,
           description: description,
           tools_conf: globalObjectTools_conf,
           rag_conf: rag_conf,
           prompt: instructions,
           status: '1',
-          agent_img: '',
           tag1: category,
           model_conf: {
             model_parameters: model_parameters,

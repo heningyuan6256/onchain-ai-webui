@@ -67,7 +67,7 @@ function ModelSelectorContent() {
       const normolEndpoints = mappedEndpoints.find((endpoint) => endpoint.value === 'one-api');
 
       if (Array.isArray(normolEndpoints?.models) && normolEndpoints.models.length) {
-        handleSelectModel(normolEndpoints, normolEndpoints.models?.pop()?.name);
+        handleSelectModel(normolEndpoints, normolEndpoints.models?.[0]?.name);
       }
     }
   }, [selectedValues, mappedEndpoints]);

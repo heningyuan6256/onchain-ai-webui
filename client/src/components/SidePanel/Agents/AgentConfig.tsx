@@ -22,19 +22,12 @@ import { Panel, isEphemeralAgent } from '~/common';
 import { useGetAgentFiles } from '~/data-provider';
 import { icons } from '~/hooks/Endpoint/Icons';
 import Instructions from './Instructions';
-import AgentAvatar from './AgentAvatar';
-import FileContext from './FileContext';
-import SearchForm from './Search/Form';
-import FileSearch from './FileSearch';
-import Artifacts from './Artifacts';
-import AgentTool from './AgentTool';
-import CodeForm from './Code/Form';
-import MCPTools from './MCPTools';
 import AgentRagSelector from './AgentRagSelector/AgentRagSelector';
 import AgentMcpSelector from './AgentMcpSelector';
 import { toast } from 'sonner';
 import request from '~/request/request';
 import './custom.css';
+import AvatarUploadField from './AvatarUploadField';
 const labelClass =
   "mb-2 text-token-text-primary block font-medium  text-[13px] text-[#333333] font-['PingFangSC','PingFang SC',sans-serif]";
 const inputClass = cn(
@@ -119,14 +112,8 @@ export default function AgentConfig({ createMutation, groups }) {
   return (
     <div>
       <div className="h-auto px-4 pt-3 dark:bg-transparent">
-        {/* Avatar & Name */}
         <div className="mb-4">
-          {/* 头像先不管，后面接了miniio再处理 */}
-          <AgentAvatar
-            agent_id={agent_id}
-            createMutation={createMutation}
-            avatar={agent?.['avatar'] ?? null}
-          />
+          <AvatarUploadField></AvatarUploadField>
           <label className={'my-label'} htmlFor="name">
             {localize('com_ui_name')}
             <span className="text-red-500">*</span>
