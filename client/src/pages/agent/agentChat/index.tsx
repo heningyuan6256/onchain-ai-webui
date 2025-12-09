@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Spinner } from '@librechat/client';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Constants, QueryKeys, EModelEndpoint } from 'librechat-data-provider';
 import { useGetModelsQuery } from 'librechat-data-provider/react-query';
 import type { TPreset } from 'librechat-data-provider';
@@ -15,7 +15,11 @@ import { useRecoilCallback } from 'recoil';
 import store from '~/store';
 import { clearMessagesCache } from '~/utils';
 import { useQueryClient } from '@tanstack/react-query';
+import request from '~/request/request';
+import { toast } from 'sonner';
+
 export default function AgentChat() {
+  const [firstConvId, setFirstConvId] = useState('');
   const { data: startupConfig } = useGetStartupConfig();
   const { isAuthenticated, user } = useAuthRedirect();
   const queryClient = useQueryClient();
@@ -31,9 +35,11 @@ export default function AgentChat() {
   const index = 0;
   const { conversationId = '' } = useParams();
   useIdChangeEffect(conversationId);
+  useEffect(() => {
+    setFirstConvId(conversationId);
+  }, []);
   const { hasSetConversation, conversation } = store.useCreateConversationAtom(index);
   const { newConversation } = useNewConvo();
-
   const modelsQuery = useGetModelsQuery({
     enabled: isAuthenticated,
     refetchOnMount: 'always',
@@ -46,15 +52,36 @@ export default function AgentChat() {
   const assistantListMap = useAssistantListMap();
   const { newConversation: newConvo } = useNewConvo(index);
   const isTemporaryChat = conversation && conversation.expiredAt ? true : false;
-  useEffect(() => {
-    if (conversationId === Constants.NEW_CONVO && conversation) {
-      newConversation({
-        modelsData: {},
-        template: undefined,
-      });
-      hasSetConversation.current = true;
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const agentId = searchParams.get('agent_id');
+  const saveconversationIdwithagentid = async (conversationId, agentid) => {
+    const res = await request('/v1/agent/system/agent/add_agent_chat', {
+      method: 'post',
+      params: { agent_id: agentid, chat_id: conversationId },
+    });
+    if (res.code !== 200) {
+      toast.error(res.message ?? '数据错误！');
     }
-  }, [conversationId]);
+  };
+  useEffect(() => {
+    if (
+      firstConvId === Constants.NEW_CONVO &&
+      conversation !== null &&
+      conversation?.conversationId !== Constants.NEW_CONVO
+    ) {
+      saveconversationIdwithagentid(conversation.conversationId, agentId);
+    }
+  }, [conversation, firstConvId]);
+  // useEffect(() => {
+  //   if (conversationId === Constants.NEW_CONVO && conversation) {
+  //     newConversation({
+  //       modelsData: {},
+  //       template: undefined,
+  //     });
+  //     hasSetConversation.current = true;
+  //   }
+  // }, [conversationId]);
   useEffect(() => {
     if (location.pathname.startsWith('/agentconfig/')) {
       setIsTemporary(false);

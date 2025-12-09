@@ -18,6 +18,7 @@ import {
 } from '~/utils';
 import { useApplyModelSpecEffects } from '~/hooks/Agents';
 import store from '~/store';
+import request from '~/request/request';
 
 const useNavigateToConvo = (index = 0) => {
   const navigate = useNavigate();
@@ -56,14 +57,20 @@ const useNavigateToConvo = (index = 0) => {
       const data = await queryClient.fetchQuery([QueryKeys.conversation, conversationId], () =>
         dataService.getConversationById(conversationId),
       );
+
       logger.log('conversation', 'Fetched fresh conversation data', data);
       setConversation(data);
       if (conversation?.endpoint === 'openai-agent' && conversation?.model === 'gpt-3.5-turbo') {
-        navigate(`/agentchat/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString}}`, {
+        const agentid = await request('/v1/agent/system/agent/query_agent_id', {
+          method: 'post',
+          params: { chat_id: conversationId },
+        });
+        searchParams.set('agent_id', agentid.rows?.agent_id);
+        navigate(`/agentchat/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`, {
           state: { focusChat: true },
         });
       } else {
-        navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString}`, {
+        navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`, {
           state: { focusChat: true },
         });
       }
