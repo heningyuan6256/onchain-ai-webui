@@ -1,4 +1,4 @@
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useEffect } from 'react';
 import { PlusCircle } from 'lucide-react';
 import * as Menu from '@ariakit/react/menu';
 import { DropdownPopup } from '@librechat/client';
@@ -8,6 +8,7 @@ import type { TSpecialVarLabel } from 'librechat-data-provider';
 import type { AgentForm } from '~/common';
 import { cn, defaultTextProps, removeFocusOutlines } from '~/utils';
 import { useLocalize } from '~/hooks';
+import request from '~/request/request';
 
 const inputClass = cn(
   defaultTextProps,
@@ -20,24 +21,45 @@ interface VariableOption {
   value: string;
 }
 
-const variableOptions: VariableOption[] = Object.keys(specialVariables).map((key) => ({
-  label: `com_ui_special_var_${key}` as TSpecialVarLabel,
-  value: `{{${key}}}`,
-}));
+// const variableOptions: any[] = Object.keys(specialVariables).map((key) => ({
+//   label: `com_ui_special_var_${key}` as TSpecialVarLabel,
+//   value: `{{${key}}}`,
+// }));
 
 export default function Instructions() {
   const menuId = useId();
   const localize = useLocalize();
   const methods = useFormContext<AgentForm>();
   const { control, setValue, getValues } = methods;
+  const [variableOptions, setVariableOptions] = useState<any[]>([]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const getprompts = async () => {
+    const promptRes: any[] = await request(
+      '/backend/system/prompt/list_prompt?pageNum=1&pageSize=10000',
+      {
+        method: 'get',
+      },
+    );
+    const variableOptions =
+      promptRes?.code === 200
+        ? promptRes?.rows?.map((item) => {
+            return {
+              label: item.prompt_content,
+              value: item.prompt_content,
+            };
+          })
+        : [];
+    setVariableOptions(variableOptions);
+  };
+  useEffect(() => {
+    getprompts();
+  }, []);
   const handleAddVariable = (label: TSpecialVarLabel, value: string) => {
     const currentInstructions = getValues('instructions') || '';
     const spacer = currentInstructions.length > 0 ? '\n' : '';
-    const prefix = localize(label);
-    setValue('instructions', currentInstructions + spacer + prefix + ': ' + value);
+    const prefix = label;
+    setValue('instructions', currentInstructions + spacer + prefix);
     setIsMenuOpen(false);
   };
 
