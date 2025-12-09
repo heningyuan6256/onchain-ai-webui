@@ -3,7 +3,7 @@ import { Avatar, Upload, message, Image } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Controller, useFormContext } from 'react-hook-form';
 import { dataService } from 'librechat-data-provider';
-
+import { nanoid } from 'nanoid';
 import { useLocalize } from '~/hooks';
 import request from '~/request/request';
 const MINIO_ENDPOINT = 'http://192.168.0.61:9002';
@@ -46,7 +46,10 @@ const AvatarUploadField = ({}: Props) => {
     }
     setLoading(true);
     try {
-      const presignUrl = await getPresignUrl(file.name, file.type);
+      const ext = file.name.split('.').pop();
+      const uniqueFileName = `${nanoid()}.${ext}`;
+
+      const presignUrl = await getPresignUrl(uniqueFileName, file.type);
 
       const res = await fetch(presignUrl, {
         method: 'PUT',
@@ -54,7 +57,7 @@ const AvatarUploadField = ({}: Props) => {
         body: file,
       });
 
-      const permanentUrl = `${MINIO_ENDPOINT}/${BUCKET_NAME}/avatar/${encodeURIComponent(file.name)}`;
+      const permanentUrl = `${MINIO_ENDPOINT}/${BUCKET_NAME}/avatar/${encodeURIComponent(uniqueFileName)}`;
       setValue('agent_img', permanentUrl);
       message.success(localize('com_ui_upload_success'));
     } catch (e) {
@@ -63,7 +66,6 @@ const AvatarUploadField = ({}: Props) => {
       setLoading(false);
     }
   };
-
   return (
     <Controller
       name="agent_img"

@@ -95,6 +95,7 @@
     "match-sorter": "^8.1.0",
     "mermaid": "^11.12.1",
     "micromark-extension-llm-math": "^3.1.0",
+    "nanoid": "^5.1.6",
     "next-themes": "^0.4.6",
     "qrcode.react": "^4.2.0",
     "rc-input-number": "^7.4.2",
