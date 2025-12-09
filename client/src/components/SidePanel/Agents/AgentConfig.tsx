@@ -32,9 +32,9 @@ const labelClass =
   "mb-2 text-token-text-primary block font-medium  text-[13px] text-[#333333] font-['PingFangSC','PingFang SC',sans-serif]";
 const inputClass = cn(
   defaultTextProps,
-  'flex w-full px-3 py-2 border-border-light bg-surface-secondary focus-visible:ring-2 focus-visible:ring-ring-primary',
+  'flex w-full px-3 py-2 border-border-light bg-surface-secondary ',
   removeFocusOutlines,
-  'h-[32px]',
+  'h-[32px] focus:border-[#0563B2]',
 );
 
 export default function AgentConfig({ createMutation, groups }) {

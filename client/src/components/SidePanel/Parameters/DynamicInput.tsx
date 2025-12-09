@@ -23,6 +23,7 @@ function DynamicInput({
   descriptionCode = false,
   placeholderCode = false,
   conversation,
+  type,
 }: DynamicSettingProps) {
   const localize = useLocalize();
   const { preset } = useChatContext();
@@ -74,13 +75,14 @@ function DynamicInput({
             </Label>
           </div>
           <Input
+            type={type === 'number' ? 'number' : 'text'}
             id={`${settingKey}-dynamic-input`}
             disabled={readonly}
             value={inputValue ?? defaultValue ?? ''}
             onChange={handleInputChange}
             placeholder={placeholderText}
             className={cn(
-              'flex !h-[32px] max-h-10 w-full resize-none !rounded-[5px] bg-surface-secondary bg-white px-3 py-2 !text-[12px]',
+              'flex !h-[32px] max-h-10 w-full resize-none !rounded-[5px] bg-surface-secondary bg-white px-3 py-2 !text-[12px] focus:border-[#0563B2]',
             )}
           />
         </HoverCardTrigger>
