@@ -157,7 +157,7 @@ export default function AppMarket() {
                       >
                         使用
                       </Button>
-                      {/* <Button
+                      <Button
                         onClick={async () => {
                           const res = await request('/v1/agent/system/agent/delete_agent', {
                             method: 'delete',
@@ -180,7 +180,7 @@ export default function AppMarket() {
                         }}
                       >
                         删除
-                      </Button> */}
+                      </Button>
                     </div>
                   </div>
                 </motion.div>

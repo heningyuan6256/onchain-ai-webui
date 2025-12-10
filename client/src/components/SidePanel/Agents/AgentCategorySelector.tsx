@@ -10,7 +10,7 @@ import {
 } from 'react-hook-form';
 import { TranslationKeys, useLocalize, useAgentCategories } from '~/hooks';
 import { cn } from '~/utils';
-
+import categories from '~/pages/agent/agentlistdev/category';
 /**
  * Custom hook to handle category synchronization
  */
@@ -36,7 +36,7 @@ const useCategorySync = (agent_id: string | null) => {
 const AgentCategorySelector: React.FC<{ className?: string }> = ({ className }) => {
   const localize = useLocalize();
   const formContext = useFormContext();
-  const { categories } = useAgentCategories();
+  // const { categories } = useAgentCategories();
 
   const agent_id = useWatch({
     name: 'id',
@@ -52,7 +52,7 @@ const AgentCategorySelector: React.FC<{ className?: string }> = ({ className }) 
   };
 
   const comboboxItems = categories.map((category) => ({
-    label: getCategoryLabel(category),
+    label: category.label,
     value: category.value,
   }));
 

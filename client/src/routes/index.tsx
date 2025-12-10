@@ -32,6 +32,7 @@ import Ocr from '~/pages/ocrapp';
 import { Toaster } from 'sonner';
 import AgentConfig from '~/pages/agent/agentConfig';
 import AgentList from '~/pages/agent/agentlist';
+import AgentListDev from '~/pages/agent/AgentListDev';
 import AgentChat from '~/pages/agent/agentChat';
 
 const AuthLayout = () => (
@@ -162,6 +163,7 @@ export const router = createBrowserRouter(
             { path: 'ocr', element: <Ocr /> },
             { path: 'agentconfig/:conversationId?', element: <AgentConfig /> },
             { path: 'agentlist', element: <AgentList /> },
+            { path: 'agentlistdev', element: <AgentListDev /> },
             { path: 'agentchat/:conversationId', element: <AgentChat /> },
             {
               path: 'agents',

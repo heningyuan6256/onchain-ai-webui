@@ -111,7 +111,7 @@ export default function NewChat({
                 },
               },
               {
-                name: '智能体广场',
+                name: '工业智能体',
                 url: 'agent',
                 icon: <Icon src={AgentSVG}></Icon>,
                 key: 'agent',
