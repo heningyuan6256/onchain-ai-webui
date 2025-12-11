@@ -35,7 +35,7 @@ const CategoryFilter = forwardRef<CategoryFilterRef, CategoryFilterProps>(({ onC
   useEffect(() => {
     updateSlider(activeId);
     onChange?.(activeId);
-  }, [activeId, onChange]);
+  }, [activeId]);
 
   useEffect(() => {
     const onResize = () => updateSlider(activeId);

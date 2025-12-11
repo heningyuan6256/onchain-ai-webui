@@ -44,7 +44,7 @@ export default function AppMarket() {
   const [publislist, setPublislist] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-  const updatePublislist = useCallback(() => {
+  const updatePublislist = () => {
     if (categoryFilterRef?.current) {
       setPublislist(
         publisOrilist?.filter((item) => {
@@ -52,7 +52,7 @@ export default function AppMarket() {
         }) || [],
       );
     }
-  }, []);
+  };
   const getList = async () => {
     const userId = localStorage.getItem('id');
     request(`/v1/agent/system/agent/list_agent`, {
