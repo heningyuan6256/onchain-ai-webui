@@ -1,23 +1,23 @@
-.agent-action-btns {
+.agent-action-btns2 {
   display: flex;
   gap: 6px !important;
 }
-.agent-action-btns .anticon {
+.agent-action-btns2 .anticon {
   font-size: 11px !important; 
   font-weight: 400  !important; 
 }
 
-.agent-action-btns .btn-save:hover {
+.agent-action-btns2 .btn-save:hover {
   color: black !important;
   border-color: black !important;
 }
-.agent-action-btns .btn-save:active {
+.agent-action-btns2 .btn-save:active {
   border-color: #ececec !important;
 }
 .ant-btn{
   gap:4px !important
 }
-.agent-action-btns .ant-btn {
+.agent-action-btns2 .ant-btn {
 padding-inline:12px;
   font-size: 10px;
   font-family: PingFang SC, PingFangSC, sans-serif;

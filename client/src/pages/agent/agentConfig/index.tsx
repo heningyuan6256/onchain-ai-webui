@@ -183,7 +183,7 @@ function AgentConfigContent() {
             <span>{agentData?.create_user_name}</span>
           </div>
         </div>
-        <div className="agent-action-btns">
+        <div className="agent-action-btns2">
           {search.get('agent_id') !== undefined && search.get('agent_id') !== null && (
             <Button
               size="small"
