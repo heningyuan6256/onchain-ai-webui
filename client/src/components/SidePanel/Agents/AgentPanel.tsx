@@ -167,6 +167,9 @@ const AgentPanel = forwardRef<AgentPanelRef, { updatemodel }>(({ updatemodel }, 
       tools_conf: res.rows.tools_conf,
       rag_conf: res.rows.rag_conf,
       agent_img: res.rows.agent_img,
+      update_time: res.rows.update_time,
+      create_user_name: res.rows.create_user_name,
+      is_shared: res.rows.is_shared,
     });
     const fromdata = {
       agent_img: res.rows.agent_img,
@@ -466,6 +469,7 @@ const AgentPanel = forwardRef<AgentPanelRef, { updatemodel }>(({ updatemodel }, 
       submitForm: handleSubmit(onSubmit),
       newquerymodel,
       setValue: (name, vals) => setValue(name, vals),
+      queryAgent,
     }),
     [handleSubmit, onSubmit, setValue, newquerymodel],
   );

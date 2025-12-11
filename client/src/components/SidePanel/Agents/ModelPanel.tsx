@@ -17,7 +17,7 @@ import { useGetEndpointsQuery } from '~/data-provider';
 import { getEndpointField, cn } from '~/utils';
 import { useLocalize } from '~/hooks';
 import { Panel } from '~/common';
-
+import './custom.css';
 export default function ModelPanel({
   setActivePanel,
   models,
@@ -306,14 +306,7 @@ export default function ModelPanel({
       <div className="p-2 pb-0">
         {/* Model */}
         <div className="model-panel-section">
-          <label
-            id="model-label"
-            className={cn(
-              'text-token-text-primary model-panel-label mb-2 block !text-[13px] font-medium',
-              "font-['PingFangSC_PingFang_SC_sans-serif']",
-            )}
-            htmlFor="model"
-          >
+          <label id="model-label" className={cn('my-label')} htmlFor="model">
             {localize('com_ui_model')} <span className="text-red-500">*</span>
           </label>
           <Controller

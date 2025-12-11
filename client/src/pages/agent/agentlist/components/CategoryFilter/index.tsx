@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import categories from '~/pages/agent/agentlistdev/category';
+import categories from '~/pages/agent/agentlist/category';
 
 export interface Category {
   value: string | number;

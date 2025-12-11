@@ -10,7 +10,7 @@ import {
 } from 'react-hook-form';
 import { TranslationKeys, useLocalize, useAgentCategories } from '~/hooks';
 import { cn } from '~/utils';
-import categories from '~/pages/agent/agentlistdev/category';
+import categories from '~/pages/agent/agentlist/category';
 /**
  * Custom hook to handle category synchronization
  */

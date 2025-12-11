@@ -64,7 +64,7 @@ export default function Header() {
                 style={{
                   fontFamily: 'PingFangSC, PingFang SC',
                   fontWeight: 600,
-                  fontSize: 16,
+                  fontSize: 13,
                   lineHeight: '18px',
                   display: 'flex',
                   alignItems: 'center',

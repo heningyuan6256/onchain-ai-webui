@@ -9,6 +9,7 @@ import type { AgentForm } from '~/common';
 import { cn, defaultTextProps, removeFocusOutlines } from '~/utils';
 import { useLocalize } from '~/hooks';
 import request from '~/request/request';
+import './custom.css';
 
 const inputClass = cn(
   defaultTextProps,
@@ -64,9 +65,9 @@ export default function Instructions() {
   };
 
   return (
-    <div className="mb-4">
-      <div className="mb-2 flex items-center">
-        <label className="text-token-text-primary flex-grow font-medium" htmlFor="instructions">
+    <div className="mb-2">
+      <div className="mb-1 flex" style={{ alignItems: 'end' }}>
+        <label className={'my-label'} htmlFor="instructions">
           {localize('com_ui_instructions')}
         </label>
         <div className="ml-auto" title="Add variables to instructions">

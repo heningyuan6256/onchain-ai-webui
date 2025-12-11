@@ -111,8 +111,8 @@ export default function AgentConfig({ createMutation, groups }) {
 
   return (
     <div>
-      <div className="h-auto px-4 pt-3 dark:bg-transparent">
-        <div className="mb-4">
+      <div className="h-auto px-0 pt-3 dark:bg-transparent">
+        <div className="mb-2">
           <AvatarUploadField></AvatarUploadField>
           <label className={'my-label'} htmlFor="name">
             {localize('com_ui_name')}
@@ -125,7 +125,7 @@ export default function AgentConfig({ createMutation, groups }) {
             render={({ field }) => (
               <>
                 <input
-                  style={{ borderRadius: 5, backgroundColor: 'white' }}
+                  style={{ borderRadius: 5, backgroundColor: 'white', height: '30px' }}
                   {...field}
                   value={field.value ?? ''}
                   maxLength={256}
@@ -150,14 +150,18 @@ export default function AgentConfig({ createMutation, groups }) {
             name="id"
             control={control}
             render={({ field }) => (
-              <p className="h-3 text-xs italic text-text-secondary" aria-live="polite">
+              <p
+                className="h-3 text-xs italic text-text-secondary"
+                style={{ display: 'none' }}
+                aria-live="polite"
+              >
                 {field.value}
               </p>
             )}
           />
         </div>
         {/* Description */}
-        <div className="mb-4">
+        <div className="mb-2">
           <label className={'my-label'} htmlFor="description">
             {localize('com_ui_description')}
           </label>
@@ -166,7 +170,7 @@ export default function AgentConfig({ createMutation, groups }) {
             control={control}
             render={({ field }) => (
               <input
-                style={{ borderRadius: 5, backgroundColor: 'white' }}
+                style={{ borderRadius: 5, backgroundColor: 'white', height: '30px' }}
                 {...field}
                 value={field.value ?? ''}
                 maxLength={512}
@@ -180,19 +184,19 @@ export default function AgentConfig({ createMutation, groups }) {
           />
         </div>
         {/* Category */}
-        <div className="mb-4">
+        <div className="mb-2">
           <label className={'my-label'} htmlFor="category-selector">
             {localize('com_ui_category')} <span className="text-red-500">*</span>
           </label>
           <AgentCategorySelector className="w-full" />
         </div>
-        <div className="mb-4">
+        <div className="mb-2">
           <label className={'my-label'} htmlFor="category-selector">
             知识库
           </label>
           <AgentRagSelector className="w-full" />
         </div>
-        <div className="mb-4">
+        <div className="mb-2">
           <label className={'my-label'} htmlFor="category-selector">
             Mcp工具
           </label>
@@ -201,7 +205,7 @@ export default function AgentConfig({ createMutation, groups }) {
         {/* Instructions */}
         <Instructions />
         {/* Model and Provider */}
-        <div className="mb-4">
+        <div className="mb-2">
           <label className={'my-label'} htmlFor="provider">
             {localize('com_ui_model')} <span className="text-red-500">*</span>
           </label>

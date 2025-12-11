@@ -105,7 +105,7 @@ function ControlCombobox({
         id={selectId}
         disabled={disabled}
         className={cn(
-          'flex !h-[32px] items-center justify-center gap-2 !rounded-[5px] bg-surface-secondary bg-white',
+          'flex !h-[30px] items-center justify-center gap-2 !rounded-[5px] bg-surface-secondary bg-white',
           'text-text-primary hover:bg-surface-tertiary',
           'border border-border-light',
           isCollapsed ? 'h-10 w-10' : 'l h-10 w-full px-3 py-2 text-sm',

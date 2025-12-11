@@ -1,5 +1,5 @@
 .agent-action-btns {
-  display: flex;
+  display:block;
   gap: 8px;
 
 }
@@ -17,7 +17,7 @@
 }
 
 .agent-action-btns .ant-btn {
-  font-size: 11px;
+  font-size: 10px;
   font-family: PingFang SC, PingFangSC, sans-serif;
   font-weight: 400;
 }
@@ -45,8 +45,8 @@
   font-style: normal;
 }
 .search{
-  width: 55%;
-  height: 27px;
+  width: 50%;
+  height: 31px;
   border-radius: 15px;
   margin: 25px auto 0;
   display: flex;
@@ -55,8 +55,6 @@
 }
 .search:hover{
   border-color:#0563B2 ;
-  width: 55%;
-  height: 27px;
   border-radius: 15px;
   margin: 25px auto 0;
   display: flex;
@@ -71,11 +69,12 @@
   box-shadow: none !important;
 }
 .listbody {
+  margin-top: 20px;
+
   width: 80%;
   margin-inline: auto;
 }
 .agentcard{
-  margin-top: 20px;
   background: #FFFFFF;
   border-radius: 12px !important;
   border: 1px solid #E0E0E0;

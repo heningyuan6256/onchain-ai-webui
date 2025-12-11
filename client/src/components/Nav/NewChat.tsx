@@ -12,7 +12,8 @@ import ADDSVG from '@/assets/image/front-add.svg';
 import CHATSVG from '@/assets/image/front-chat.svg';
 import appsSvg from '@/assets/image/front-apps.svg';
 import LIBRARYSVG from '@/assets/image/front-library.svg';
-import AgentSVG from '@/assets/image/agent.svg';
+// import AgentSVG from '@/assets/image/agent.svg';
+import AgentSVG from '@/assets/image/agentlist.svg';
 import Icon from '../icon';
 
 export default function NewChat({
