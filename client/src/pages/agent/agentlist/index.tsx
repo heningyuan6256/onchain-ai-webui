@@ -70,7 +70,9 @@ export default function AppMarket() {
     });
   };
   useEffect(() => {
-    getList();
+    if (search) {
+      getList();
+    }
   }, [search]);
   const getOriPublisList = async () => {
     const requestOptions: RequestInit = { method: 'get', redirect: 'follow' };
@@ -88,6 +90,9 @@ export default function AppMarket() {
     getList();
     getOriPublisList();
   }, []);
+  useEffect(() => {
+    updatePublislist();
+  }, [categoryFilterRef, publisOrilist]);
   return (
     <div className="flex h-[100%]">
       <div className="flex flex-1 flex-col">
