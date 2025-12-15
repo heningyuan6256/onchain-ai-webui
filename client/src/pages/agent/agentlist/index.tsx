@@ -38,6 +38,7 @@ const cardVariants = {
 export default function AppMarket() {
   const { showToast } = useToastContext();
   const categoryFilterRef = useRef(null);
+  const [categories, setCategories] = useState<any[]>([]);
   const navigate = useNavigate();
   const [applist, setAppList] = useState<any[]>([]);
   const [publisOrilist, setPublisOrilist] = useState<any[]>([]);
@@ -85,10 +86,23 @@ export default function AppMarket() {
       setLoading(false);
     });
   };
-
+  const getCategories = async () => {
+    const requestOptions: RequestInit = { method: 'get', redirect: 'follow' };
+    request(
+      `/backend/sys/dict/data/list?pageNum=1&pageSize=10000&dictType=agenttag`,
+      requestOptions,
+    ).then((data) => {
+      setCategories(
+        data?.rows?.map((item) => {
+          return { value: item.dictValue, label: item.dictLabel, color: item.cssClass };
+        }) || [],
+      );
+    });
+  };
   useEffect(() => {
     getList();
     getOriPublisList();
+    getCategories();
   }, []);
   useEffect(() => {
     updatePublislist();
@@ -215,12 +229,12 @@ export default function AppMarket() {
                                 <Tag
                                   color={
                                     categories.find((item) => {
-                                      return item.value === app?.tag1;
+                                      return item?.value === app?.tag1;
                                     })?.color || 'green'
                                   }
                                 >
                                   {categories.find((item) => {
-                                    return item.value === app?.tag1;
+                                    return item?.value === app?.tag1;
                                   })?.label || '其它'}
                                 </Tag>
                               </div>
@@ -258,6 +272,7 @@ export default function AppMarket() {
               </div>
               <div className="search" style={{ height: '34px' }}>
                 <CategoryFilter
+                  categories={categories}
                   onChange={updatePublislist}
                   ref={categoryFilterRef}
                 ></CategoryFilter>

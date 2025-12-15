@@ -19,7 +19,7 @@ endpoints:
       titleModel: 'qwen2.5-3b'
     - name: 'openai-agent'
       apiKey: 'sk-1234567890abcdef1234567890abcdef'
-      baseURL: 'http://192.168.0.178:8000/v1'
+      baseURL: 'http://192.168.0.61:6012/v1'
       models:
         default:
           - 'gpt-3.5-turbo'
