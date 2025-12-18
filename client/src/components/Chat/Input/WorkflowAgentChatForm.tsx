@@ -339,12 +339,12 @@ const ChatForm = memo(({ index = 0, isAgent = false }: { index?: number; isAgent
               </div>
               {true && (
                 <>
-                  {/* <div style={{ height: 0, width: 0, overflow: 'hidden' }}> */}
-                  <WorkflowAgentModelSelector
-                    setHasTargetModel={setHasTargetModel}
-                    startupConfig={startupConfig}
-                  />
-                  {/* </div> */}
+                  <div style={{ height: 0, width: 0, overflow: 'hidden' }}>
+                    <WorkflowAgentModelSelector
+                      setHasTargetModel={setHasTargetModel}
+                      startupConfig={startupConfig}
+                    />
+                  </div>
                   <div className="mx-auto flex" />
                   {SpeechToText && (
                     <AudioRecorder
