@@ -20,4 +20,5 @@ export interface SelectedValues {
 
 export interface ModelSelectorProps {
   startupConfig: TStartupConfig | undefined;
+  setHasTargetModel: (value: boolean) => void;
 }

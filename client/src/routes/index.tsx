@@ -33,6 +33,7 @@ import { Toaster } from 'sonner';
 import AgentConfig from '~/pages/agent/agentConfig';
 import AgentList from '~/pages/agent/agentlist';
 import AgentChat from '~/pages/agent/agentChat';
+import WorkflowAgentChat from '~/pages/agent/workflowAgentChat';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -164,6 +165,7 @@ export const router = createBrowserRouter(
             { path: 'agentlist', element: <AgentList /> },
 
             { path: 'agentchat/:conversationId', element: <AgentChat /> },
+            { path: 'wagentchat/:conversationId', element: <WorkflowAgentChat /> },
             {
               path: 'agents',
               element: (

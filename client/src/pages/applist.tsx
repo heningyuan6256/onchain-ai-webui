@@ -181,7 +181,7 @@ export default function AppMarket() {
                     const searchParams = new URLSearchParams(location.search);
                     const user = searchParams.get('user');
                     navigate(
-                      `/application/${app.app_url}?user=${user}&appId=${encodeURIComponent(app.app_id)}`,
+                      `/wagentchat/new?user=${user}&workflowId=${encodeURIComponent(app.workflow_id)}`,
                     );
                   }}
                 >
@@ -197,24 +197,18 @@ export default function AppMarket() {
                   <div className="mt-[20px] flex justify-between">
                     <div className="flex flex-nowrap gap-2">
                       {[
-                        headerCategory?.find((o) => {
-                          return o.value === app.tag1;
-                        }),
-                        siderCategory?.find((o) => {
-                          return o.value === app.tag2;
-                        }),
-                      ].map((tag, i) => {
-                        if (tag) {
-                          return (
-                            <span
-                              key={i}
-                              className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
-                            >
-                              {tag.label}
-                            </span>
-                          );
-                        }
-                      })}
+                        headerCategory?.find((o) => o.value === app.tag1),
+                        siderCategory?.find((o) => o.value === app.tag2),
+                      ]
+                        .filter(Boolean) // 去掉 undefined
+                        .map((tag, i) => (
+                          <span
+                            key={i}
+                            className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
+                          >
+                            {tag.label}
+                          </span>
+                        ))}
                     </div>
                     {/* <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
                       <Icon className="w-3 cursor-pointer" src={startSvg} />

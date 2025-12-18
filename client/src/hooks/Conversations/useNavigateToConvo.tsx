@@ -69,6 +69,13 @@ const useNavigateToConvo = (index = 0) => {
         navigate(`/agentchat/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`, {
           state: { focusChat: true },
         });
+      } else if (conversation?.endpoint === 'n8n') {
+        navigate(
+          `/wagentchat/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`,
+          {
+            state: { focusChat: true },
+          },
+        );
       } else {
         navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`, {
           state: { focusChat: true },

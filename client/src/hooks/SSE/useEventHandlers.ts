@@ -588,6 +588,7 @@ export default function useEventHandlers({
             `/agentchat/${Constants.NEW_CONVO}`,
             `/c/${Constants.NEW_CONVO}`,
             `/agentconfig/${Constants.NEW_CONVO}`,
+            `/wagentchat/${Constants.NEW_CONVO}`,
           ].includes(location.pathname)
         ) {
           const searchParams = new URLSearchParams(location.search);
