@@ -78,6 +78,15 @@ const startServer = async () => {
   app.get('/health', (_req, res) => res.status(200).send('OK'));
 
   /* Middleware */
+  // app.use((req, res, next) => {
+  //   console.log('[RAW] ================== 新请求 ==================');
+  //   console.log('[RAW] time      :', new Date().toISOString());
+  //   console.log('[RAW] method    :', req.method);
+  //   console.log('[RAW] url       :', req.originalUrl);
+  //   console.log('[RAW] headers   :', req.headers);
+  //   console.log('[RAW] ==========================================');
+  //   next();
+  // });//debug用
   app.use(noIndex);
   app.use(express.json({ limit: '3mb' }));
   app.use(express.urlencoded({ extended: true, limit: '3mb' }));

@@ -118,7 +118,7 @@ export default function useSSE(
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
-        agent_id: agent_id ?? '1',
+        agentid: agent_id ?? '1',
       },
     });
 
