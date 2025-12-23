@@ -17,12 +17,8 @@ import OpenAISVG from '@/assets/image/openai.svg';
 import Icon from '~/components/icon';
 import request from '~/request/request';
 import { toast } from 'sonner';
-
-function ModelSelectorContent({
-  setHasTargetModel,
-}: {
-  setHasTargetModel: (value: boolean) => void;
-}) {
+import { useLocation } from 'react-router-dom';
+function ModelSelectorContent({ setHasTargetModel }: { setHasTargetModel: (value: any) => void }) {
   const localize = useLocalize();
 
   const {
@@ -48,35 +44,88 @@ function ModelSelectorContent({
   //这里指定固定为智能体专用，然后看看智能体id怎么取的传
   const { handleSelectModel } = useModelSelectorContext();
   const [workflowagentmodel, setWorkflowagentmodel] = useState<any>(undefined);
-  useEffect(() => {
-    if (
-      !new URLSearchParams(location.search).get('workflowId') &&
-      mappedEndpoints
-        .find((item) => item.value === 'n8n')
-        ?.models?.find((item) => item.name === model)
-    ) {
-      setWorkflowagentmodel(model);
 
-      setHasTargetModel(true);
+  const getWorkflowByName = async () => {
+    return await request(`/workflow/system/workflow/list?pageNum=1&pageSize=20&name=${model}`, {
+      method: 'get',
+    });
+  };
+  const getWorkflow = async () => {
+    return await request('/workflow/system/workflow/query', {
+      method: 'get',
+      params: { workflow_id: new URLSearchParams(location.search).get('workflowId') },
+    });
+  };
+  const getBridgeList = async () => {
+    return await request('/v1/openaiworkflowbridge/v1/models', {
+      method: 'get',
+      ignoreToken: true,
+      headers: { Authorization: 'Bearer onchain' },
+    });
+  };
+  const { pathname, search } = useLocation();
+
+  useEffect(() => {
+    if (!new URLSearchParams(location.search).get('workflowId')) {
+      //校验历史记录进入的model是否在后端和桥接处合法
+      Promise.all([getWorkflowByName(), getBridgeList()]).then((res) => {
+        if (res[0]?.code === 200 && Array.isArray(res[1]?.data)) {
+          const workflow = res[0]?.rows?.find(
+            (item) =>
+              item.name === model && item.tags?.find((tag) => tag.name === 'n8n-openai-bridge'),
+          );
+          const bridge = res[1]?.data?.find((item) => item.id === model);
+          // console.log('进入了校验1', workflow, bridge);
+
+          if (workflow && bridge) {
+            setWorkflowagentmodel(model);
+            setHasTargetModel(true);
+          } else if (workflow) {
+            setHasTargetModel(null); //代表工作流有，桥接还未同步
+          } else {
+            setHasTargetModel(false); //代表工作流完全不可用可能被删过
+          }
+        } else {
+          toast.error(
+            res[0]?.code === 200
+              ? (res[1]?.message ?? '网络错误！')
+              : (res[0]?.message ?? '网络错误！'),
+          );
+        }
+      });
+
       return;
     }
     if (!new URLSearchParams(location.search).get('workflowId')) {
       setHasTargetModel(false);
       return;
     }
+    //校验新工作流智能体对话的model是否在后端和桥接处合法
+    Promise.all([getWorkflow(), getBridgeList()]).then((res) => {
+      if (res[0]?.code === 200 && Array.isArray(res[1]?.data)) {
+        const workflowName = res[0]?.data?.data?.name;
+        const workflow = res[0]?.data?.data?.tags?.find((tag) => tag.name === 'n8n-openai-bridge');
+        // console.log('检查2', workflowName, workflow, res);
 
-    request('/workflow/system/workflow/query', {
-      method: 'get',
-      params: { workflow_id: new URLSearchParams(location.search).get('workflowId') },
-    }).then((res) => {
-      if (res?.code === 200) {
-        setWorkflowagentmodel(res?.data?.data?.name);
-        setHasTargetModel(res?.data?.data?.name ? true : false);
+        const bridge = res[1]?.data?.find((item) => item.id === workflowName);
+
+        if (workflow && bridge) {
+          setWorkflowagentmodel(workflowName);
+          setHasTargetModel(true);
+        } else if (workflow) {
+          setHasTargetModel(null); //代表工作流有，桥接还未同步
+        } else {
+          setHasTargetModel(false); //代表工作流完全不可用可能被删过
+        }
       } else {
-        toast.error(res?.message ?? '网络错误！');
+        toast.error(
+          res[0]?.code === 200
+            ? (res[1]?.message ?? '网络错误！')
+            : (res[0]?.message ?? '网络错误！'),
+        );
       }
     });
-  }, []);
+  }, [pathname, search]);
   useEffect(() => {
     if (workflowagentmodel && model !== workflowagentmodel) {
       handleSelectModel(

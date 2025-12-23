@@ -81,7 +81,9 @@ const ChatForm = memo(({ index = 0, isAgent = false }: { index?: number; isAgent
       return '发送消息给智能体';
     } else if (hasTargetModel === false) {
       return '当前智能体不可用';
-    } else {
+    } else if (hasTargetModel === null) {
+      return '配置启动中，请稍候再进入';
+    } else if (hasTargetModel === undefined) {
       return '连接中，请稍等';
     }
   }, [location.search, hasTargetModel]);

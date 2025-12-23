@@ -91,8 +91,8 @@ const initializeClient = async ({ req, res, signal, endpointOption }) => {
     logViolation,
     agent: primaryAgent,
   });
-
-  if (!validationResult.isValid) {
+  //工作流智能体桥接开放后端校验
+  if (!validationResult.isValid && primaryAgent?.provider !== 'n8n') {
     throw new Error(validationResult.error?.message);
   }
 

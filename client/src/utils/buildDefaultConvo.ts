@@ -20,7 +20,6 @@ const buildDefaultConvo = ({
 }): TConversation => {
   const { lastSelectedModel, lastSelectedTools } = getLocalStorageItems();
   const endpointType = lastConversationSetup?.endpointType ?? conversation.endpointType;
-
   if (!endpoint) {
     return {
       ...conversation,
@@ -37,8 +36,9 @@ const buildDefaultConvo = ({
       : null;
 
   let possibleModels: string[], secondaryModels: string[];
+  //工作流智能体开放前端校验
 
-  if (availableModels.includes(model)) {
+  if (availableModels.includes(model) || endpoint === 'n8n') {
     possibleModels = [model, ...availableModels];
   } else {
     possibleModels = [...availableModels];

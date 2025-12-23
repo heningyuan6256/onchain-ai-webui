@@ -48,8 +48,13 @@ const useNavigateToConvo = (index = 0) => {
 
   const fetchFreshData = async (conversation?: Partial<TConversation>) => {
     const conversationId = conversation?.conversationId;
-    const searchParams = new URLSearchParams(location.search);
+    let searchParams = new URLSearchParams(location.search);
     const user = searchParams.get('user');
+    //清空参数
+    searchParams = new URLSearchParams();
+    if (user) {
+      searchParams.set('user', user);
+    }
     if (!conversationId) {
       return;
     }

@@ -83,6 +83,13 @@ export default defineConfig(({ command }) => ({
           return path.replace(/^\/v1\/agent/, '');
         },
       },
+      '/v1/openaiworkflowbridge': {
+        target: 'http://192.168.0.61:3334',
+        changeOrigin: true,
+        rewrite(path) {
+          return path.replace(/^\/v1\/openaiworkflowbridge/, '');
+        },
+      },
     },
   },
   // Set the directory where environment variables are loaded from and restrict prefixes
