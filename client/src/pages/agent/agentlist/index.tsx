@@ -188,9 +188,11 @@ export default function AppMarket() {
                             <Icon src={editsvg} />
                           </div>
                           <span
-                            style={{ backgroundColor: app.published ? '#1cdbce' : '#d0d0d0' }}
+                            style={{
+                              backgroundColor: app.is_shared === '1' ? '#1cdbce' : '#d0d0d0',
+                            }}
                             className={`absolute right-2 top-2 h-3 w-3 rounded-full border-2 border-white`}
-                            title={app.published ? '已发布' : '未发布'}
+                            title={app.is_shared === '1' ? '已发布' : '未发布'}
                           />
                           <div className="flex text-[13px] font-semibold text-[#333333]">
                             <Icon
