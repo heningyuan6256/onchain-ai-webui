@@ -66,7 +66,7 @@ request.interceptors.response.use(async (response, options) => {
 
   if (status === 403) {
     message.error('您没有权限访问该功能');
-    history.replace('/system/admin/index');
+    history.replace('/');
     return Promise.reject(new Error('No permission'));
   }
 
@@ -80,10 +80,8 @@ request.interceptors.response.use(async (response, options) => {
     try {
       const refreshRes = await refreshTokenApi();
       if (refreshRes?.code !== 200) {
-        // exitLogin();
-        location.href = 'http://59.175.92.126:17778/login';
-        //59.175.92.126:17778/backend/login
-        http: return { code: 500, message: '请重新登录！' };
+        history.replace('/login');
+        return { code: 500, message: '请重新登录！' };
       }
 
       console.log('刷新token成功', refreshRes);
