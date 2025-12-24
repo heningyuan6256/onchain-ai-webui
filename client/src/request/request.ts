@@ -72,7 +72,7 @@ request.interceptors.response.use(async (response, options) => {
 
   if (status === 401) {
     // 防止无限循环
-    if (options.url?.includes('/refresh')) {
+    if (options.url?.includes('/refresh') || options.url?.includes('/getnewtoken')) {
       history.replace('/login');
       return Promise.reject(new Error('Refresh failed'));
     }
