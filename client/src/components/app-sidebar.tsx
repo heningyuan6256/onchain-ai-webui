@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   AudioWaveform,
   BookOpen,
@@ -12,11 +12,11 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { NavProjects } from "@/components/nav-projects";
-import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
+import { NavProjects } from '@/components/nav-projects';
+import { NavUser } from '@/components/nav-user';
+import { TeamSwitcher } from '@/components/team-switcher';
 import { Constants } from 'librechat-data-provider';
 import startSvg from '@/assets/image/front-lightupcollect.svg';
 import {
@@ -29,15 +29,15 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar";
-import logoPNG from "../assets/image/logo.png";
-import AISVG from "../assets/image/front-ai.svg";
-import ADDSVG from "../assets/image/front-add.svg";
-import CHATSVG from "../assets/image/front-chat.svg";
-import LIBRARYSVG from "../assets/image/front-library.svg";
-import SETTINGSVG from "../assets/image/front-setting.svg";
-import appsSvg from "../assets/image/front-apps.svg";
-import STARSVG from "../assets/image/front-lightupcollect.svg";
+} from '@/components/ui/sidebar';
+import logoPNG from '../assets/image/logo.png';
+import AISVG from '../assets/image/front-ai.svg';
+import ADDSVG from '../assets/image/front-add.svg';
+import CHATSVG from '../assets/image/front-chat.svg';
+import LIBRARYSVG from '../assets/image/front-library.svg';
+import SETTINGSVG from '../assets/image/front-setting.svg';
+import appsSvg from '../assets/image/front-apps.svg';
+import STARSVG from '../assets/image/front-lightupcollect.svg';
 import {
   useLocalize,
   useHasAccess,
@@ -46,22 +46,27 @@ import {
   useNavScrolling,
   useNavigateToConvo,
 } from '~/hooks';
-import Icon from "./icon";
+import Icon from './icon';
 import type { InfiniteQueryObserverResult } from '@tanstack/react-query';
-import { useUploadData } from "@/contexts/UploadDataContext";
-import { useSession } from "@/tars/common/hooks/useSession";
+import { useUploadData } from '@/contexts/UploadDataContext';
+import { useSession } from '@/tars/common/hooks/useSession';
 import { useCallback, useEffect, useState, useMemo, memo, lazy, Suspense, useRef } from 'react';
-import { NewChat, SearchBar } from "./Nav";
+import { NewChat, SearchBar } from './Nav';
 import store from '~/store';
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import { TooltipAnchor, useMediaQuery, MobileSidebar } from '@librechat/client';
-import { ConversationListParams, ConversationListResponse, Permissions, PermissionTypes } from 'librechat-data-provider';
-import { useConversationsInfiniteQuery } from "~/data-provider";
-import { useRecoilValue } from "recoil";
-import { Button } from "./ui/button";
-import Restract from "./Icons/restract";
-import AccountSettings from "./Nav/AccountSettings";
-import { Conversations } from "./Conversations";
+import {
+  ConversationListParams,
+  ConversationListResponse,
+  Permissions,
+  PermissionTypes,
+} from 'librechat-data-provider';
+import { useConversationsInfiniteQuery } from '~/data-provider';
+import { useRecoilValue } from 'recoil';
+import { Button } from './ui/button';
+import Restract from './Icons/restract';
+import AccountSettings from './Nav/AccountSettings';
+import { Conversations } from './Conversations';
 const NavMask = memo(
   ({ navVisible, toggleNavVisible }: { navVisible: boolean; toggleNavVisible: () => void }) => (
     <div
@@ -85,16 +90,12 @@ const NAV_WIDTH_MOBILE = '320px';
 
 const MemoNewChat = memo(NewChat);
 
-
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const open = !!props.navVisible
-  const navVisible = !!props.navVisible
-  const setNavVisible = props.setNavVisible
+  const open = !!props.navVisible;
+  const navVisible = !!props.navVisible;
+  const setNavVisible = props.setNavVisible;
 
   console.log(navVisible, 'navVisible');
-
-
 
   const localize = useLocalize();
   const { isAuthenticated } = useAuthContext();
@@ -106,15 +107,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     search: '',
   };
 
-  const { data: dataFav } =
-    useConversationsInfiniteQuery(DEFAULT_PARAMS, {
-      staleTime: 0,
-      cacheTime: 5 * 60 * 1000,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-    });
+  const { data: dataFav } = useConversationsInfiniteQuery(DEFAULT_PARAMS, {
+    staleTime: 0,
+    cacheTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
 
-  const favData = dataFav?.pages?.[0]?.conversations || []
+  const favData = dataFav?.pages?.[0]?.conversations || [];
 
   const [navWidth, setNavWidth] = useState(NAV_WIDTH_DESKTOP);
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
@@ -159,9 +159,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       if (computedHasNextPage) {
         return fetchNextPage(options);
       }
-      return Promise.resolve(
-        {} as InfiniteQueryObserverResult<ConversationListResponse, unknown>,
-      );
+      return Promise.resolve({} as InfiniteQueryObserverResult<ConversationListResponse, unknown>);
     },
     isFetchingNext: isFetchingNextPage,
   });
@@ -248,23 +246,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }
   }, [search.query, search.isTyping, isLoading, isFetching]);
 
-  const params = useParams()
+  const params = useParams();
   const currentConvoId = useMemo(() => params.conversationId, [params.conversationId]);
 
   const { navigateToConvo } = useNavigateToConvo();
   return (
-    <Sidebar collapsible="icon" className={`bg-nav-bar ${open ? "w-[240px]" : "w-[48px]"}`} {...props}>
+    <Sidebar
+      collapsible="icon"
+      className={`bg-nav-bar ${open ? 'w-[240px]' : 'w-[48px]'}`}
+      {...props}
+    >
       <SidebarHeader navVisible={navVisible}>
         {open ? (
           <div className="flex justify-between">
             <div className="flex items-center">
-              <img className="top_logo select-none" src={logoPNG} height={16} />
+              <img className="top_logo select-none" src={'./temp.png'} height={16} />
+              {/*  <img className="top_logo select-none" src={logoPNG} height={16} /> */}
               {/* <SidebarTrigger /> */}
             </div>
 
             {/* <TeamSwitcher teams={data.teams} /> */}
             <div>
-              <SidebarTrigger  {...props} />
+              <SidebarTrigger {...props} />
             </div>
           </div>
         ) : (
@@ -273,7 +276,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         {!open ? (
-          <div className="px-2.5 py-1.5 overflow-hidden">
+          <div className="overflow-hidden px-2.5 py-1.5">
             <SidebarMenuHorizentol></SidebarMenuHorizentol>
           </div>
         ) : (
@@ -282,7 +285,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <nav
           id="chat-history-nav"
           aria-label={localize('com_ui_chat_history')}
-          className={`flex h-full flex-col ${open ? "px-2 pb-3.5 pt-1 md:px-3" : 'p-0'}`}
+          className={`flex h-full flex-col ${open ? 'px-2 pb-3.5 pt-1 md:px-3' : 'p-0'}`}
         >
           <div className="flex flex-1 flex-col" ref={outerContainerRef}>
             {/* <div className="py-4 px-1 flex justify-between items-center">
@@ -314,52 +317,56 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               isSmallScreen={isSmallScreen}
             />
 
-            {
-              navVisible && <div className="px-1 mb-2 mt-2">
+            {navVisible && (
+              <div className="mb-2 mt-2 px-1">
                 <SidebarMenuHorizentol></SidebarMenuHorizentol>
               </div>
-            }
+            )}
 
-            {
-              navVisible && <>
+            {navVisible && (
+              <>
                 <SidebarMenuTitle
                   title="收藏对话"
-                  data={favData.map((item) => {
-                    return {
-                      ...item, icon: <Icon src={startSvg}></Icon>, name: item.title, onClick: (ctrlOrMetaKey: boolean) => {
-                        // if (ctrlOrMetaKey) {
-                        //   itemToggleNav();
-                        //   const baseUrl = window.location.origin;
-                        //   const path = `/c/${item.conversationId}`;
-                        //   window.open(baseUrl + path, '_blank');
-                        //   return;
-                        // }
+                  data={
+                    favData.map((item) => {
+                      return {
+                        ...item,
+                        icon: <Icon src={startSvg}></Icon>,
+                        name: item.title,
+                        onClick: (ctrlOrMetaKey: boolean) => {
+                          // if (ctrlOrMetaKey) {
+                          //   itemToggleNav();
+                          //   const baseUrl = window.location.origin;
+                          //   const path = `/c/${item.conversationId}`;
+                          //   window.open(baseUrl + path, '_blank');
+                          //   return;
+                          // }
 
-                        if (currentConvoId === item.conversationId) {
-                          return;
-                        }
+                          if (currentConvoId === item.conversationId) {
+                            return;
+                          }
 
-                        itemToggleNav();
+                          itemToggleNav();
 
-                        if (typeof item.title === 'string' && item.title.length > 0) {
-                          document.title = item.title;
-                        }
+                          if (typeof item.title === 'string' && item.title.length > 0) {
+                            document.title = item.title;
+                          }
 
-                        navigateToConvo(item, {
-                          currentConvoId,
-                          resetLatestMessage: !(item.conversationId ?? '') || item.conversationId === Constants.NEW_CONVO,
-                        });
-                      }
-                    };
-                  }) as any}
+                          navigateToConvo(item, {
+                            currentConvoId,
+                            resetLatestMessage:
+                              !(item.conversationId ?? '') ||
+                              item.conversationId === Constants.NEW_CONVO,
+                          });
+                        },
+                      };
+                    }) as any
+                  }
                 ></SidebarMenuTitle>
-                <div className="px-1 mb-2 mt-2">
+                <div className="mb-2 mt-2 px-1">
                   <SidebarMenuHorizentol></SidebarMenuHorizentol>
                 </div>
-                <SidebarMenuTitle
-                  title="近期对话"
-                  data={[]}
-                ></SidebarMenuTitle>
+                <SidebarMenuTitle title="近期对话" data={[]}></SidebarMenuTitle>
                 <Conversations
                   conversations={conversations}
                   moveToTop={moveToTop}
@@ -370,22 +377,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   isSearchLoading={isSearchLoading}
                 />
               </>
-            }
-
+            )}
           </div>
-          {
-            navVisible && <Suspense fallback={null}>
+          {navVisible && (
+            <Suspense fallback={null}>
               <AccountSettings />
             </Suspense>
-          }
-
+          )}
         </nav>
       </SidebarContent>
-      {
-        !navVisible && <SidebarFooter>
+      {!navVisible && (
+        <SidebarFooter>
           <SidebarTrigger {...props} isFooter />
         </SidebarFooter>
-      }
+      )}
       <SidebarRail />
     </Sidebar>
   );

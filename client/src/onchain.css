@@ -9,7 +9,8 @@
 
 .top_logo {
   width: 150px;
-  height: 24px;
+  /* height: 24px; */
+  height: 30px;
 }
 
 .thought_table .ant-thought-chain.ant-thought-chain-small>.ant-thought-chain-item .ant-thought-chain-item-header::before {
