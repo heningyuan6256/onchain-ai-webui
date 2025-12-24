@@ -17,8 +17,16 @@ import OpenAISVG from '@/assets/image/openai.svg';
 import Icon from '~/components/icon';
 import request from '~/request/request';
 import { toast } from 'sonner';
-import { useLocation } from 'react-router-dom';
-function ModelSelectorContent({ setHasTargetModel }: { setHasTargetModel: (value: any) => void }) {
+import { useLocation, useParams } from 'react-router-dom';
+import { dataService, QueryKeys } from 'librechat-data-provider';
+import { useQueryClient } from '@tanstack/react-query';
+function ModelSelectorContent({
+  setHasTargetModel,
+  conversation,
+}: {
+  setHasTargetModel: (value: any) => void;
+  conversation: any;
+}) {
   const localize = useLocalize();
 
   const {
@@ -44,11 +52,31 @@ function ModelSelectorContent({ setHasTargetModel }: { setHasTargetModel: (value
   //这里指定固定为智能体专用，然后看看智能体id怎么取的传
   const { handleSelectModel } = useModelSelectorContext();
   const [workflowagentmodel, setWorkflowagentmodel] = useState<any>(undefined);
-
+  const { conversationId } = useParams();
+  const queryClient = useQueryClient();
+  const [conveOriSetup, setConveOriSetup] = useState<any>(undefined);
+  const getConveOriSetup = async () => {
+    return await queryClient.fetchQuery([QueryKeys.conversation, conversationId], () =>
+      dataService.getConversationById(conversationId as string),
+    );
+  };
+  useEffect(() => {
+    if (
+      !new URLSearchParams(location.search).get('workflowId') &&
+      (!conveOriSetup || conveOriSetup?.conversationId !== conversationId)
+    ) {
+      getConveOriSetup().then((res) => {
+        setConveOriSetup(res);
+      });
+    }
+  }, [conversationId]);
   const getWorkflowByName = async () => {
-    return await request(`/workflow/system/workflow/list?pageNum=1&pageSize=20&name=${model}`, {
-      method: 'get',
-    });
+    return await request(
+      `/workflow/system/workflow/list?pageNum=1&pageSize=20&name=${conveOriSetup?.model}`,
+      {
+        method: 'get',
+      },
+    );
   };
   const getWorkflow = async () => {
     return await request('/workflow/system/workflow/query', {
@@ -66,19 +94,26 @@ function ModelSelectorContent({ setHasTargetModel }: { setHasTargetModel: (value
   const { pathname, search } = useLocation();
 
   useEffect(() => {
+    if (
+      !new URLSearchParams(location.search).get('workflowId') &&
+      conversationId !== conveOriSetup?.conversationId
+    ) {
+      return;
+    }
     if (!new URLSearchParams(location.search).get('workflowId')) {
       //校验历史记录进入的model是否在后端和桥接处合法
       Promise.all([getWorkflowByName(), getBridgeList()]).then((res) => {
         if (res[0]?.code === 200 && Array.isArray(res[1]?.data)) {
           const workflow = res[0]?.rows?.find(
             (item) =>
-              item.name === model && item.tags?.find((tag) => tag.name === 'n8n-openai-bridge'),
+              item.name === conveOriSetup?.model &&
+              item.tags?.find((tag) => tag.name === 'n8n-openai-bridge'),
           );
-          const bridge = res[1]?.data?.find((item) => item.id === model);
-          // console.log('进入了校验1', workflow, bridge);
+          const bridge = res[1]?.data?.find((item) => item.id === conveOriSetup?.model);
+          console.log('进入了校验1', workflow, bridge);
 
           if (workflow && bridge) {
-            setWorkflowagentmodel(model);
+            setWorkflowagentmodel(conveOriSetup?.model);
             setHasTargetModel(true);
           } else if (workflow) {
             setHasTargetModel(null); //代表工作流有，桥接还未同步
@@ -105,7 +140,7 @@ function ModelSelectorContent({ setHasTargetModel }: { setHasTargetModel: (value
       if (res[0]?.code === 200 && Array.isArray(res[1]?.data)) {
         const workflowName = res[0]?.data?.data?.name;
         const workflow = res[0]?.data?.data?.tags?.find((tag) => tag.name === 'n8n-openai-bridge');
-        // console.log('检查2', workflowName, workflow, res);
+        console.log('检查2', workflowName, workflow, res);
 
         const bridge = res[1]?.data?.find((item) => item.id === workflowName);
 
@@ -125,7 +160,7 @@ function ModelSelectorContent({ setHasTargetModel }: { setHasTargetModel: (value
         );
       }
     });
-  }, [pathname, search]);
+  }, [pathname, search, conversationId, conveOriSetup]);
   useEffect(() => {
     if (workflowagentmodel && model !== workflowagentmodel) {
       handleSelectModel(
@@ -232,11 +267,15 @@ function ModelSelectorContent({ setHasTargetModel }: { setHasTargetModel: (value
   );
 }
 
-export default function ModelSelector({ setHasTargetModel, startupConfig }: ModelSelectorProps) {
+export default function ModelSelector({
+  setHasTargetModel,
+  startupConfig,
+  conversation,
+}: ModelSelectorProps) {
   return (
     <ModelSelectorChatProvider>
       <ModelSelectorProvider startupConfig={startupConfig}>
-        <ModelSelectorContent setHasTargetModel={setHasTargetModel} />
+        <ModelSelectorContent setHasTargetModel={setHasTargetModel} conversation={conversation} />
       </ModelSelectorProvider>
     </ModelSelectorChatProvider>
   );

@@ -343,6 +343,7 @@ const ChatForm = memo(({ index = 0, isAgent = false }: { index?: number; isAgent
                 <>
                   <div style={{ height: 0, width: 0, overflow: 'hidden' }}>
                     <WorkflowAgentModelSelector
+                      conversation={conversation}
                       setHasTargetModel={setHasTargetModel}
                       startupConfig={startupConfig}
                     />
