@@ -888,6 +888,14 @@ class AgentClient extends BaseClient {
             body: config.configurable.requestBody,
           });
         }
+        if (this.options.req.headers.agentid)
+          this.options.agent.model_parameters.configuration.defaultHeaders = {
+            ...this.options.agent.model_parameters.configuration.defaultHeaders,
+            agent_id: this.options.req.headers.agentid,
+          };
+        // console.log('对话请求后端参数', this.options.agent.model_parameters);
+        // console.log('前台自己对话请求完整', this.options.req);
+        // console.log('前台自己对话请求头', this.options.req.headers);
 
         run = await createRun({
           agent,

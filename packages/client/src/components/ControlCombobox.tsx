@@ -95,7 +95,7 @@ function ControlCombobox({
   );
 
   return (
-    <div className={cn('flex w-full items-center justify-center px-1', containerClassName)}>
+    <div className={cn('flex w-full items-center justify-center', containerClassName)}>
       <Ariakit.SelectLabel store={select} className="sr-only">
         {ariaLabel}
       </Ariakit.SelectLabel>
@@ -105,11 +105,12 @@ function ControlCombobox({
         id={selectId}
         disabled={disabled}
         className={cn(
-          'flex items-center justify-center gap-2 rounded-full bg-surface-secondary',
+          'flex !h-[30px] items-center justify-center gap-2 !rounded-[5px] bg-surface-secondary bg-white',
           'text-text-primary hover:bg-surface-tertiary',
           'border border-border-light',
-          isCollapsed ? 'h-10 w-10' : 'h-10 w-full rounded-xl px-3 py-2 text-sm',
+          isCollapsed ? 'h-10 w-10' : 'l h-10 w-full px-3 py-2 text-sm',
           className,
+          "!font-['PingFangSC','PingFang SC',sans-serif] !text-[12px] !text-[#333333]",
         )}
       >
         {SelectIcon != null && iconSide === 'left' && (
@@ -134,21 +135,11 @@ function ControlCombobox({
         gutter={4}
         portal
         className={cn(
-          'animate-popover z-50 overflow-hidden rounded-xl border border-border-light bg-surface-secondary shadow-lg',
+          'animate-popover z-50 overflow-hidden !rounded-[5px] border border-border-light bg-surface-secondary bg-white shadow-lg',
         )}
         style={{ width: isCollapsed ? '300px' : (buttonWidth ?? '300px') }}
       >
-        <div className="py-1.5">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-primary" />
-            <Ariakit.Combobox
-              store={combobox}
-              autoSelect
-              placeholder={searchPlaceholder}
-              className="w-full rounded-md bg-surface-secondary py-2 pl-9 pr-3 text-sm text-text-primary focus:outline-none"
-            />
-          </div>
-        </div>
+        {/* 这里吧自带的下拉框的搜索栏删掉了 */}
         <div className="max-h-[300px] overflow-auto">
           <Ariakit.ComboboxList store={combobox}>
             <SelectRenderer store={select} items={matches} itemSize={ROW_HEIGHT} overscan={5}>

@@ -3,7 +3,7 @@ const isLoggerEnabled = import.meta.env.VITE_ENABLE_LOGGER === 'true';
 const loggerFilter = import.meta.env.VITE_LOGGER_FILTER || '';
 
 type LogFunction = (...args: unknown[]) => void;
-
+//打印的内容太多了影响调试
 const createLogFunction = (
   consoleMethod: LogFunction,
   type?: 'log' | 'warn' | 'error' | 'info' | 'debug' | 'dir',
@@ -13,11 +13,11 @@ const createLogFunction = (
       const tag = typeof args[0] === 'string' ? args[0] : '';
       if (shouldLog(tag)) {
         if (tag && typeof args[1] === 'string' && type === 'error') {
-          consoleMethod(`[${tag}] ${args[1]}`, ...args.slice(2));
+          // consoleMethod(`[${tag}] ${args[1]}`, ...args.slice(2));
         } else if (tag && args.length > 1) {
-          consoleMethod(`[${tag}]`, ...args.slice(1));
+          // consoleMethod(`[${tag}]`, ...args.slice(1));
         } else {
-          consoleMethod(...args);
+          // consoleMethod(...args);
         }
       }
     }

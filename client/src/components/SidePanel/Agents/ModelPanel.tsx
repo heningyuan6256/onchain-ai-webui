@@ -17,72 +17,263 @@ import { useGetEndpointsQuery } from '~/data-provider';
 import { getEndpointField, cn } from '~/utils';
 import { useLocalize } from '~/hooks';
 import { Panel } from '~/common';
-
+import './custom.css';
 export default function ModelPanel({
-  providers,
   setActivePanel,
-  models: modelsData,
+  models,
 }: Pick<AgentModelPanelProps, 'models' | 'providers' | 'setActivePanel'>) {
   const localize = useLocalize();
 
   const { control, setValue } = useFormContext<AgentForm>();
-
   const model = useWatch({ control, name: 'model' });
   const providerOption = useWatch({ control, name: 'provider' });
   const modelParameters = useWatch({ control, name: 'model_parameters' });
 
-  const provider = useMemo(() => {
-    const value =
-      typeof providerOption === 'string'
-        ? providerOption
-        : (providerOption as StringOption | undefined)?.value;
-    return value ?? '';
-  }, [providerOption]);
-  const models = useMemo(
-    () => (provider ? (modelsData[provider] ?? []) : []),
-    [modelsData, provider],
-  );
-
   useEffect(() => {
     const _model = model ?? '';
-    if (provider && _model) {
-      const modelExists = models.includes(_model);
-      if (!modelExists) {
-        const newModels = modelsData[provider] ?? [];
-        setValue('model', newModels[0] ?? '');
-      }
+    if (_model) {
       localStorage.setItem(LocalStorageKeys.LAST_AGENT_MODEL, _model);
-      localStorage.setItem(LocalStorageKeys.LAST_AGENT_PROVIDER, provider);
     }
-
-    if (provider && !_model) {
-      setValue('model', models[0] ?? '');
-    }
-  }, [provider, models, modelsData, setValue, model]);
+  }, [models, setValue, model]);
 
   const { data: endpointsConfig = {} } = useGetEndpointsQuery();
 
-  const bedrockRegions = useMemo(() => {
-    return endpointsConfig?.[provider]?.availableRegions ?? [];
-  }, [endpointsConfig, provider]);
-
-  const endpointType = useMemo(
-    () => getEndpointField(endpointsConfig, provider, 'type'),
-    [provider, endpointsConfig],
-  );
-
   const parameters = useMemo((): SettingDefinition[] => {
-    const customParams = endpointsConfig[provider]?.customParams ?? {};
-    const [combinedKey, endpointKey] = getSettingsKeys(endpointType ?? provider, model ?? '');
-    const overriddenEndpointKey = customParams.defaultParamsEndpoint ?? endpointKey;
-    const defaultParams =
-      agentParamSettings[combinedKey] ?? agentParamSettings[overriddenEndpointKey] ?? [];
-    const overriddenParams = endpointsConfig[provider]?.customParams?.paramDefinitions ?? [];
-    const overriddenParamsMap = keyBy(overriddenParams, 'key');
-    return defaultParams
-      .filter((param) => param != null)
-      .map((param) => (overriddenParamsMap[param.key] as SettingDefinition) ?? param);
-  }, [endpointType, endpointsConfig, model, provider]);
+    return [
+      {
+        key: 'maxContextTokens',
+        label: 'com_endpoint_context_tokens',
+        labelCode: true,
+        type: 'number',
+        component: 'input',
+        placeholder: 'com_nav_theme_system',
+        placeholderCode: true,
+        description: 'com_endpoint_context_info',
+        descriptionCode: true,
+        optionType: 'model',
+      },
+      {
+        key: 'max_tokens',
+        label: 'com_endpoint_max_output_tokens',
+        labelCode: true,
+        type: 'number',
+        component: 'input',
+        description: 'com_endpoint_openai_max_tokens',
+        descriptionCode: true,
+        placeholder: 'com_nav_theme_system',
+        placeholderCode: true,
+        optionType: 'model',
+      },
+      {
+        key: 'fileTokenLimit',
+        label: 'com_ui_file_token_limit',
+        labelCode: true,
+        description: 'com_ui_file_token_limit_desc',
+        descriptionCode: true,
+        placeholder: 'com_nav_theme_system',
+        placeholderCode: true,
+        type: 'number',
+        component: 'input',
+      },
+      {
+        key: 'temperature',
+        label: 'com_endpoint_temperature',
+        labelCode: true,
+        description: 'com_endpoint_openai_temp',
+        descriptionCode: true,
+        type: 'number',
+        component: 'slider',
+        optionType: 'model',
+        columnSpan: 4,
+        default: 1,
+        range: {
+          min: 0,
+          max: 2,
+          step: 0.01,
+        },
+      },
+
+      {
+        key: 'top_p',
+        label: 'com_endpoint_top_p',
+        labelCode: true,
+        description: 'com_endpoint_anthropic_topp',
+        descriptionCode: true,
+        type: 'number',
+        component: 'slider',
+        optionType: 'model',
+        columnSpan: 4,
+        default: 1,
+        range: {
+          min: 0,
+          max: 1,
+          step: 0.01,
+        },
+      },
+      {
+        key: 'frequency_penalty',
+        label: 'com_endpoint_frequency_penalty',
+        labelCode: true,
+        description: 'com_endpoint_openai_freq',
+        descriptionCode: true,
+        type: 'number',
+        default: 0,
+        range: {
+          min: -2,
+          max: 2,
+          step: 0.01,
+        },
+        component: 'slider',
+        optionType: 'model',
+        columnSpan: 4,
+      },
+      {
+        key: 'presence_penalty',
+        label: 'com_endpoint_presence_penalty',
+        labelCode: true,
+        description: 'com_endpoint_openai_pres',
+        descriptionCode: true,
+        type: 'number',
+        default: 0,
+        range: {
+          min: -2,
+          max: 2,
+          step: 0.01,
+        },
+        component: 'slider',
+        optionType: 'model',
+        columnSpan: 4,
+      },
+      {
+        key: 'resendFiles',
+        label: 'com_endpoint_plug_resend_files',
+        labelCode: true,
+        description: 'com_endpoint_openai_resend_files',
+        descriptionCode: true,
+        type: 'boolean',
+        default: true,
+        component: 'switch',
+        optionType: 'conversation',
+        showDefault: false,
+        columnSpan: 2,
+      },
+      {
+        key: 'imageDetail',
+        label: 'com_endpoint_plug_image_detail',
+        labelCode: true,
+        description: 'com_endpoint_openai_detail',
+        descriptionCode: true,
+        type: 'enum',
+        default: 'auto',
+        component: 'slider',
+        options: ['low', 'auto', 'high'],
+        enumMappings: {
+          low: 'com_ui_low',
+          auto: 'com_ui_auto',
+          high: 'com_ui_high',
+        },
+        optionType: 'conversation',
+        columnSpan: 2,
+      },
+      {
+        key: 'reasoning_effort',
+        label: 'com_endpoint_reasoning_effort',
+        labelCode: true,
+        description: 'com_endpoint_openai_reasoning_effort',
+        descriptionCode: true,
+        type: 'enum',
+        default: '',
+        component: 'slider',
+        options: ['', 'minimal', 'low', 'medium', 'high'],
+        enumMappings: {
+          '': 'com_ui_none',
+          minimal: 'com_ui_minimal',
+          low: 'com_ui_low',
+          medium: 'com_ui_medium',
+          high: 'com_ui_high',
+        },
+        optionType: 'model',
+        columnSpan: 4,
+      },
+      {
+        key: 'reasoning_summary',
+        label: 'com_endpoint_reasoning_summary',
+        labelCode: true,
+        description: 'com_endpoint_openai_reasoning_summary',
+        descriptionCode: true,
+        type: 'enum',
+        default: '',
+        component: 'slider',
+        options: ['', 'auto', 'concise', 'detailed'],
+        enumMappings: {
+          '': 'com_ui_none',
+          auto: 'com_ui_auto',
+          concise: 'com_ui_concise',
+          detailed: 'com_ui_detailed',
+        },
+        optionType: 'model',
+        columnSpan: 4,
+      },
+      {
+        key: 'verbosity',
+        label: 'com_endpoint_verbosity',
+        labelCode: true,
+        description: 'com_endpoint_openai_verbosity',
+        descriptionCode: true,
+        type: 'enum',
+        default: '',
+        component: 'slider',
+        options: ['', 'low', 'medium', 'high'],
+        enumMappings: {
+          '': 'com_ui_none',
+          low: 'com_ui_low',
+          medium: 'com_ui_medium',
+          high: 'com_ui_high',
+        },
+        optionType: 'model',
+        columnSpan: 4,
+      },
+      {
+        key: 'useResponsesApi',
+        label: 'com_endpoint_use_responses_api',
+        labelCode: true,
+        description: 'com_endpoint_openai_use_responses_api',
+        descriptionCode: true,
+        type: 'boolean',
+        default: false,
+        component: 'switch',
+        optionType: 'model',
+        showDefault: false,
+        columnSpan: 2,
+      },
+      {
+        key: 'web_search',
+        label: 'com_ui_web_search',
+        labelCode: true,
+        description: 'com_endpoint_openai_use_web_search',
+        descriptionCode: true,
+        type: 'boolean',
+        default: false,
+        component: 'switch',
+        optionType: 'model',
+        showDefault: false,
+        columnSpan: 2,
+      },
+      {
+        key: 'disableStreaming',
+        label: 'com_endpoint_disable_streaming_label',
+        labelCode: true,
+        description: 'com_endpoint_disable_streaming',
+        descriptionCode: true,
+        type: 'boolean',
+        default: false,
+        component: 'switch',
+        optionType: 'model',
+        showDefault: false,
+        columnSpan: 2,
+      },
+    ];
+  }, []);
 
   const setOption = (optionKey: keyof t.AgentModelParameters) => (value: t.AgentParameterValue) => {
     setValue(`model_parameters.${optionKey}`, value);
@@ -94,7 +285,7 @@ export default function ModelPanel({
 
   return (
     <div className="mx-1 mb-1 flex h-full min-h-[50vh] w-full flex-col gap-2 text-sm">
-      <div className="model-panel relative flex flex-col items-center px-16 py-4 text-center">
+      {/* <div className="model-panel relative flex flex-col items-center px-16 py-4 text-center">
         <div className="absolute left-0 top-4">
           <button
             type="button"
@@ -111,68 +302,11 @@ export default function ModelPanel({
         </div>
 
         <div className="mb-2 mt-2 text-xl font-medium">{localize('com_ui_model_parameters')}</div>
-      </div>
-      <div className="p-2">
-        {/* Endpoint aka Provider for Agents */}
-        <div className="mb-4">
-          <label
-            id="provider-label"
-            className="text-token-text-primary model-panel-label mb-2 block font-medium"
-            htmlFor="provider"
-          >
-            {localize('com_ui_provider')} <span className="text-red-500">*</span>
-          </label>
-          <Controller
-            name="provider"
-            control={control}
-            rules={{ required: true, minLength: 1 }}
-            render={({ field, fieldState: { error } }) => {
-              const value =
-                typeof field.value === 'string'
-                  ? field.value
-                  : ((field.value as StringOption)?.value ?? '');
-              const display =
-                typeof field.value === 'string'
-                  ? field.value
-                  : ((field.value as StringOption)?.label ?? '');
-
-              return (
-                <>
-                  <ControlCombobox
-                    selectedValue={value}
-                    displayValue={alternateName[display] ?? display}
-                    selectPlaceholder={localize('com_ui_select_provider')}
-                    searchPlaceholder={localize('com_ui_select_search_provider')}
-                    setValue={field.onChange}
-                    items={providers.map((provider) => ({
-                      label: typeof provider === 'string' ? provider : provider.label,
-                      value: typeof provider === 'string' ? provider : provider.value,
-                    }))}
-                    className={cn(error ? 'border-2 border-red-500' : '')}
-                    ariaLabel={localize('com_ui_provider')}
-                    isCollapsed={false}
-                    showCarat={true}
-                  />
-                  {error && (
-                    <span className="model-panel-error text-sm text-red-500 transition duration-300 ease-in-out">
-                      {localize('com_ui_field_required')}
-                    </span>
-                  )}
-                </>
-              );
-            }}
-          />
-        </div>
+      </div> */}
+      <div className="p-2 pb-0">
         {/* Model */}
-        <div className="model-panel-section mb-4">
-          <label
-            id="model-label"
-            className={cn(
-              'text-token-text-primary model-panel-label mb-2 block font-medium',
-              !provider && 'text-gray-500 dark:text-gray-400',
-            )}
-            htmlFor="model"
-          >
+        <div className="model-panel-section">
+          <label id="model-label" className={cn('my-label')} htmlFor="model">
             {localize('com_ui_model')} <span className="text-red-500">*</span>
           </label>
           <Controller
@@ -184,28 +318,18 @@ export default function ModelPanel({
                 <>
                   <ControlCombobox
                     selectedValue={field.value || ''}
-                    selectPlaceholder={
-                      provider
-                        ? localize('com_ui_select_model')
-                        : localize('com_ui_select_provider_first')
-                    }
+                    selectPlaceholder={localize('com_ui_select_model')}
                     searchPlaceholder={localize('com_ui_select_model')}
                     setValue={field.onChange}
                     items={models.map((model) => ({
-                      label: model,
-                      value: model,
+                      label: model?.model_name,
+                      value: model?.model_name,
                     }))}
-                    disabled={!provider}
                     className={cn('disabled:opacity-50', error ? 'border-2 border-red-500' : '')}
                     ariaLabel={localize('com_ui_model')}
                     isCollapsed={false}
                     showCarat={true}
                   />
-                  {provider && error && (
-                    <span className="text-sm text-red-500 transition duration-300 ease-in-out">
-                      {localize('com_ui_field_required')}
-                    </span>
-                  )}
                 </>
               );
             }}
@@ -225,9 +349,9 @@ export default function ModelPanel({
               }
               const { key, default: defaultValue, ...rest } = setting;
 
-              if (key === 'region' && bedrockRegions.length) {
-                rest.options = bedrockRegions;
-              }
+              // if (key === 'region' && bedrockRegions.length) {
+              //   rest.options = bedrockRegions;
+              // }
 
               return (
                 <Component
@@ -244,14 +368,14 @@ export default function ModelPanel({
         </div>
       )}
       {/* Reset Parameters Button */}
-      <button
+      {/* <button
         type="button"
         onClick={handleResetParameters}
         className="btn btn-neutral my-1 flex w-full items-center justify-center gap-2 px-4 py-2 text-sm"
       >
         <RotateCcw className="h-4 w-4" aria-hidden="true" />
         {localize('com_ui_reset_var', { 0: localize('com_ui_model_parameters') })}
-      </button>
+      </button> */}
     </div>
   );
 }

@@ -66,13 +66,14 @@ bower_components/
 .floo
 .flooignore
 
-#config file
-librechat.yaml
-librechat.yml
+#config file,布什这个为什么要忽略啊
+# librechat.yaml
+# librechat.yml
 
 # Environment
 .npmrc
-.env*
+#这个为什么也要忽略啊
+# .env*
 my.secrets
 !**/.env.example
 !**/.env.test.example

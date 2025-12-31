@@ -1,0 +1,53 @@
+.agent-action-btns2 {
+  display: flex;
+  gap: 6px !important;
+}
+.agent-action-btns2 .anticon {
+  font-size: 11px !important; 
+  font-weight: 400  !important; 
+}
+
+.agent-action-btns2 .btn-save:hover {
+  color: black !important;
+  border-color: black !important;
+}
+.agent-action-btns2 .btn-save:active {
+  border-color: #ececec !important;
+}
+.ant-btn{
+  gap:4px !important
+}
+.agent-action-btns2 .ant-btn {
+padding-inline:12px;
+  font-size: 10px;
+  font-family: PingFang SC, PingFangSC, sans-serif;
+  font-weight: 400;
+}
+
+.confiremodeltitle{
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  font-size: 15px;
+  color: #333333;
+  text-align: left;
+  font-style: normal;
+}
+.confiremodeldesc{
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+  font-size: 12px;
+  color: #333333;
+  text-align: left;
+  font-style: normal;
+}
+.ant-modal-content{
+  border-radius: 10px !important;
+}
+.ant-modal-close{
+  color: #4c4c4c !important;
+  border-radius: 10px !important;
+}
+.ant-modal-close:hover{
+  background-color: #ffff !important;
+  color: #000000 !important;
+}

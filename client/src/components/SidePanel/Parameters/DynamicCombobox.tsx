@@ -6,6 +6,7 @@ import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
 import { ESide } from '~/common';
 import { cn } from '~/utils';
+import './custom.css';
 
 function DynamicCombobox({
   label = '',
@@ -80,10 +81,7 @@ function DynamicCombobox({
         <HoverCardTrigger className="grid w-full items-center gap-2">
           {showLabel === true && (
             <div className="flex w-full justify-between">
-              <Label
-                htmlFor={`${settingKey}-dynamic-combobox`}
-                className="text-left text-sm font-medium"
-              >
+              <Label htmlFor={`${settingKey}-dynamic-combobox`} className="my-label">
                 {labelCode ? (localize(label as TranslationKeys) ?? label) : label || settingKey}
                 {showDefault && (
                   <small className="opacity-40">
@@ -113,7 +111,7 @@ function DynamicCombobox({
             SelectIcon={SelectIcon}
           />
         </HoverCardTrigger>
-        {description && (
+        {/* {description && (
           <OptionHover
             description={
               descriptionCode
@@ -122,7 +120,7 @@ function DynamicCombobox({
             }
             side={ESide.Left}
           />
-        )}
+        )} */}
       </HoverCard>
     </div>
   );

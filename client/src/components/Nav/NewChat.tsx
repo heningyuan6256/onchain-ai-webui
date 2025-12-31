@@ -8,10 +8,12 @@ import { useLocalize, useNewConvo } from '~/hooks';
 import { clearMessagesCache } from '~/utils';
 import store from '~/store';
 import { NavProjects } from '../nav-projects';
-import ADDSVG from "@/assets/image/front-add.svg";
-import CHATSVG from "@/assets/image/front-chat.svg";
-import appsSvg from "@/assets/image/front-apps.svg";
-import LIBRARYSVG from "@/assets/image/front-library.svg";
+import ADDSVG from '@/assets/image/front-add.svg';
+import CHATSVG from '@/assets/image/front-chat.svg';
+import appsSvg from '@/assets/image/front-apps.svg';
+import LIBRARYSVG from '@/assets/image/front-library.svg';
+// import AgentSVG from '@/assets/image/agent.svg';
+import AgentSVG from '@/assets/image/agentlist.svg';
 import Icon from '../icon';
 
 export default function NewChat({
@@ -53,9 +55,6 @@ export default function NewChat({
     [queryClient, conversation, newConvo, navigate, toggleNav, isSmallScreen],
   );
 
-
-
-
   return (
     <>
       <div className="flex items-center justify-between py-[16px]">
@@ -75,43 +74,54 @@ export default function NewChat({
             </Button>
           }
         /> */}
-        <div className="flex gap-0.5 flex-col w-full">
+        <div className="flex w-full flex-col gap-0.5">
           {headerButtons}
 
-          <NavProjects projects={[
-            {
-              name: "开启新对话",
-              url: "/",
-              icon: <Icon src={ADDSVG}></Icon>,
-              key: "home",
-              onClick: clickHandler
-            },
-            {
-              name: "我的对话",
-              url: "/conversations",
-              icon: <Icon src={CHATSVG}></Icon>,
-              key: "conversations",
-              onClick: () => {
-                navigate(`/conversations${location.search}`)
-              }
-            },
-            {
-              name: "工业知识库",
-              url: "",
-              key: "library",
-              icon: <Icon src={LIBRARYSVG}></Icon>,
-              onClick: () => { }
-            },
-            {
-              name: "应用广场",
-              url: "application",
-              icon: <Icon src={appsSvg}></Icon>,
-              key: "app",
-              onClick: () => {
-                navigate(`/application${location.search}`)
-              }
-            },
-          ]} />
+          <NavProjects
+            projects={[
+              {
+                name: '开启新对话',
+                url: '/',
+                icon: <Icon src={ADDSVG}></Icon>,
+                key: 'home',
+                onClick: clickHandler,
+              },
+              {
+                name: '我的对话',
+                url: '/conversations',
+                icon: <Icon src={CHATSVG}></Icon>,
+                key: 'conversations',
+                onClick: () => {
+                  navigate(`/conversations${location.search}`);
+                },
+              },
+              {
+                name: '工业知识库',
+                url: '',
+                key: 'library',
+                icon: <Icon src={LIBRARYSVG}></Icon>,
+                onClick: () => {},
+              },
+              {
+                name: '应用广场',
+                url: 'application',
+                icon: <Icon src={appsSvg}></Icon>,
+                key: 'app',
+                onClick: () => {
+                  navigate(`/application${location.search}`);
+                },
+              },
+              {
+                name: '工业智能体',
+                url: 'agent',
+                icon: <Icon src={AgentSVG}></Icon>,
+                key: 'agent',
+                onClick: () => {
+                  navigate(`/agentlist${location.search}`);
+                },
+              },
+            ]}
+          />
 
           {/* <TooltipAnchor
             description={localize('com_ui_new_chat')}

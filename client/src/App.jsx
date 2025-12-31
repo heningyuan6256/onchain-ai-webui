@@ -12,8 +12,35 @@ import { getThemeFromEnv } from './utils/getThemeFromEnv';
 import { initializeFontSize } from '~/store/fontSize';
 import { LiveAnnouncer } from '~/a11y';
 import { router } from './routes';
-
 const App = () => {
+
+  //监听调试url的参数改变
+
+  // (() => {
+  //   let lastUrl = location.href;
+
+  //   const observer = (source = 'popstate') => {
+  //     if (location.href === lastUrl) return;
+  //     console.groupCollapsed(
+  //       `%c URL 变化: ${lastUrl} → ${location.href}  (${source})`,
+  //       'color: #d97706; font-weight: bold;'
+  //     );
+  //     console.trace('Call stack');
+  //     console.groupEnd();
+  //     lastUrl = location.href;
+  //   };
+
+  //   window.addEventListener('popstate', () => observer('popstate'));
+
+  //   ['pushState', 'replaceState'].forEach(method => {
+  //     const original = history[method];
+  //     history[method] = function (...args) {
+  //       original.apply(this, args);
+  //       observer(method); 
+  //     };
+  //   });
+  // })();
+
   const { setError } = useApiErrorBoundary();
 
   const queryClient = new QueryClient({

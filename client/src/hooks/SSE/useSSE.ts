@@ -17,6 +17,7 @@ import { useGenTitleMutation, useGetStartupConfig, useGetUserBalance } from '~/d
 import { useAuthContext } from '~/hooks/AuthContext';
 import useEventHandlers from './useEventHandlers';
 import store from '~/store';
+import { toast } from 'sonner';
 
 const clearDraft = (conversationId?: string | null) => {
   if (conversationId) {
@@ -103,10 +104,22 @@ export default function useSSE(
 
     let textIndex = null;
     clearStepMaps();
+    const urlParams = new URLSearchParams(window.location.search);
+    const agent_id = urlParams.get('agent_id');
+    //agentconfig或者agentchat做一个缺数据拦截
+    if ((location.pathname.startsWith('/agent') && agent_id === null) || agent_id === undefined) {
+      // toast.error('数据错误！');
+      console.error('数据错误！', submission);
+      return;
+    }
 
     const sse = new SSE(payloadData.server, {
-      payload: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      payload: JSON.stringify({ ...payload }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        agentid: agent_id ?? '1',
+      },
     });
 
     sse.addEventListener('attachment', (e: MessageEvent) => {
@@ -250,4 +263,7 @@ export default function useSSE(
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submission]);
+}
+function showToast(arg0: { message: any }) {
+  throw new Error('Function not implemented.');
 }

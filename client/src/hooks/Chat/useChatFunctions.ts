@@ -147,7 +147,20 @@ export default function useChatFunctions({
       parentMessageId = Constants.NO_PARENT;
       currentMessages = [];
       conversationId = null;
-      navigate('/c/new', { state: { focusChat: true } });
+      const { pathname, search } = window.location;
+      // console.log('排查pathname带不带别的内容', pathname);
+
+      navigate(`${pathname}${search}`, { state: { focusChat: true } });
+
+      // let targetPath;
+      // if (pathname === '/c' || pathname.startsWith('/c/')) {
+      //   targetPath = '/c/new';
+      // } else if (pathname === '/agentchat' || pathname.startsWith('/agentchat/')) {
+      //   targetPath = '/agentchat/new';
+      // } else {
+      //   targetPath = '/c/new';
+      // }
+      // navigate(targetPath, { state: { focusChat: true } });
     }
 
     const targetParentMessageId = isRegenerate ? messageId : latestMessage?.parentMessageId;
@@ -328,7 +341,7 @@ export default function useChatFunctions({
       setLatestMessage(initialResponse);
     }
 
-    setSubmission(submission);
+    setSubmission(submission); //这里构造了新的Submission让sse新产生链接
     logger.dir('message_stream', submission, { depth: null });
   };
 

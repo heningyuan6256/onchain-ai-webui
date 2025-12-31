@@ -5,6 +5,7 @@ import { TranslationKeys, useLocalize, useParameterEffects } from '~/hooks';
 import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
 import { ESide } from '~/common';
+import './custom.css';
 
 function DynamicSwitch({
   label = '',
@@ -48,10 +49,7 @@ function DynamicSwitch({
       <HoverCard openDelay={300}>
         <HoverCardTrigger className="grid w-full items-center gap-2">
           <div className="flex justify-between">
-            <Label
-              htmlFor={`${settingKey}-dynamic-switch`}
-              className="break-words text-left text-sm font-medium"
-            >
+            <Label htmlFor={`${settingKey}-dynamic-switch`} className="my-label">
               {labelCode ? (localize(label as TranslationKeys) ?? label) : label || settingKey}{' '}
               {showDefault && (
                 <small className="opacity-40">
@@ -72,7 +70,7 @@ function DynamicSwitch({
             }
           />
         </HoverCardTrigger>
-        {description && (
+        {/* {description && (
           <OptionHover
             description={
               descriptionCode
@@ -81,7 +79,7 @@ function DynamicSwitch({
             }
             side={ESide.Left}
           />
-        )}
+        )} */}
       </HoverCard>
     </div>
   );

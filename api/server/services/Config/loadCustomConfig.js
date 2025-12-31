@@ -26,7 +26,7 @@ let i = 0;
 async function loadCustomConfig(printConfig = true) {
   // Use CONFIG_PATH if set, otherwise fallback to defaultConfigPath
   const configPath = process.env.CONFIG_PATH || defaultConfigPath;
-
+  //加载yaml模型配置文件的地方
   let customConfig;
 
   if (/^https?:\/\//.test(configPath)) {

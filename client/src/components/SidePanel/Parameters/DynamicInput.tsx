@@ -6,6 +6,7 @@ import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
 import { ESide } from '~/common';
 import { cn } from '~/utils';
+import './custom.css';
 
 function DynamicInput({
   label = '',
@@ -22,6 +23,7 @@ function DynamicInput({
   descriptionCode = false,
   placeholderCode = false,
   conversation,
+  type,
 }: DynamicSettingProps) {
   const localize = useLocalize();
   const { preset } = useChatContext();
@@ -59,10 +61,7 @@ function DynamicInput({
       <HoverCard openDelay={300}>
         <HoverCardTrigger className="grid w-full items-center gap-2">
           <div className="flex w-full justify-between">
-            <Label
-              htmlFor={`${settingKey}-dynamic-input`}
-              className="text-left text-sm font-medium"
-            >
+            <Label htmlFor={`${settingKey}-dynamic-input`} className="my-label">
               {labelCode ? localize(label as TranslationKeys) || label : label || settingKey}{' '}
               {showDefault && (
                 <small className="opacity-40">
@@ -76,17 +75,18 @@ function DynamicInput({
             </Label>
           </div>
           <Input
+            type={type === 'number' ? 'number' : 'text'}
             id={`${settingKey}-dynamic-input`}
             disabled={readonly}
             value={inputValue ?? defaultValue ?? ''}
             onChange={handleInputChange}
             placeholder={placeholderText}
             className={cn(
-              'flex h-10 max-h-10 w-full resize-none border-none bg-surface-secondary px-3 py-2',
+              'flex !h-[30px] max-h-10 w-full resize-none !rounded-[5px] bg-surface-secondary bg-white px-3 py-2 !text-[12px] focus:border-[#0563B2]',
             )}
           />
         </HoverCardTrigger>
-        {description && (
+        {/* {description && (
           <OptionHover
             description={
               descriptionCode
@@ -95,7 +95,7 @@ function DynamicInput({
             }
             side={ESide.Left}
           />
-        )}
+        )} */}
       </HoverCard>
     </div>
   );

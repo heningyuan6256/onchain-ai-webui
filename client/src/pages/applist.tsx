@@ -41,6 +41,7 @@ import { useSession } from '@/tars/common/hooks/useSession';
 
 import { motion } from 'framer-motion';
 import { Segmented } from 'antd';
+import request from '~/request/request';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -66,63 +67,78 @@ const cardVariants = {
 
 export default function AppMarket() {
   const navigate = useNavigate();
-  const apps = [
-    {
-      title: '电商-爆单短视频制作官',
-      desc: '专注电商带货的简单视频制作，提供创意文案撰写、视频生成及数据跟踪。',
-      tags: ['数字人视频', '智能体'],
-      stats: { views: 577, likes: 18 },
-    },
-    {
-      title: '公众号爆文工厂',
-      desc: '快速生成符合公众号推送规范的图文混合内容，支持行业分析与标题优化。',
-      tags: ['内容创作', '工作流'],
-      stats: { views: 259, likes: 56 },
-    },
-    {
-      title: '支付宝MCP体验',
-      desc: '支付场景下的链路体验，通过MCP协议快速接入支付宝收单支付服务。',
-      tags: ['快捷支付', '智能体'],
-      stats: { views: 10146, likes: 135 },
-    },
-    {
-      title: 'PPT自动生成',
-      desc: '根据关键词生成结构化PPT内容，适合培训、汇报与教学使用。',
-      tags: ['生成PPT', '智能体'],
-      stats: { views: 5252, likes: 74 },
-    },
-    {
-      title: '支付宝MCP体验',
-      desc: '支付场景下的链路体验，通过MCP协议快速接入支付宝收单支付服务。',
-      tags: ['快捷支付', '智能体'],
-      stats: { views: 10146, likes: 135 },
-    },
-  ];
+  const [headerCategory, setHeaderCategory] = useState<any[]>([]);
+  const [siderCategory, setSiderCategory] = useState<any[]>([]);
+  const [headerCategorySelected, setHeaderCategorySelected] = useState<string>();
+  const [siderCategorySelected, setSiderCategorySelected] = useState<string[]>([]);
 
-  const categories = [
-    '法律服务',
-    '交通物流',
-    '金融服务',
-    '政企服务',
-    '泛互联网',
-    '教育科创',
-    '企业服务',
-    '文化传媒',
-    '消费零售',
-  ];
   const [applist, setAppList] = useState<any[]>([]);
+  const [fliterList, setFliterList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
+  const getAppList = async () => {
     const requestOptions: RequestInit = {
       method: 'get',
       redirect: 'follow',
     };
-    fetch(`/apps/system/app/list?pageNum=1&pageSize=500`, requestOptions).then((res) => {
-      res.json().then((data) => {
-        setAppList(data?.rows || []);
-        setLoading(false);
-      });
+    request(`/apps/system/app/list?pageNum=1&pageSize=10000`, requestOptions).then((data) => {
+      setAppList(data?.rows || []);
+      setLoading(false);
     });
+  };
+  useEffect(() => {
+    const headerTagValue = headerCategory.find((item) => item.label === headerCategorySelected);
+    const siderTagValue = siderCategory.filter((item) =>
+      siderCategorySelected.includes(item.label),
+    );
+    if (headerTagValue && Array.isArray(applist) && Array.isArray(siderTagValue)) {
+      setFliterList(
+        applist.filter((item) => {
+          if (
+            siderTagValue.length !== 0 &&
+            !siderTagValue.find((o) => {
+              return o.value === item.tag2;
+            })
+          ) {
+            return false;
+          }
+          return item.tag1 === headerTagValue.value;
+        }),
+      );
+    }
+  }, [headerCategorySelected, siderCategorySelected, applist]);
+  const getHeaderCategories = async () => {
+    const requestOptions: RequestInit = { method: 'get', redirect: 'follow' };
+    request(
+      `/backend/sys/dict/data/list?pageNum=1&pageSize=10000&dictType=appheadertag`,
+      requestOptions,
+    ).then((data) => {
+      setHeaderCategory(
+        data?.rows?.map((item) => {
+          return { value: item.dictValue, label: item.dictLabel };
+        }) || [],
+      );
+      if (data?.rows?.length) {
+        setHeaderCategorySelected(data?.rows[0].dictLabel);
+      }
+    });
+  };
+  const getSiderCategories = async () => {
+    const requestOptions: RequestInit = { method: 'get', redirect: 'follow' };
+    request(
+      `/backend/sys/dict/data/list?pageNum=1&pageSize=10000&dictType=appsidertag`,
+      requestOptions,
+    ).then((data) => {
+      setSiderCategory(
+        data?.rows?.map((item) => {
+          return { value: item.dictValue, label: item.dictLabel };
+        }) || [],
+      );
+    });
+  };
+  useEffect(() => {
+    getAppList();
+    getHeaderCategories();
+    getSiderCategories();
   }, []);
 
   return (
@@ -134,9 +150,12 @@ export default function AppMarket() {
           <h1 className="text-[16px] font-bold text-[#333333]">应用市场</h1>
           <div className="flex flex-1 items-center justify-center">
             <Segmented<string>
-              options={['应用模板', '应用实践', '解决方案']}
+              value={headerCategorySelected}
+              options={headerCategory.map((item) => {
+                return item.label;
+              })}
               onChange={(value) => {
-                console.log(value); // string
+                setHeaderCategorySelected(value);
               }}
             />
           </div>
@@ -152,7 +171,7 @@ export default function AppMarket() {
               initial="hidden"
               animate="show"
             >
-              {applist.map((app, idx) => (
+              {fliterList.map((app, idx) => (
                 <motion.div
                   key={idx}
                   variants={cardVariants}
@@ -162,8 +181,7 @@ export default function AppMarket() {
                     const searchParams = new URLSearchParams(location.search);
                     const user = searchParams.get('user');
                     navigate(
-                      // `/c/new?endpoint=n8n&model=${app.app_name}&user=${user}&appId=${encodeURIComponent(app.app_id)}`
-                      `/application/${app.app_url}?user=${user}&appId=${encodeURIComponent(app.app_id)}&endpoint=n8n&model=${app.app_name}`,
+                      `/wagentchat/new?user=${user}&workflowId=${encodeURIComponent(app.workflow_id)}`,
                     );
                   }}
                 >
@@ -178,131 +196,140 @@ export default function AppMarket() {
                   </p>
                   <div className="mt-[20px] flex justify-between">
                     <div className="flex flex-nowrap gap-2">
-                      {['数字人视频', '智能体'].map((tag, i) => (
-                        <span
-                          key={i}
-                          className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      {[
+                        headerCategory?.find((o) => o.value === app.tag1),
+                        siderCategory?.find((o) => o.value === app.tag2),
+                      ]
+                        .filter(Boolean) // 去掉 undefined
+                        .map((tag, i) => (
+                          <span
+                            key={i}
+                            className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
+                          >
+                            {tag.label}
+                          </span>
+                        ))}
                     </div>
-                    <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
+                    {/* <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
                       <Icon className="w-3 cursor-pointer" src={startSvg} />
                       {577}
-                    </div>
+                    </div> */}
                   </div>
                 </motion.div>
               ))}
-              {loading === false && (
-                <>
-                  <motion.div
-                    key={'ocr'}
-                    variants={cardVariants}
-                    whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
-                    className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
-                    onClick={() => {
-                      navigate(`/ocr?mode=plain_ocr`);
-                    }}
-                  >
-                    <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
-                      <Icon src={appsLog} className="mr-2 h-4 w-4" />
-                      <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                        {'通用OCR'}
+              {loading === false &&
+                headerCategorySelected === '应用模板' &&
+                (siderCategorySelected?.length === 0
+                  ? true
+                  : siderCategorySelected.includes('泛互联网')) && (
+                  <>
+                    <motion.div
+                      key={'ocr'}
+                      variants={cardVariants}
+                      whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
+                      className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
+                      onClick={() => {
+                        navigate(`/ocr?mode=plain_ocr`);
+                      }}
+                    >
+                      <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
+                        <Icon src={appsLog} className="mr-2 h-4 w-4" />
+                        <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                          {'通用OCR'}
+                        </div>
                       </div>
-                    </div>
-                    <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
-                      {'OCR应用'}
-                    </p>
-                    <div className="mt-[20px] flex justify-between">
-                      <div className="flex flex-nowrap gap-2">
-                        {['数字人视频', '智能体'].map((tag, i) => (
-                          <span
-                            key={i}
-                            className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                      <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
+                        {'OCR应用'}
+                      </p>
+                      <div className="mt-[20px] flex justify-between">
+                        <div className="flex flex-nowrap gap-2">
+                          {['应用模板', '泛互联网'].map((tag, i) => (
+                            <span
+                              key={i}
+                              className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        {/* <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
+                          <Icon className="w-3 cursor-pointer" src={startSvg} />
+                          {577}
+                        </div> */}
                       </div>
-                      <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
-                        <Icon className="w-3 cursor-pointer" src={startSvg} />
-                        {577}
+                    </motion.div>
+                    <motion.div
+                      key={'ocr'}
+                      variants={cardVariants}
+                      whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
+                      className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
+                      onClick={() => {
+                        navigate(`/ocr?mode=describe`);
+                      }}
+                    >
+                      <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
+                        <Icon src={appsLog} className="mr-2 h-4 w-4" />
+                        <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                          {'图像描述'}
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                  <motion.div
-                    key={'ocr'}
-                    variants={cardVariants}
-                    whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
-                    className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
-                    onClick={() => {
-                      navigate(`/ocr?mode=describe`);
-                    }}
-                  >
-                    <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
-                      <Icon src={appsLog} className="mr-2 h-4 w-4" />
-                      <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                        {'图像描述'}
+                      <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
+                        {'OCR应用'}
+                      </p>
+                      <div className="mt-[20px] flex justify-between">
+                        <div className="flex flex-nowrap gap-2">
+                          {['应用模板', '泛互联网'].map((tag, i) => (
+                            <span
+                              key={i}
+                              className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        {/* <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
+                          <Icon className="w-3 cursor-pointer" src={startSvg} />
+                          {577}
+                        </div> */}
                       </div>
-                    </div>
-                    <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
-                      {'OCR应用'}
-                    </p>
-                    <div className="mt-[20px] flex justify-between">
-                      <div className="flex flex-nowrap gap-2">
-                        {['数字人视频', '智能体'].map((tag, i) => (
-                          <span
-                            key={i}
-                            className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                    </motion.div>
+                    <motion.div
+                      key={'ocr'}
+                      variants={cardVariants}
+                      whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
+                      className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
+                      onClick={() => {
+                        navigate(`/ocr?mode=find_ref`);
+                      }}
+                    >
+                      <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
+                        <Icon src={appsLog} className="mr-2 h-4 w-4" />
+                        <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                          {'查找定位'}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
-                        <Icon className="w-3 cursor-pointer" src={startSvg} />
-                        {577}
+                      <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
+                        {'OCR应用'}
+                      </p>
+                      <div className="mt-[20px] flex justify-between">
+                        <div className="flex flex-nowrap gap-2">
+                          {['应用模板', '泛互联网'].map((tag, i) => (
+                            <span
+                              key={i}
+                              className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        {/* <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
+                          <Icon className="w-3 cursor-pointer" src={startSvg} />
+                          {577}
+                        </div> */}
                       </div>
-                    </div>
-                  </motion.div>
-                  <motion.div
-                    key={'ocr'}
-                    variants={cardVariants}
-                    whileHover={{ scale: 1.03, boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}
-                    className="app_card_bg h-[168px] cursor-pointer rounded-sm border border-[#e6e8ee] p-5 transition-all duration-500 hover:border-[#0563B2]"
-                    onClick={() => {
-                      navigate(`/ocr?mode=find_ref`);
-                    }}
-                  >
-                    <div className="flex h-[32px] items-center text-[13px] font-semibold text-[#333333]">
-                      <Icon src={appsLog} className="mr-2 h-4 w-4" />
-                      <div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                        {'查找定位'}
-                      </div>
-                    </div>
-                    <p className="mt-[8px] line-clamp-2 h-[32px] break-words text-xs text-[#26244C73]">
-                      {'OCR应用'}
-                    </p>
-                    <div className="mt-[20px] flex justify-between">
-                      <div className="flex flex-nowrap gap-2">
-                        {['数字人视频', '智能体'].map((tag, i) => (
-                          <span
-                            key={i}
-                            className="whitespace-nowrap rounded-sm bg-[#EFF0F3CC] px-2 py-1 text-xs text-[#8E8C99]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-1 whitespace-nowrap text-xs text-gray-400">
-                        <Icon className="w-3 cursor-pointer" src={startSvg} />
-                        {577}
-                      </div>
-                    </div>
-                  </motion.div>
-                </>
-              )}
+                    </motion.div>
+                  </>
+                )}
             </motion.div>
           </div>
 
@@ -316,12 +343,24 @@ export default function AppMarket() {
             <div>
               <h2 className="mb-3 text-xs font-semibold text-gray-700">行业</h2>
               <div className="flex flex-wrap gap-2">
-                {categories.map((c, i) => (
+                {siderCategory.map((c, i) => (
                   <span
+                    onClick={(e) => {
+                      setSiderCategorySelected((lastValue) => {
+                        if (lastValue.find((item) => item === c.label)) {
+                          return lastValue.filter((item) => item !== c.label);
+                        } else {
+                          return [...lastValue, c.label];
+                        }
+                      });
+                    }}
                     key={i}
-                    className="hover:[#0563B2] cursor-pointer rounded-sm border border-[#E4E4E4] bg-[#fff] px-3 py-1 text-xs text-[#26244CE0] transition hover:border-[#0563B2]"
+                    className={cn(
+                      'hover:[#0563B2] cursor-pointer rounded-sm border border-[#E4E4E4] px-3 py-1 text-xs text-[#26244CE0] transition hover:border-[#0563B2]',
+                      siderCategorySelected.includes(c.label) ? 'bg-[#e3e3e3]' : 'bg-[#fff]',
+                    )}
                   >
-                    {c}
+                    {c.label}
                   </span>
                 ))}
               </div>

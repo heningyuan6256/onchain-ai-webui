@@ -45,6 +45,7 @@ import {
   ModelSelectorChatProvider,
   useModelSelectorChatContext,
 } from '../Menus/Endpoints/ModelSelectorChatContext';
+import request from '~/request/request';
 
 const ChatForm = memo(({ index = 0 }: { index?: number }) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
@@ -133,14 +134,12 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
         redirect: 'follow',
       };
 
-      fetch(`/model/system/model/list_model_queue?model_ids=${model}`, requestOptions).then(
-        (res) => {
-          res.json().then(({ data }) => {
-            const safeParse = (str) => Number(str?.split('} ')?.pop()?.trim());
-            quequetotal.inline = safeParse(data[0]) + safeParse(data[1]);
-            quequetotal.inque = safeParse(data[1]);
-            console.log('排队结果', quequetotal);
-          });
+      request(`/model/system/model/list_model_queue?model_ids=${model}`, requestOptions).then(
+        ({ data }) => {
+          const safeParse = (str) => Number(str?.split('} ')?.pop()?.trim());
+          quequetotal.inline = safeParse(data[0]) + safeParse(data[1]);
+          quequetotal.inque = safeParse(data[1]);
+          console.log('排队结果', quequetotal);
         },
       );
     };

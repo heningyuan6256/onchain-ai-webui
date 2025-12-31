@@ -90,7 +90,7 @@ const createErrorMessage = ({
     const latestPartValue = latestContentPart?.[latestContentPart.type ?? ''];
     isValidContentPart =
       latestContentPart.type !== ContentTypes.TEXT ||
-        (latestContentPart.type === ContentTypes.TEXT && typeof latestPartValue === 'string')
+      (latestContentPart.type === ContentTypes.TEXT && typeof latestPartValue === 'string')
         ? true
         : latestPartValue?.value !== '';
   }
@@ -493,7 +493,7 @@ export default function useEventHandlers({
 
       const hasNoResponse =
         responseMessage?.content?.[0]?.['text']?.value ===
-        submission.initialResponse?.content?.[0]?.['text']?.value ||
+          submission.initialResponse?.content?.[0]?.['text']?.value ||
         !!responseMessage?.content?.[0]?.['tool_call']?.auth;
 
       /** Handle edge case where stream is cancelled before any response, which creates a blank page */
@@ -583,12 +583,23 @@ export default function useEventHandlers({
             startupConfig: queryClient.getQueryData<TStartupConfig>([QueryKeys.startupConfig]),
           });
         }
-
-        if (location.pathname === `/c/${Constants.NEW_CONVO}`) {
+        if (
+          [
+            `/agentchat/${Constants.NEW_CONVO}`,
+            `/c/${Constants.NEW_CONVO}`,
+            `/agentconfig/${Constants.NEW_CONVO}`,
+            `/wagentchat/${Constants.NEW_CONVO}`,
+          ].includes(location.pathname)
+        ) {
           const searchParams = new URLSearchParams(location.search);
           // const searchParamsString = searchParams?.toString();
           const user = searchParams.get('user');
-          navigate(`/c/${conversation.conversationId}?user=${localStorage.getItem("user")}`, { replace: true });
+          const target = location.pathname.split('/')?.[1];
+          const localStorageuser = localStorage.getItem('user');
+          localStorageuser && searchParams.set('user', localStorageuser);
+          navigate(`/${target}/${conversation.conversationId}?${searchParams.toString()}`, {
+            replace: true,
+          });
         }
       }
 
@@ -790,9 +801,9 @@ export default function useEventHandlers({
         } else {
           throw new Error(
             'Unexpected response from server; Status: ' +
-            response.status +
-            ' ' +
-            response.statusText,
+              response.status +
+              ' ' +
+              response.statusText,
           );
         }
       } catch (error) {

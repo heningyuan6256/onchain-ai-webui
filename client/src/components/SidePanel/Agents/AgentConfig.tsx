@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useToastContext } from '@librechat/client';
 import { EModelEndpoint } from 'librechat-data-provider';
 import { Controller, useWatch, useFormContext } from 'react-hook-form';
@@ -22,29 +22,29 @@ import { Panel, isEphemeralAgent } from '~/common';
 import { useGetAgentFiles } from '~/data-provider';
 import { icons } from '~/hooks/Endpoint/Icons';
 import Instructions from './Instructions';
-import AgentAvatar from './AgentAvatar';
-import FileContext from './FileContext';
-import SearchForm from './Search/Form';
-import FileSearch from './FileSearch';
-import Artifacts from './Artifacts';
-import AgentTool from './AgentTool';
-import CodeForm from './Code/Form';
-import MCPTools from './MCPTools';
-
-const labelClass = 'mb-2 text-token-text-primary block font-medium';
+import AgentRagSelector from './AgentRagSelector/AgentRagSelector';
+import AgentMcpSelector from './AgentMcpSelector';
+import { toast } from 'sonner';
+import request from '~/request/request';
+import './custom.css';
+import AvatarUploadField from './AvatarUploadField';
+const labelClass =
+  "mb-2 text-token-text-primary block font-medium  text-[13px] text-[#333333] font-['PingFangSC','PingFang SC',sans-serif]";
 const inputClass = cn(
   defaultTextProps,
-  'flex w-full px-3 py-2 border-border-light bg-surface-secondary focus-visible:ring-2 focus-visible:ring-ring-primary',
+  'flex w-full px-3 py-2 border-border-light bg-surface-secondary ',
   removeFocusOutlines,
+  'h-[32px] focus:border-[#0563B2]',
 );
 
-export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'createMutation'>) {
+export default function AgentConfig({ createMutation, groups }) {
   const localize = useLocalize();
   const fileMap = useFileMapContext();
   const { showToast } = useToastContext();
   const methods = useFormContext<AgentForm>();
   const [showToolDialog, setShowToolDialog] = useState(false);
   const [showMCPToolDialog, setShowMCPToolDialog] = useState(false);
+
   const {
     actions,
     setAction,
@@ -68,16 +68,6 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
 
   const { data: agentFiles = [] } = useGetAgentFiles(agent_id);
 
-  const mergedFileMap = useMemo(() => {
-    const newFileMap = { ...fileMap };
-    agentFiles.forEach((file) => {
-      if (file.file_id) {
-        newFileMap[file.file_id] = file;
-      }
-    });
-    return newFileMap;
-  }, [fileMap, agentFiles]);
-
   const {
     codeEnabled,
     toolsEnabled,
@@ -87,66 +77,6 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
     webSearchEnabled,
     fileSearchEnabled,
   } = useAgentCapabilities(agentsConfig?.capabilities);
-
-  const context_files = useMemo(() => {
-    if (typeof agent === 'string') {
-      return [];
-    }
-
-    if (agent?.id !== agent_id) {
-      return [];
-    }
-
-    if (agent.context_files) {
-      return agent.context_files;
-    }
-
-    const _agent = processAgentOption({
-      agent,
-      fileMap: mergedFileMap,
-    });
-    return _agent.context_files ?? [];
-  }, [agent, agent_id, mergedFileMap]);
-
-  const knowledge_files = useMemo(() => {
-    if (typeof agent === 'string') {
-      return [];
-    }
-
-    if (agent?.id !== agent_id) {
-      return [];
-    }
-
-    if (agent.knowledge_files) {
-      return agent.knowledge_files;
-    }
-
-    const _agent = processAgentOption({
-      agent,
-      fileMap: mergedFileMap,
-    });
-    return _agent.knowledge_files ?? [];
-  }, [agent, agent_id, mergedFileMap]);
-
-  const code_files = useMemo(() => {
-    if (typeof agent === 'string') {
-      return [];
-    }
-
-    if (agent?.id !== agent_id) {
-      return [];
-    }
-
-    if (agent.code_files) {
-      return agent.code_files;
-    }
-
-    const _agent = processAgentOption({
-      agent,
-      fileMap: mergedFileMap,
-    });
-    return _agent.code_files ?? [];
-  }, [agent, agent_id, mergedFileMap]);
 
   const handleAddActions = useCallback(() => {
     if (isEphemeralAgent(agent_id)) {
@@ -180,16 +110,11 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
   const { toolIds, mcpServerNames } = useVisibleTools(tools, regularTools, mcpServersMap);
 
   return (
-    <>
-      <div className="h-auto bg-white px-4 pt-3 dark:bg-transparent">
-        {/* Avatar & Name */}
-        <div className="mb-4">
-          <AgentAvatar
-            agent_id={agent_id}
-            createMutation={createMutation}
-            avatar={agent?.['avatar'] ?? null}
-          />
-          <label className={labelClass} htmlFor="name">
+    <div>
+      <div className="h-auto px-0 pt-3 dark:bg-transparent">
+        <div className="mb-2">
+          <AvatarUploadField></AvatarUploadField>
+          <label className={'my-label'} htmlFor="name">
             {localize('com_ui_name')}
             <span className="text-red-500">*</span>
           </label>
@@ -200,6 +125,7 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
             render={({ field }) => (
               <>
                 <input
+                  style={{ borderRadius: 5, backgroundColor: 'white', height: '30px' }}
                   {...field}
                   value={field.value ?? ''}
                   maxLength={256}
@@ -224,15 +150,19 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
             name="id"
             control={control}
             render={({ field }) => (
-              <p className="h-3 text-xs italic text-text-secondary" aria-live="polite">
+              <p
+                className="h-3 text-xs italic text-text-secondary"
+                style={{ display: 'none' }}
+                aria-live="polite"
+              >
                 {field.value}
               </p>
             )}
           />
         </div>
         {/* Description */}
-        <div className="mb-4">
-          <label className={labelClass} htmlFor="description">
+        <div className="mb-2">
+          <label className={'my-label'} htmlFor="description">
             {localize('com_ui_description')}
           </label>
           <Controller
@@ -240,6 +170,7 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
             control={control}
             render={({ field }) => (
               <input
+                style={{ borderRadius: 5, backgroundColor: 'white', height: '30px' }}
                 {...field}
                 value={field.value ?? ''}
                 maxLength={512}
@@ -253,234 +184,55 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
           />
         </div>
         {/* Category */}
-        <div className="mb-4">
-          <label className={labelClass} htmlFor="category-selector">
+        <div className="mb-2">
+          <label className={'my-label'} htmlFor="category-selector">
             {localize('com_ui_category')} <span className="text-red-500">*</span>
           </label>
           <AgentCategorySelector className="w-full" />
         </div>
+        <div className="mb-2">
+          <label className={'my-label'} htmlFor="category-selector">
+            知识库
+          </label>
+          <AgentRagSelector className="w-full" />
+        </div>
+        <div className="mb-2">
+          <label className={'my-label'} htmlFor="category-selector">
+            Mcp工具
+          </label>
+          <AgentMcpSelector groups={groups || []} className="w-full" />
+        </div>
         {/* Instructions */}
         <Instructions />
         {/* Model and Provider */}
-        <div className="mb-4">
-          <label className={labelClass} htmlFor="provider">
+        <div className="mb-2">
+          <label className={'my-label'} htmlFor="provider">
             {localize('com_ui_model')} <span className="text-red-500">*</span>
           </label>
           <button
             type="button"
+            style={{ borderRadius: 5 }}
             onClick={() => setActivePanel(Panel.model)}
-            className="btn btn-neutral border-token-border-light relative h-10 w-full rounded-lg font-medium"
+            className="btn btn-neutral border-token-border-light relative h-10 w-full !bg-white font-medium"
             aria-haspopup="true"
             aria-expanded="false"
           >
             <div className="flex w-full items-center gap-2">
-              {Icon && (
-                <div className="shadow-stroke relative flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white text-black dark:bg-white">
-                  <Icon
-                    className="h-2/3 w-2/3"
-                    endpoint={providerValue as string}
-                    endpointType={endpointType}
-                    iconURL={endpointIconURL}
-                  />
-                </div>
-              )}
               <span>{model != null && model ? model : localize('com_ui_select_model')}</span>
             </div>
           </button>
         </div>
-        {(codeEnabled ||
-          fileSearchEnabled ||
-          artifactsEnabled ||
-          contextEnabled ||
-          webSearchEnabled) && (
-          <div className="mb-4 flex w-full flex-col items-start gap-3">
-            <label className="text-token-text-primary block font-medium">
-              {localize('com_assistants_capabilities')}
-            </label>
-            {/* Code Execution */}
-            {codeEnabled && <CodeForm agent_id={agent_id} files={code_files} />}
-            {/* Web Search */}
-            {webSearchEnabled && <SearchForm />}
-            {/* File Context */}
-            {contextEnabled && <FileContext agent_id={agent_id} files={context_files} />}
-            {/* Artifacts */}
-            {artifactsEnabled && <Artifacts />}
-            {/* File Search */}
-            {fileSearchEnabled && <FileSearch agent_id={agent_id} files={knowledge_files} />}
-          </div>
-        )}
         {/* MCP Section */}
-        {startupConfig?.mcpServers != null && (
+        {/* {startupConfig?.mcpServers != null && (
           <MCPTools
             agentId={agent_id}
             mcpServerNames={mcpServerNames}
             setShowMCPToolDialog={setShowMCPToolDialog}
           />
-        )}
+        )} */}
         {/* Agent Tools & Actions */}
-        <div className="mb-4">
-          <label className={labelClass}>
-            {`${toolsEnabled === true ? localize('com_ui_tools') : ''}
-              ${toolsEnabled === true && actionsEnabled === true ? ' + ' : ''}
-              ${actionsEnabled === true ? localize('com_assistants_actions') : ''}`}
-          </label>
-          <div>
-            <div className="mb-1">
-              {/* Render all visible IDs */}
-              {toolIds.map((toolId, i) => {
-                const tool = regularTools?.find((t) => t.pluginKey === toolId);
-                if (!tool) return null;
-                return (
-                  <AgentTool
-                    key={`${toolId}-${i}-${agent_id}`}
-                    tool={toolId}
-                    regularTools={regularTools}
-                    agent_id={agent_id}
-                  />
-                );
-              })}
-            </div>
-            <div className="flex flex-col gap-1">
-              {(actions ?? [])
-                .filter((action) => action.agent_id === agent_id)
-                .map((action, i) => (
-                  <Action
-                    key={i}
-                    action={action}
-                    onClick={() => {
-                      setAction(action);
-                      setActivePanel(Panel.actions);
-                    }}
-                  />
-                ))}
-            </div>
-            <div className="mt-2 flex space-x-2">
-              {(toolsEnabled ?? false) && (
-                <button
-                  type="button"
-                  onClick={() => setShowToolDialog(true)}
-                  className="btn btn-neutral border-token-border-light relative h-9 w-full rounded-lg font-medium"
-                  aria-haspopup="dialog"
-                >
-                  <div className="flex w-full items-center justify-center gap-2">
-                    {localize('com_assistants_add_tools')}
-                  </div>
-                </button>
-              )}
-              {(actionsEnabled ?? false) && (
-                <button
-                  type="button"
-                  disabled={isEphemeralAgent(agent_id)}
-                  onClick={handleAddActions}
-                  className="btn btn-neutral border-token-border-light relative h-9 w-full rounded-lg font-medium"
-                  aria-haspopup="dialog"
-                >
-                  <div className="flex w-full items-center justify-center gap-2">
-                    {localize('com_assistants_add_actions')}
-                  </div>
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+
         {/* Support Contact (Optional) */}
-        <div className="mb-4">
-          <div className="mb-1.5 flex items-center gap-2">
-            <span>
-              <label className="text-token-text-primary block font-medium">
-                {localize('com_ui_support_contact')}
-              </label>
-            </span>
-          </div>
-          <div className="space-y-3">
-            {/* Support Contact Name */}
-            <div className="flex flex-col">
-              <label
-                className="mb-1 flex items-center justify-between"
-                htmlFor="support-contact-name"
-              >
-                <span className="text-sm">{localize('com_ui_support_contact_name')}</span>
-              </label>
-              <Controller
-                name="support_contact.name"
-                control={control}
-                rules={{
-                  minLength: {
-                    value: 3,
-                    message: localize('com_ui_support_contact_name_min_length', { minLength: 3 }),
-                  },
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <>
-                    <input
-                      {...field}
-                      value={field.value ?? ''}
-                      className={cn(inputClass, error ? 'border-2 border-red-500' : '')}
-                      id="support-contact-name"
-                      type="text"
-                      placeholder={localize('com_ui_support_contact_name_placeholder')}
-                      aria-label="Support contact name"
-                      aria-invalid={error ? 'true' : 'false'}
-                      aria-describedby={error ? 'support-contact-name-error' : undefined}
-                    />
-                    {error && (
-                      <span
-                        id="support-contact-name-error"
-                        className="text-sm text-red-500 transition duration-300 ease-in-out"
-                        role="alert"
-                        aria-live="polite"
-                      >
-                        {error.message}
-                      </span>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            {/* Support Contact Email */}
-            <div className="flex flex-col">
-              <label
-                className="mb-1 flex items-center justify-between"
-                htmlFor="support-contact-email"
-              >
-                <span className="text-sm">{localize('com_ui_support_contact_email')}</span>
-              </label>
-              <Controller
-                name="support_contact.email"
-                control={control}
-                rules={{
-                  validate: (value) =>
-                    validateEmail(value ?? '', localize('com_ui_support_contact_email_invalid')),
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <>
-                    <input
-                      {...field}
-                      value={field.value ?? ''}
-                      className={cn(inputClass, error ? 'border-2 border-red-500' : '')}
-                      id="support-contact-email"
-                      type="email"
-                      placeholder={localize('com_ui_support_contact_email_placeholder')}
-                      aria-label="Support contact email"
-                      aria-invalid={error ? 'true' : 'false'}
-                      aria-describedby={error ? 'support-contact-email-error' : undefined}
-                    />
-                    {error && (
-                      <span
-                        id="support-contact-email-error"
-                        className="text-sm text-red-500 transition duration-300 ease-in-out"
-                        role="alert"
-                        aria-live="polite"
-                      >
-                        {error.message}
-                      </span>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-          </div>
-        </div>
       </div>
       <ToolSelectDialog
         isOpen={showToolDialog}
@@ -496,6 +248,6 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
           endpoint={EModelEndpoint.agents}
         />
       )}
-    </>
+    </div>
   );
 }

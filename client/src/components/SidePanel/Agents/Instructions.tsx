@@ -1,4 +1,4 @@
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useEffect } from 'react';
 import { PlusCircle } from 'lucide-react';
 import * as Menu from '@ariakit/react/menu';
 import { DropdownPopup } from '@librechat/client';
@@ -8,10 +8,12 @@ import type { TSpecialVarLabel } from 'librechat-data-provider';
 import type { AgentForm } from '~/common';
 import { cn, defaultTextProps, removeFocusOutlines } from '~/utils';
 import { useLocalize } from '~/hooks';
+import request from '~/request/request';
+import './custom.css';
 
 const inputClass = cn(
   defaultTextProps,
-  'flex w-full px-3 py-2 border-border-light bg-surface-secondary focus-visible:ring-2 focus-visible:ring-ring-primary',
+  'flex w-full px-3 py-2 border-border-light bg-surface-secondary focus:border-[#0563B2]',
   removeFocusOutlines,
 );
 
@@ -20,31 +22,52 @@ interface VariableOption {
   value: string;
 }
 
-const variableOptions: VariableOption[] = Object.keys(specialVariables).map((key) => ({
-  label: `com_ui_special_var_${key}` as TSpecialVarLabel,
-  value: `{{${key}}}`,
-}));
+// const variableOptions: any[] = Object.keys(specialVariables).map((key) => ({
+//   label: `com_ui_special_var_${key}` as TSpecialVarLabel,
+//   value: `{{${key}}}`,
+// }));
 
 export default function Instructions() {
   const menuId = useId();
   const localize = useLocalize();
   const methods = useFormContext<AgentForm>();
   const { control, setValue, getValues } = methods;
+  const [variableOptions, setVariableOptions] = useState<any[]>([]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const getprompts = async () => {
+    const promptRes: any[] = await request(
+      '/backend/system/prompt/list_prompt?pageNum=1&pageSize=10000',
+      {
+        method: 'get',
+      },
+    );
+    const variableOptions =
+      promptRes?.code === 200
+        ? promptRes?.rows?.map((item) => {
+            return {
+              label: item.prompt_content,
+              value: item.prompt_content,
+            };
+          })
+        : [];
+    setVariableOptions(variableOptions);
+  };
+  useEffect(() => {
+    getprompts();
+  }, []);
   const handleAddVariable = (label: TSpecialVarLabel, value: string) => {
     const currentInstructions = getValues('instructions') || '';
     const spacer = currentInstructions.length > 0 ? '\n' : '';
-    const prefix = localize(label);
-    setValue('instructions', currentInstructions + spacer + prefix + ': ' + value);
+    const prefix = label;
+    setValue('instructions', currentInstructions + spacer + prefix);
     setIsMenuOpen(false);
   };
 
   return (
-    <div className="mb-4">
-      <div className="mb-2 flex items-center">
-        <label className="text-token-text-primary flex-grow font-medium" htmlFor="instructions">
+    <div className="mb-2">
+      <div className="mb-1 flex" style={{ alignItems: 'end' }}>
+        <label className={'my-label'} htmlFor="instructions">
           {localize('com_ui_instructions')}
         </label>
         <div className="ml-auto" title="Add variables to instructions">
@@ -58,10 +81,15 @@ export default function Instructions() {
             trigger={
               <Menu.MenuButton
                 id="variables-menu-button"
+                style={{ borderRadius: 5, color: '#d2d2d2' }}
                 aria-label="Add variable to instructions"
-                className="flex h-7 items-center gap-1 rounded-md border border-border-medium bg-surface-secondary px-2 py-0 text-sm text-text-primary transition-colors duration-200 hover:bg-surface-tertiary"
+                className="flex h-7 items-center gap-1 border border-border-medium !bg-black bg-surface-secondary px-2 py-0 text-sm text-text-primary transition-colors duration-200 hover:bg-surface-tertiary"
               >
-                <PlusCircle className="mr-1 h-3 w-3 text-text-secondary" aria-hidden={true} />
+                <PlusCircle
+                  style={{ borderRadius: 5, color: '#d2d2d2' }}
+                  className="mr-1 h-3 w-3 text-text-secondary"
+                  aria-hidden={true}
+                />
                 {localize('com_ui_variables')}
               </Menu.MenuButton>
             }
@@ -70,7 +98,7 @@ export default function Instructions() {
               onClick: () => handleAddVariable(option.label, option.value),
             }))}
             menuId={menuId}
-            className="z-30"
+            className="z-30 !rounded-[5px]"
           />
         </div>
       </div>
@@ -80,9 +108,10 @@ export default function Instructions() {
         render={({ field, fieldState: { error } }) => (
           <>
             <textarea
+              style={{ borderRadius: 5 }}
               {...field}
               value={field.value ?? ''}
-              className={cn(inputClass, 'min-h-[100px] resize-y')}
+              className={cn(inputClass, 'min-h-[100px] resize-y bg-white')}
               id="instructions"
               placeholder={localize('com_agents_instructions_placeholder')}
               rows={3}

@@ -1,6 +1,7 @@
 // import { dataSet, ragflowAPI } from "@/components/nav-projects";
-import { api_key, userid } from "@/components/nav-projects";
-import React, { createContext, useState, useEffect, useContext } from "react";
+import { api_key, userid } from '@/components/nav-projects';
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import request from '~/request/request';
 
 // 上下文类型定义
 interface UploadDataContextType {
@@ -60,14 +61,17 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const fetchUploadData = async () => {
     const params = new URLSearchParams({
       // api_key: api_key, // 假设你有这个变量
-      other_id: localStorage.getItem("id")!,
-      pageNum: "1",
-      pageSize: "100"
+      other_id: localStorage.getItem('id')!,
+      pageNum: '1',
+      pageSize: '100',
     });
-    const { rows: ListDataSets } = await fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
-      method: "GET",
-      // headers: { Authorization: `Bearer ${ragflowAPI}` },
-    }).then((response) => response.json());
+    const { rows: ListDataSets } = await request(
+      `/rag/system/ragflow/datasets?${params.toString()}`,
+      {
+        method: 'GET',
+        // headers: { Authorization: `Bearer ${ragflowAPI}` },
+      },
+    );
     const PromiseData: Promise<any>[] = [];
 
     (ListDataSets || []).forEach((item: any) => {
@@ -75,7 +79,7 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         new Promise((resolve) => {
           const params = new URLSearchParams({
             // api_key: api_key, // 假设你有这个变量
-            user_id: localStorage.getItem("id")!,
+            user_id: localStorage.getItem('id')!,
             dataset_id: item.id,
           });
 
@@ -90,7 +94,7 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           //     resolve({ ...item, docs: [] });
           //   });
           resolve({ ...item, docs: [] });
-        })
+        }),
       );
     });
 
@@ -153,7 +157,7 @@ export const UploadDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 export const useUploadData = (): UploadDataContextType => {
   const context = useContext(UploadDataContext);
   if (!context) {
-    throw new Error("useUploadData must be used within an UploadDataProvider");
+    throw new Error('useUploadData must be used within an UploadDataProvider');
   }
   return context;
 };

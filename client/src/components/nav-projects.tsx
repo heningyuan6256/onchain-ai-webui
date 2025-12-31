@@ -63,6 +63,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/Alert';
+import request from '~/request/request';
 import { SpinnerWrapper } from './Spiner';
 
 export const api_key = location.search?.split('=')[1] || 'ragflow-EwNGQxYmM4NjY5OTExZjBiNTVmNzIzNz';
@@ -128,7 +129,7 @@ const DocData: FC = (props: any) => {
             <AlertDialogCancel className="onchain_btn">取消</AlertDialogCancel>
             <AlertDialogAction
               className="onchain_btn"
-              onClick={() => {
+              onClick={async () => {
                 const myHeaders = new Headers();
                 myHeaders.append('Content-Type', 'application/json');
                 const params = new URLSearchParams({
@@ -136,7 +137,7 @@ const DocData: FC = (props: any) => {
                   user_id: localStorage.getItem('id')!,
                 });
 
-                fetch(
+                const struct = await request(
                   `/rag/system/ragflow/datasets/${props.selectLibrary?.id}/documents?${params.toString()}`,
                   {
                     method: 'DElETE',
@@ -144,13 +145,11 @@ const DocData: FC = (props: any) => {
                     // redirect: "follow",
                     body: JSON.stringify([props.id]),
                   },
-                ).then((res) => {
-                  res.json().then(async (struct) => {
-                    await props.fetchKnowldegeData();
-                    toast.success('删除知识库成功');
-                    console.log(struct, 'struct');
-                  });
-                });
+                );
+
+                await props.fetchKnowldegeData();
+                toast.success('删除知识库成功');
+                console.log(struct, 'struct');
               }}
             >
               确认
@@ -267,11 +266,10 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
       dataset_id: selectLibrary.id!,
     });
 
-    await fetch(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
+    await request(`/rag/system/ragflow/datasets/documents/list_sys_doc?${params.toString()}`, {
       method: 'GET',
       redirect: 'follow',
     })
-      .then((response) => response.json())
       .then((result) => {
         const datas = result.rows;
         setDisplayFiles(datas);
@@ -347,10 +345,12 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
         const formData = new FormData();
         formData.append('content', uploadText);
 
-        fetch(`/rag/system/ragflow/datasets/documents/upload?${params.toString()}`, requestOptions)
-          .then((response) => response.json())
+        request(
+          `/rag/system/ragflow/datasets/documents/upload?${params.toString()}`,
+          requestOptions,
+        )
           .then(async (result) => {
-            await fetch(
+            await request(
               `/rag/system/ragflow/datasets/${selectLibrary.id}/parse?dataset_id=${selectLibrary.id}`,
               {
                 method: 'POST',
@@ -362,7 +362,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                 },
               },
             );
-            fetch(
+            request(
               `/rag/system/ragflow/datasets/${selectLibrary.id}/documents/${
                 result.document_id
               }/chunks?${params.toString()}`,
@@ -472,14 +472,14 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                           name: inputValue,
                         });
                         const toastId = toast.loading('正在新建');
-                        const data = await fetch(
+                        const data = await request(
                           `/rag/system/ragflow/datasets?${params.toString()}`,
                           {
                             method: 'post',
                             body: formData,
                           },
                         );
-                        if (data.status == 200) {
+                        if (data.code == 200) {
                           toast.dismiss(toastId);
                           toast.success(`新建成功`);
                           refreshUploadData();
@@ -540,7 +540,7 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                       <AlertDialogCancel className="onchain_btn">取消</AlertDialogCancel>
                       <AlertDialogAction
                         className="onchain_btn"
-                        onClick={() => {
+                        onClick={async () => {
                           const myHeaders = new Headers();
                           myHeaders.append('Content-Type', 'application/json');
                           const params = new URLSearchParams({
@@ -548,14 +548,14 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                             user_id: localStorage.getItem('id')!,
                           });
 
-                          fetch(`/rag/system/ragflow/datasets?${params.toString()}`, {
+                          await request(`/rag/system/ragflow/datasets?${params.toString()}`, {
                             method: 'DElETE',
                             headers: myHeaders,
                             // redirect: "follow",
                             body: JSON.stringify([item.id]),
                           })
                             .then((res) => {
-                              if (res.status == 200) {
+                              if (res.code == 200) {
                                 toast.success('删除成功');
                                 refreshUploadData();
                                 if (selectLibrary == item.id) {
@@ -644,13 +644,12 @@ export const LibraryModel: FC<LibraryModelProps> = (props) => {
                         };
                         setLoading(true);
                         setRunningLoading(true);
-                        fetch(
+                        request(
                           `/rag/system/ragflow/datasets/documents/upload?dataset_id=${selectLibrary.id}&img_ignore=1`,
                           requestOptions,
                         )
-                          .then((response) => response.json())
                           .then(async (result) => {
-                            await fetch(
+                            await request(
                               `/rag/system/ragflow/datasets/${selectLibrary.id}/parse?dataset_id=${selectLibrary.id}`,
                               {
                                 method: 'POST',

@@ -18,6 +18,7 @@ import {
 } from '~/utils';
 import { useApplyModelSpecEffects } from '~/hooks/Agents';
 import store from '~/store';
+import request from '~/request/request';
 
 const useNavigateToConvo = (index = 0) => {
   const navigate = useNavigate();
@@ -47,8 +48,13 @@ const useNavigateToConvo = (index = 0) => {
 
   const fetchFreshData = async (conversation?: Partial<TConversation>) => {
     const conversationId = conversation?.conversationId;
-    const searchParams = new URLSearchParams(location.search);
+    let searchParams = new URLSearchParams(location.search);
     const user = searchParams.get('user');
+    //清空参数
+    searchParams = new URLSearchParams();
+    if (user) {
+      searchParams.set('user', user);
+    }
     if (!conversationId) {
       return;
     }
@@ -56,14 +62,37 @@ const useNavigateToConvo = (index = 0) => {
       const data = await queryClient.fetchQuery([QueryKeys.conversation, conversationId], () =>
         dataService.getConversationById(conversationId),
       );
+
       logger.log('conversation', 'Fetched fresh conversation data', data);
       setConversation(data);
-      navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?user=${user}`, { state: { focusChat: true } });
+      if (conversation?.endpoint === 'openai-agent' && conversation?.model === 'gpt-3.5-turbo') {
+        const agentid = await request('/v1/agent/system/agent/query_agent_id', {
+          method: 'post',
+          params: { chat_id: conversationId },
+        });
+        searchParams.set('agent_id', agentid.rows?.agent_id);
+        navigate(`/agentchat/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`, {
+          state: { focusChat: true },
+        });
+      } else if (conversation?.endpoint === 'n8n') {
+        navigate(
+          `/wagentchat/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`,
+          {
+            state: { focusChat: true },
+          },
+        );
+      } else {
+        navigate(`/c/${conversationId ?? Constants.NEW_CONVO}?${searchParams.toString()}`, {
+          state: { focusChat: true },
+        });
+      }
     } catch (error) {
       console.error('Error fetching conversation data on navigation', error);
       if (conversation) {
         setConversation(conversation as TConversation);
-        navigate(`/c/${conversationId}${location.search}?user=${user}`, { state: { focusChat: true } });
+        navigate(`/c/${conversationId}${location.search}?user=${user}`, {
+          state: { focusChat: true },
+        });
       }
     }
   };

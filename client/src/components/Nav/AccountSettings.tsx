@@ -2,6 +2,7 @@ import { useState, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import * as Select from '@ariakit/react/select';
 import { FileText, LogOut } from 'lucide-react';
+import BACKENDSVG from '../../assets/image/backend.svg';
 import { LinkIcon, GearIcon, DropdownMenuSeparator, Avatar } from '@librechat/client';
 import { useGetStartupConfig, useGetUserBalance } from '~/data-provider';
 import FilesView from '~/components/Chat/Input/Files/FilesView';
@@ -9,7 +10,8 @@ import { useAuthContext } from '~/hooks/AuthContext';
 import { useLocalize } from '~/hooks';
 import Settings from './Settings';
 import store from '~/store';
-
+import Icon from '../icon';
+import request from '~/request/request';
 function AccountSettings() {
   const localize = useLocalize();
   const { user, isAuthenticated, logout } = useAuthContext();
@@ -125,6 +127,29 @@ function AccountSettings() {
         >
           <LogOut className="icon-sm" />
           {localize('com_nav_log_out')}
+        </Select.SelectItem>
+        <Select.SelectItem
+          aria-selected={true}
+          onClick={async () => {
+            window.open(
+              `http://192.168.0.198:9700/login?au=${btoa(
+                `${localStorage.getItem('token')}^${localStorage.getItem('refresh_token')}`,
+              )}`,
+            );
+          }}
+          value="backend"
+          className="select-item !rounded-[10px]"
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.75rem',
+            color: '#212121',
+            fontWeight: 'normal',
+            fontStyle: 'normal',
+            borderRadius: '10px',
+          }}
+        >
+          <Icon className="h-3 w-3 max-w-3" src={BACKENDSVG}></Icon>
+          {'控制台'}
         </Select.SelectItem>
       </Select.SelectPopover>
       {showFiles && <FilesView open={showFiles} onOpenChange={setShowFiles} />}

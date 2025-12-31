@@ -59,20 +59,20 @@ export default function FileRow({
 
   useEffect(() => {
     if (files.length === 0) {
-      setFilesLoading(false);
+      setFilesLoading && setFilesLoading(false);
       return;
     }
 
     if (files.some((file) => file.progress < 1)) {
-      setFilesLoading(true);
+      setFilesLoading && setFilesLoading(true);
       return;
     }
 
     if (files.every((file) => file.progress === 1)) {
-      setFilesLoading(false);
+      setFilesLoading && setFilesLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files]);
+  }, [files, setFilesLoading]);
 
   if (files.length === 0) {
     return null;
@@ -81,20 +81,20 @@ export default function FileRow({
   const renderFiles = () => {
     const rowStyle = isRTL
       ? {
-        display: 'flex',
-        flexDirection: 'row-reverse',
-        flexWrap: 'wrap',
-        gap: '4px',
-        width: '100%',
-        maxWidth: '100%',
-      }
+          display: 'flex',
+          flexDirection: 'row-reverse',
+          flexWrap: 'wrap',
+          gap: '4px',
+          width: '100%',
+          maxWidth: '100%',
+        }
       : {
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '4px',
-        width: '100%',
-        maxWidth: '100%',
-      };
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '4px',
+          width: '100%',
+          maxWidth: '100%',
+        };
 
     return (
       <div style={rowStyle as React.CSSProperties}>
@@ -139,7 +139,13 @@ export default function FileRow({
                     source={file.source}
                   />
                 ) : ( */}
-                <FileContainer isImage={isImage} source={file.source} url={file.preview ?? file.filepath} file={file} onDelete={handleDelete} />
+                <FileContainer
+                  isImage={isImage}
+                  source={file.source}
+                  url={file.preview ?? file.filepath}
+                  file={file}
+                  onDelete={handleDelete}
+                />
                 {/* )}? */}
               </div>
             );
